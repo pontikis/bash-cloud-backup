@@ -1,4 +1,8 @@
 # /.idea
 /.idea/*
 
+/conf/initialize.sh
+bkp_all.sh
+
+
 /todo
