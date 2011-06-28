@@ -33,7 +33,7 @@ CONFIGURATION
 =============
 copy -R conf.default conf and edit conf/initialize.sh (paremeters and Amazon S3 credentials)
 copy bkp_all.default.sh to bkp_all.sh and edit it (uncomment procedures to be executed)
-edit s3-plain-custom.sh (optional)
+copy s3-plain-custom.default.sh to s3-plain-custom.sh and edit it (optional)
 
 RUN
 ===
