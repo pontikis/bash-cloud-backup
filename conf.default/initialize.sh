@@ -72,6 +72,25 @@ scripts)
     # make backup directories in case they do not exist
     if [ ! -d "$backuproot/$dir_scripts" ]; then $MKDIR $backuproot/$dir_scripts; fi
   ;;
+svn)
+    # define variables
+    dir_svn='svn'
+    all_prefix_svn='svn'
+    svn_path='/usr/local/svn'
+    svn_hot_backup_py_path='/usr/share/doc/subversion-1.2.3/tools/backup'
+
+    # make backup directories in case they do not exist
+    if [ ! -d "$backuproot/$dir_svn" ]; then $MKDIR $backuproot/$dir_svn; fi
+  ;;
+otrs)
+    # define variables
+    dir_otrs='otrs'
+
+    otrs_internal_bkp='/opt/otrs/scripts/backup.pl'
+
+    # make backup directories in case they do not exist
+    if [ ! -d "$backuproot/$dir_otrs" ]; then $MKDIR $backuproot/$dir_otrs; fi
+  ;;
 s3_plain)
     # define variables
     s3_plain_path='s3://bucket_name/path/to/plain_backup/'
@@ -90,12 +109,10 @@ s3_dup)
   ;;
 esac
 
-
 # GET START TIME
 if [ ${#start} -eq 0 ]; then    # var start has no value
   start=`$DATE "+%Y-%m-%d %H:%M:%S"`
 fi
-
 
 # UDF .............................................
 function createlog {
