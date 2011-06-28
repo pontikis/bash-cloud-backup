@@ -1,0 +1,22 @@
+# CONFIGUARATION FILES
+# valid entries start with /
+
+# APACHE
+/etc/apache2
+
+# PHP
+/etc/php5
+
+# MYSQL
+/etc/mysql/my.cnf
+
+# FILE SYSTEM
+/etc/fstab
+
+# MOS
+/var/www/mos/common/settings.php
+/var/www/mos/common/options.php
+/var/www/mos/common/options.js
+/var/www/mos/js/tiny_mce_3_2_1_1/plugins/filemanager/config.php
+/var/www/mos/images/logo.png
+
