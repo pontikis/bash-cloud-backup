@@ -19,6 +19,37 @@ COPYRIGHT: Christos Pontikis (pontikis@gmail.com) - MediSign SA (http://www.medi
 
 LICENSE: GNU General Public License (http://www.gnu.org/copyleft/gpl.html)
 
+SCRIPTS included in bash-cloud-backup
+=====================================
+bkp_all.sh: the main script
+
+conf/initialize.sh: main configuration script
+conf/db-mysql: mysql databases to backup
+conf/sites: web server directories to backup
+conf/scripts: scripts to backup
+conf/conf-files: configuration files to backup
+conf/svn-repos: svn repos to backup
+
+bkp_mysql.sh: Performs backup of selected mysql databases (in conf/db-mysql).
+bkp_www.sh: Performs backup of selected web server directoties (in conf/sites).
+bkp_conf.sh: Rerforms backup of selected system configuration files (in conf/conf-files).
+bkp_scripts.sh: Performs backup of selected scripts (in conf/scripts).
+
+bkp_svn.sh: Performs backup of selected SVN repos (in conf/svn-repos).
+bkp_otrs.sh: Performs backup of OTRS support ticketing system.
+
+s3-plain-sync.sh: backup directory is synchronized with Amazon S3, using s3cmd sync
+s3-plain-sync-custom.sh: custom sync using s3cmd sync
+
+s3-dup-backup.sh: backup directory is uploaded to Amazon S3, using duplicity
+s3-dup-restore.sh: simple tool to restore a file from duplicity archives
+s3-dup-list.sh: simple tool to list current files in duplicity archives
+
+BACKUP LOGS
+===========
+Backup is keeping logs in log directory.
+You should take care for logfile rotation.
+
 EXTERNAL SOFTWARE
 =================
 duplicity http://duplicity.nongnu.org/  (for Debian: apt-get install duplicity pytho-boto)
@@ -27,7 +58,7 @@ s3tools http://s3tools.org/             (for Debian: apt-get install s3cmd)
 
 AMAZON S3 ACCOUNT
 =================
-For cloud backup an Amazon S3 account is needed (http://aws.amazon.com/s3/)
+For cloud backup, an Amazon S3 account is needed (http://aws.amazon.com/s3/)
 
 SETUP USING GIT (recommended)
 ============================
@@ -65,37 +96,6 @@ RUN
 ===
 To perform backup, call bkp_all.sh (you may use CRON for automation).
 Each one from bkp_* or s3_* can run as stand-alone script.
-
-SCRIPTS
-=======
-bkp_all.sh: the main script
-
-conf/initialize.sh: main configuration script
-conf/db-mysql: mysql databases to backup
-conf/sites: web server directories to backup
-conf/scripts: scripts to backup
-conf/conf-files: configuration files to backup
-conf/svn-repos: svn repos to backup
-
-bkp_mysql.sh: Performs backup of selected mysql databases (in conf/db-mysql).
-bkp_www.sh: Performs backup of selected web server directoties (in conf/sites).
-bkp_conf.sh: Rerforms backup of selected system configuration files (in conf/conf-files).
-bkp_scripts.sh: Performs backup of selected scripts (in conf/scripts).
-
-bkp_svn.sh: Performs backup of selected SVN repos (in conf/svn-repos).
-bkp_otrs.sh: Performs backup of OTRS support ticketing system.
-
-s3-plain-sync.sh: backup directory is synchronized with Amazon S3, using s3cmd sync
-s3-plain-sync-custom.sh: custom sync using s3cmd sync
-
-s3-dup-backup.sh: backup directory is uploaded to Amazon S3, using duplicity
-s3-dup-restore.sh: simple tool to restore a file from duplicity archives
-s3-dup-list.sh: simple tool to list current files in duplicity archives
-
-BACKUP LOGS
-===========
-Backup is keeping logs in log directory.
-You should take care for logfile rotation.
 
 CRON AUTOMATION
 ===============
