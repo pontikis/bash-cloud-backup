@@ -45,9 +45,9 @@ s3-dup-backup.sh: backup directory is uploaded to Amazon S3, using duplicity
 s3-dup-restore.sh: simple tool to restore a file from duplicity archives
 s3-dup-list.sh: simple tool to list current files in duplicity archives
 
-BACKUP LOGS
-===========
-Backup is keeping logs in log directory.
+LOGS
+====
+bash-cloud-backup is keeping logs in log directory.
 You should take care for logfile rotation.
 
 EXTERNAL SOFTWARE
@@ -64,7 +64,7 @@ SETUP USING GIT (recommended)
 ============================
 # setup (using git)
 cd /root/scripts
-git clone https://github.com/pontikis/bash-cloud-backup.git
+git clone git://github.com/pontikis/bash-cloud-backup.git
 
 # get updates (using git)
 cd /root/scripts
