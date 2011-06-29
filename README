@@ -47,13 +47,20 @@ wget https://github.com/pontikis/bash-cloud-backup/zipball/master
 
 CONFIGURATION
 =============
+
+IMPORTANT SECURITY ISSUE:
+Ensure that all executable (*.sh) and directories are mod 700 and text files 600
+cd /root/scripts
+chown -R root:root bash-cloud-backup
+chmod 700 bash-cloud-backup
+chmod 700 bash-cloud-backup/conf.default
+chmod 600 bash-cloud-backup/conf.default/*
+chmod -R 700 bash-cloud-backup/*.sh
+chmod -R 700 bash-cloud-backup/conf.default/*.sh
+
 copy -R conf.default conf and edit conf/initialize.sh (paremeters and Amazon S3 credentials)
 copy bkp_all.default.sh to bkp_all.sh and edit it (uncomment procedures to be executed)
 copy s3-plain-custom.default.sh to s3-plain-custom.sh and edit it (optional)
-
-IMPORTANT SECURITY ISSUE:
-chown -R root:root bash-cloud-backup
-chmod -R 700 bash-cloud-backup
 
 RUN
 ===
