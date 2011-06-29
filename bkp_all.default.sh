@@ -33,10 +33,10 @@ createlog "Daily filesystem backup is starting..."
 #source ${scriptpath}bkp_scripts.sh
 
 # include svn backup script
-#source ${scriptpath}bkp_svn
+#source ${scriptpath}bkp_svn.sh
 
 # include OTRS backup script
-#source ${scriptpath}bkp_otrs
+#source ${scriptpath}bkp_otrs.sh
 
 createlog "Daily filesystem backup completed."
 
