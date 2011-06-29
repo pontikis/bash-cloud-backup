@@ -29,11 +29,31 @@ AMAZON S3 ACCOUNT
 =================
 For cloud backup an Amazon S3 account is needed (http://aws.amazon.com/s3/)
 
+SETUP USING GIT (recommended)
+============================
+# setup (using git)
+cd /root/scripts
+git clone https://github.com/pontikis/bash-cloud-backup.git
+
+# get updates (using git)
+cd /root/scripts
+git fetch
+git merge origin
+
+SETUP by download
+=================
+If git is not available, download the source:
+wget https://github.com/pontikis/bash-cloud-backup/zipball/master
+
 CONFIGURATION
 =============
 copy -R conf.default conf and edit conf/initialize.sh (paremeters and Amazon S3 credentials)
 copy bkp_all.default.sh to bkp_all.sh and edit it (uncomment procedures to be executed)
 copy s3-plain-custom.default.sh to s3-plain-custom.sh and edit it (optional)
+
+IMPORTANT SECURITY ISSUE:
+chown -R root:root bash-cloud-backup
+chmod -R 700 bash-cloud-backup
 
 RUN
 ===
@@ -71,13 +91,8 @@ BACKUP LOGS
 Backup is keeping logs in log directory.
 You should take care for logfile rotation.
 
-PRIVACY
-=======
-chown -R root:root backup
-chmod -R 700 backup
-
-CRON
-====
+CRON AUTOMATION
+===============
 su -l root
 crontab -e
 0 1 * * * /usr/bin/nice -n19 /root/scripts/backup/bkp_all.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
