@@ -88,7 +88,7 @@ chmod 600 bash-cloud-backup/conf.default/*
 chmod -R 700 bash-cloud-backup/*.sh
 chmod -R 700 bash-cloud-backup/conf.default/*.sh
 
-copy -R conf.default conf and edit conf/initialize.sh (paremeters and Amazon S3 credentials)
+copy -R conf.default conf and edit conf/initialize.sh (parameters and Amazon S3 credentials)
 copy bkp_all.default.sh to bkp_all.sh and edit it (uncomment procedures to be executed)
 copy s3-plain-custom.default.sh to s3-plain-custom.sh and edit it (optional)
 
@@ -101,5 +101,5 @@ CRON AUTOMATION
 ===============
 su -l root
 crontab -e
-0 1 * * * /usr/bin/nice -n19 /root/scripts/backup/bkp_all.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
+0 1 * * * /usr/bin/nice -n19 /root/scripts/bash-cloud-backup/bkp_all.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
 (every night at 01:00)
