@@ -10,5 +10,5 @@ source ${scriptpath}conf/initialize.sh s3_plain
 SOURCE="$backuproot/";
 DEST=$s3_plain_path
 
-$S3CMD sync $SOURCE $DEST
+$S3CMD sync --delete-removed $SOURCE $DEST
 
