@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#-------------------------------------
+# SCRIPT.........: initialize
+# ACTION.........: Initialize variables for backup scripts
+# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
+# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# LICENSE........: GNU General Public License (see http://www.gnu.org/copyleft/gpl.html)
+# DOCUMENTATION..: See README for instructions
+#-------------------------------------
+
 FIND="$(which find)"
 TAR="$(which tar)"
 GZIP="$(which gzip)"
