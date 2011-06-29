@@ -32,7 +32,7 @@ backuproot='/root/backup'
 if [ ! -d "$backuproot" ]; then $MKDIR $backuproot; fi
 
 # define variables 
-logfile='$backuproot/log/backup.log'
+logfile="$backuproot/log/backup.log"
 
 # make backup directories in case they do not exist
 if [ ! -d "$backuproot/log" ]; then $MKDIR $backuproot/log; fi
