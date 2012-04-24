@@ -24,12 +24,11 @@ DUPLICITY="$(which duplicity)"
 
 # !!! P L E A S E  C O M P L E T E  Y O U R  O W N  D A T A!
 
-days_rotation=7
-
+days_rotation=14
 backuproot='/root/backup'
 
 # make backup directories in case they do not exist
-if [ ! -d "$backuproot" ]; then $MKDIR $backuproot; fi
+if [ ! -d "$backuproot" ]; then $MKDIR -p $backuproot; fi
 
 # define variables 
 logfile="$backuproot/log/backup.log"
@@ -93,6 +92,7 @@ otrs)
   ;;
 s3_plain)
     # define variables
+    use_s3_server_encryption=1
     s3_plain_path='s3://bucket_name/path/to/plain_backup/'
   ;;
 s3_dup)
