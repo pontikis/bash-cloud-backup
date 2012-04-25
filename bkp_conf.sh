@@ -37,13 +37,21 @@ dt=`$DATE +%Y%m%d.%H%M%S`
 listfile=$currentdir/conf-$dt-list.tar
 bkpfile=$currentdir/conf-$dt.tar
 createlog "---creating tar $bkpfile..."
-$TAR cfv $listfile $tmpdir/backup_list > /dev/null
-$TAR cfv $bkpfile -T $tmpdir/backup_list > /dev/null
+$TAR cpfv $listfile $tmpdir/backup_list > /dev/null
+$TAR cpfv $bkpfile -T $tmpdir/backup_list > /dev/null
 
-# compress site files tar
-createlog "---zip $bkpfile..."
-$GZIP -9 -f $listfile
-$GZIP -9 -f $bkpfile
+if [ $use_7z -eq 1 ]; then
+    createlog "---7zip $bkpfile..."
+    $cmd_7Z $listfile "$listfile.zip"
+    $cmd_7Z $bkpfile "$bkpfile.zip"
+    $RM -f $listfile
+    $RM -f $bkpfile
+else
+    # compress site files tar
+    createlog "---zip $bkpfile..."
+    $GZIP -9 -f $listfile
+    $GZIP -9 -f $bkpfile
+fi
 
 # rotating delete files of 7 days old
 createlog "---rotating delete..."
