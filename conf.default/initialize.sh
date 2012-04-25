@@ -17,7 +17,7 @@ CHMOD="$(which chmod)"
 MKDIR="$(which mkdir)"
 RM="$(which rm)"
 
-cmd_7Z="$(which 7Z) a -pYOUR_PASSWORD_HERE -mx=9 -mm=Deflate -mem=AES256 -tzip"
+cmd_7Z="$(which 7z) a -pYOUR_PASSWORD_HERE -mx=9 -mm=Deflate -mem=AES256 -tzip"
 use_7z=1
 
 MYSQLDUMP="$(which mysqldump)"
