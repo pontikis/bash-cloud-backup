@@ -47,7 +47,6 @@ if [ $use_7z -eq 1 ]; then
     $RM -f $listfile
     $RM -f $bkpfile
 else
-    # compress site files tar
     createlog "---zip $bkpfile..."
     $GZIP -9 -f $listfile
     $GZIP -9 -f $bkpfile

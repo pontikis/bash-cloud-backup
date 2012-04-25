@@ -40,10 +40,18 @@ createlog "---creating tar $bkpfile..."
 $TAR cfv $listfile $tmpdir/backup_list > /dev/null
 $TAR cfv $bkpfile -T $tmpdir/backup_list > /dev/null
 
-# compress site files tar
-createlog "---zip $bkpfile..."
-$GZIP -9 -f $listfile
-$GZIP -9 -f $bkpfile
+if [ $use_7z -eq 1 ]; then
+    createlog "---7zip $bkpfile..."
+    $cmd_7z "$listfile.zip" $listfile
+    $cmd_7z "$bkpfile.zip" $bkpfile
+    $RM -f $listfile
+    $RM -f $bkpfile
+else
+    createlog "---zip $bkpfile..."
+    $GZIP -9 -f $listfile
+    $GZIP -9 -f $bkpfile
+fi
+
 
 # rotating delete files of 7 days old
 createlog "---rotating delete..."

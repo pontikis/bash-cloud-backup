@@ -31,10 +31,15 @@ do
     dt=`$DATE +%Y%m%d.%H%M%S`
     bkpfile=$currentdir/$db-$dt.sql
     $MYSQLDUMP -u$mysql_user -p$mysql_password $db > $bkpfile
-    
-    # compress sql file
-    createlog "---zip $bkpfile..."
-    $GZIP -9 -f $bkpfile
+
+    if [ $use_7z -eq 1 ]; then
+        createlog "---7zip $bkpfile..."
+        $cmd_7z "$bkpfile.zip" $bkpfile
+        $RM -f $bkpfile
+    else
+        createlog "---zip $bkpfile..."
+        $GZIP -9 -f $bkpfile
+    fi
 
     # rotating delete files of 7 days old
     createlog "---rotating delete..."

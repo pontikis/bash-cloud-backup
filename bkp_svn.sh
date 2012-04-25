@@ -41,9 +41,14 @@ do
     createlog "---creating tar $bkpfile..."
     $TAR cfv $bkpfile $tmpdir > /dev/null
 
-    # compress repo files tar
-    createlog "---zip $bkpfile..."
-    $GZIP -9 -f $bkpfile
+    if [ $use_7z -eq 1 ]; then
+        createlog "---7zip $bkpfile..."
+        $cmd_7z "$bkpfile.zip" $bkpfile
+        $RM -f $bkpfile
+    else
+        createlog "---zip $bkpfile..."
+        $GZIP -9 -f $bkpfile
+    fi
 
     # delete tmp dir
     if [ -d $tmpdir ]; then $RM -rf $tmpdir; fi
