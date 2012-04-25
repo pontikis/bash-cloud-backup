@@ -1,8 +1,7 @@
-# /.idea
+# IDE files
 /.idea/*
 
 /conf/*
 
 bkp_all.sh
-
-/s3-plain-sync-custom.sh
+s3-plain-sync-custom.sh
