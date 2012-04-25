@@ -36,7 +36,7 @@ do
     dt=`$DATE +%Y%m%d.%H%M%S`
     bkpfile=$currentdir/$site-$dt.tar
     createlog "---creating tar $bkpfile..."
-    $TAR cfv $bkpfile $wwwroot/$wwwpath > /dev/null
+    $TAR cpfv $bkpfile $wwwroot/$wwwpath > /dev/null
 
     if [ $use_7z -eq 1 ]; then
         createlog "---7zip $bkpfile..."

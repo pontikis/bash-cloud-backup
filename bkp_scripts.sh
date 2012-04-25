@@ -37,8 +37,8 @@ dt=`$DATE +%Y%m%d.%H%M%S`
 listfile=$currentdir/scripts-$dt-list.tar
 bkpfile=$currentdir/scripts-$dt.tar
 createlog "---creating tar $bkpfile..."
-$TAR cfv $listfile $tmpdir/backup_list > /dev/null
-$TAR cfv $bkpfile -T $tmpdir/backup_list > /dev/null
+$TAR cpfv $listfile $tmpdir/backup_list > /dev/null
+$TAR cpfv $bkpfile -T $tmpdir/backup_list > /dev/null
 
 if [ $use_7z -eq 1 ]; then
     createlog "---7zip $bkpfile..."

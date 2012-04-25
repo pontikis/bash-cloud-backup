@@ -39,7 +39,7 @@ do
     dt=`$DATE +%Y%m%d.%H%M%S`
     bkpfile=$currentdir/$repo-$dt.tar
     createlog "---creating tar $bkpfile..."
-    $TAR cfv $bkpfile $tmpdir > /dev/null
+    $TAR cpfv $bkpfile $tmpdir > /dev/null
 
     if [ $use_7z -eq 1 ]; then
         createlog "---7zip $bkpfile..."
