@@ -42,8 +42,8 @@ $TAR cpfv $bkpfile -T $tmpdir/backup_list > /dev/null
 
 if [ $use_7z -eq 1 ]; then
     createlog "---7zip $bkpfile..."
-    $cmd_7z $listfile "$listfile.zip"
-    $cmd_7z $bkpfile "$bkpfile.zip"
+    $cmd_7z "$listfile.zip" $listfile
+    $cmd_7z "$bkpfile.zip" $bkpfile
     $RM -f $listfile
     $RM -f $bkpfile
 else
