@@ -32,12 +32,6 @@ createlog "Daily filesystem backup is starting..."
 # include scripts backup script
 #source ${scriptpath}bkp_scripts.sh
 
-# include svn backup script
-#source ${scriptpath}bkp_svn.sh
-
-# include OTRS backup script
-#source ${scriptpath}bkp_otrs.sh
-
 createlog "Daily filesystem backup completed."
 
 #-------------------------------------------------------------------------------
@@ -53,8 +47,4 @@ createlog "Daily S3 plain custom backup is starting..."
 createlog "Daily S3 plain custom backup completed."
 
 #-------------------------------------------------------------------------------
-createlog "####################"
-createlog "Daily S3 encrypted incremental backup is starting..."
-#source ${scriptpath}s3-dup-backup.sh
-createlog "Daily S3 encrypted incremental backup completed"
-#-------------------------------------------------------------------------------
+
