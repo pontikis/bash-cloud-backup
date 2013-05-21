@@ -24,6 +24,7 @@ use_7z=1
 MYSQLDUMP="$(which mysqldump)"
 
 S3CMD="$(which s3cmd)"
+S3CMD_SYNC_params="--verbose --config /root/.s3cfg --delete-removed"
 
 days_rotation=14
 backuproot='/root/backup'
