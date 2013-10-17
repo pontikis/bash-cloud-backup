@@ -15,7 +15,7 @@ scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
 
 # include initialize script
-source ${scriptpath}conf/initialize.sh conf
+source ${scriptpath}conf/initialize.sh docs
 
 createlog "-Daily backup of DOCS is starting..."
 
