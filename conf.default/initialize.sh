@@ -74,6 +74,13 @@ scripts)
     # make backup directories in case they do not exist
     if [ ! -d "$backuproot/$dir_scripts" ]; then $MKDIR $backuproot/$dir_scripts; fi
   ;;
+docs)
+    # define variables
+    dir_docs='docs'
+
+    # make backup directories in case they do not exist
+    if [ ! -d "$backuproot/$dir_docs" ]; then $MKDIR $backuproot/$dir_docs; fi
+  ;;
 s3_plain)
     # define variables
     use_s3_server_encryption=1
