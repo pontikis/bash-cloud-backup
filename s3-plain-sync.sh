@@ -12,5 +12,4 @@ DEST=$s3_plain_path
 ENCR=""
 if [ $use_s3_server_encryption -eq 1 ]; then ENCR="--add-header=x-amz-server-side-encryption:AES256"; fi
 
-$S3CMD sync $S3CMD_SYNC_params $ENCR $SOURCE $DEST
-
+$S3CMD sync --delete-removed --verbose $ENCR $SOURCE $DEST
