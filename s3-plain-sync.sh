@@ -10,6 +10,6 @@ source ${scriptpath}conf/initialize.sh s3_plain
 SOURCE="$backuproot/";
 DEST=$s3_plain_path
 ENCR=""
-if [ $use_s3_server_encryption -eq 1 ]; then ENCR="--add-header=x-amz-server-side-encryption:AES256"; fi
+if [ $use_s3_server_encryption -eq 1 ]; then ENCR="--server-side-encryption"; fi
 
 $S3CMD sync --delete-removed --verbose $ENCR $SOURCE $DEST
