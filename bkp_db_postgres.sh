@@ -5,7 +5,7 @@
 # ACTION.........: Performs backup of selected postgresql databases (in conf/db-postgres)
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: MediSign SA (http://www.medisign.gr)
-# LICENSE........: GNU General Public License (see http://www.gnu.org/copyleft/gpl.html)
+# LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
 #                  a conf directory exist for configuration files

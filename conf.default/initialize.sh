@@ -4,7 +4,7 @@
 # ACTION.........: Initialize variables for backup scripts
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: MediSign SA (http://www.medisign.gr)
-# LICENSE........: GNU General Public License (see http://www.gnu.org/copyleft/gpl.html)
+# LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 #-------------------------------------------------------------------------------
 
