@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------------------
-# SCRIPT.........: bkp_db_pg
-# ACTION.........: Performs backup of selected mysql databases (in conf/db-postgres)
+# SCRIPT.........: bkp_db_postgres
+# ACTION.........: Performs backup of selected postgresql databases (in conf/db-postgres)
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: MediSign SA (http://www.medisign.gr)
 # LICENSE........: GNU General Public License (see http://www.gnu.org/copyleft/gpl.html)
