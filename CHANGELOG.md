@@ -1,13 +1,13 @@
 bash-cloud-backup
 =================
 
-Simple PHP database wrapper
+bash-cloud-backup is a set of bash scripts, which can be used to automate local and cloud backup in Linux/Unix machines.
 
 Copyright [Christos Pontikis][copyright]
 [copyright]: http://www.pontikis.net
 
 License [MIT][mit]
-[mit]: https://raw.github.com/pontikis/dacapo/master/MIT_LICENSE
+[mit]: https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
 Release 0.9.0 (03 May 2014)
