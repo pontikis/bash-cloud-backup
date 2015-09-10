@@ -15,7 +15,7 @@ INCREMENTAL ENCRYPTED BACKUPS WITH DUPLICITY (AMAZON S3)
 After local filesystem backup has been completed, the backup directory is uploaded to Amazon S3, using duplicity.
 Attention: No GPG key is used. Just the PASSPHRASE protection.
 
-COPYRIGHT: Christos Pontikis (pontikis@gmail.com) - MediSign SA (http://www.medisign.gr)
+COPYRIGHT: Christos Pontikis (pontikis@gmail.com -  http://www.pontikis.gr)
 
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 
