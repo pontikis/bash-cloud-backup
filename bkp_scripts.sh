@@ -3,7 +3,6 @@
 #----------------------------------------------------------------------------------
 # SCRIPT.........: bkp_conf
 # ACTION.........: Performs backup of selected scripts (in conf/scripts)
-# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions

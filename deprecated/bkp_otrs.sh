@@ -2,8 +2,7 @@
 
 #-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_otrs
-# ACTION.........: Performs OTRS backup (application, data) 
-# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
+# ACTION.........: Performs OTRS backup (application, data)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: GNU General Public License 
 #                  (see http://www.gnu.org/copyleft/gpl.html)

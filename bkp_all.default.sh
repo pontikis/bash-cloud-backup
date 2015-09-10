@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #-------------------------------------------------------------------------------
-# SCRIPT.........: bkp_all
+# SCRIPT.........: bkp_all.default.sh
 # ACTION.........: Performs backup of selected files
-# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions

@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------------------
-# SCRIPT.........: bkp_db_postgres
+# SCRIPT.........: bkp_db_postgres.sh
 # ACTION.........: Performs backup of selected postgresql databases (in conf/db-postgres)
-# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions

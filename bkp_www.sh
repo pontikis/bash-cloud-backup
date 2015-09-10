@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------------------
-# SCRIPT.........: bkp_www
+# SCRIPT.........: bkp_www.sh
 # ACTION.........: Performs backup of selected web sites (in conf/sites)
-# CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # DATE...........: 2006-05-13
 # VERSION........: 1.0
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
