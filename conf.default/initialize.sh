@@ -3,7 +3,7 @@
 # SCRIPT.........: initialize
 # ACTION.........: Initialize variables for backup scripts
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
-# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 #-------------------------------------------------------------------------------

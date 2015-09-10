@@ -4,7 +4,7 @@
 # SCRIPT.........: bkp_db_postgres
 # ACTION.........: Performs backup of selected postgresql databases (in conf/db-postgres)
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
-# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and

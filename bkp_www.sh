@@ -6,7 +6,7 @@
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
 # DATE...........: 2006-05-13
 # VERSION........: 1.0
-# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and

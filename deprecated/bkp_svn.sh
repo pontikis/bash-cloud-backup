@@ -4,7 +4,7 @@
 # SCRIPT.........: bkp_svn
 # ACTION.........: Performs backup of selected SVN repos (in conf/svn-repos)
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
-# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: GNU General Public License (see http://www.gnu.org/copyleft/gpl.html)
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and

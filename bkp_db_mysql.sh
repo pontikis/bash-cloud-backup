@@ -4,7 +4,7 @@
 # SCRIPT.........: bkp_mysql
 # ACTION.........: Performs backup of selected mysql databases (in conf/db-mysql)
 # CREATED BY.....: Christos Pontikis (http://www.medisign.gr)
-# COPYRIGHT......: MediSign SA (http://www.medisign.gr)
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
