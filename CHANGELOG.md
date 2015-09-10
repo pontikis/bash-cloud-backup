@@ -12,6 +12,5 @@ License [MIT][mit]
 
 Release 0.9.0 (03 May 2014)
 ---------------------------
-* select, update, insert, delete
-* transactions
-* utility functions (qstr, lower, limit)
+* MIT LICENSE
+* Postgres support
