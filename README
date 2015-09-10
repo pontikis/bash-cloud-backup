@@ -17,7 +17,7 @@ Attention: No GPG key is used. Just the PASSPHRASE protection.
 
 COPYRIGHT: Christos Pontikis (pontikis@gmail.com) - MediSign SA (http://www.medisign.gr)
 
-LICENSE: GNU General Public License (http://www.gnu.org/copyleft/gpl.html)
+# LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 
 SCRIPTS included in bash-cloud-backup
 =====================================
