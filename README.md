@@ -15,10 +15,6 @@ LOCAL FILESYSTEM BACKUP
 * Backup files are stored in specified directories and are deleted rotating (14 days default).
 * AMAZON S3 SYNC: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but highly recommended).
 
-CHANGELOG
----------
-Christos Pontikis (pontikis@gmail.com -  http://www.pontikis.gr)
-
 COPYRIGHT
 ---------
 Christos Pontikis (pontikis@gmail.com -  http://www.pontikis.gr)
