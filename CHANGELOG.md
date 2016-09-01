@@ -8,6 +8,10 @@ Copyright Christos Pontikis http://www.pontikis.net
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
+Release 1.0.3 (01 Sep 2016)
+---------------------------
+* change default CMD_7z to create 7z package (not zip) #15
+
 Release 1.0.2 (01 Sep 2016)
 ---------------------------
 * MIT LICENSE
