@@ -13,6 +13,7 @@ Release 1.0.2 (01 Sep 2016)
 * MIT LICENSE
 * S3CMD_SYNC_PARAMS user defined (including server side encryption) 
 * use_s3_server_encryption deprecated (included in S3CMD_SYNC_PARAMS)
+* 7z compression added
 
 Release 1.0.1 (28 Jun 2011)
 ---------------------------
