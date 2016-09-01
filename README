@@ -64,7 +64,7 @@ SETUP USING GIT (recommended)
 ============================
 # setup (using git)
 cd /root/scripts
-git clone git://github.com/pontikis/bash-cloud-backup.git
+git clone https://github.com/pontikis/bash-cloud-backup.git
 
 # get updates (using git)
 cd /root/scripts
