@@ -26,9 +26,9 @@ S3CMD="$(which s3cmd)"
 S3CMD_SYNC_PARAMS="--verbose --config /root/.s3cfg --delete-removed --server-side-encryption"
 # ATTENTION --------------------------------------------------------------------
 # s3cmd versions < 0.9 ---------------------------------------------------------
-# add server siode encryption using "--add-header=x-amz-server-side-encryption:AES256"
+# add server side encryption using "--add-header=x-amz-server-side-encryption:AES256"
 # s3cmd latest version ---------------------------------------------------------
-# add server siode encryption using"--server-side-encryption"
+# add server side encryption using"--server-side-encryption"
 
 days_rotation=14
 backuproot='/root/backup'
