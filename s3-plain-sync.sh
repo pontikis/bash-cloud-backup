@@ -9,7 +9,5 @@ source ${scriptpath}conf/initialize.sh s3_plain
 # attention: / is important to copy only the contents of $backuproot
 SOURCE="$backuproot/";
 DEST=$s3_plain_path
-ENCR=""
-if [ $use_s3_server_encryption -eq 1 ]; then ENCR="--server-side-encryption"; fi
 
-$S3CMD sync --delete-removed --verbose $ENCR $SOURCE $DEST
+$S3CMD sync $S3CMD_SYNC_PARAMS $SOURCE $DEST

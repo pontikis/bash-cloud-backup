@@ -23,7 +23,12 @@ use_7z=1
 MYSQLDUMP="$(which mysqldump)"
 
 S3CMD="$(which s3cmd)"
-S3CMD_SYNC_params="--verbose --config /root/.s3cfg --delete-removed"
+S3CMD_SYNC_PARAMS="--verbose --config /root/.s3cfg --delete-removed --server-side-encryption"
+# ATTENTION --------------------------------------------------------------------
+# s3cmd versions < 0.9 ---------------------------------------------------------
+# add server siode encryption using "--add-header=x-amz-server-side-encryption:AES256"
+# s3cmd latest version ---------------------------------------------------------
+# add server siode encryption using"--server-side-encryption"
 
 days_rotation=14
 backuproot='/root/backup'
@@ -82,7 +87,6 @@ docs)
   ;;
 s3_plain)
     # define variables
-    use_s3_server_encryption=1
     s3_plain_path='s3://bucket_name/path/to/plain_backup/'
   ;;
 esac
