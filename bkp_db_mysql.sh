@@ -33,7 +33,7 @@ do
 
     if [ $use_7z -eq 1 ]; then
         createlog "---7zip $bkpfile..."
-        $cmd_7z "$bkpfile.$7z_filetype" $bkpfile
+        $cmd_7z "$bkpfile.$filetype_7z" $bkpfile
         $RM -f $bkpfile
     else
         createlog "---zip $bkpfile..."

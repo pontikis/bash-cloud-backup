@@ -22,7 +22,7 @@ cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mhe -t7z"
 filetype_7z=7z
 # you should use the following (NOT recommended) -------------------------------
 # cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
-# 7z_filetype=zip
+# filetype_7z=zip
 
 MYSQLDUMP="$(which mysqldump)"
 
