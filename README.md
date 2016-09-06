@@ -46,7 +46,8 @@ SCRIPTS included in bash-cloud-backup
 * bkp_docs.sh: Performs backup of selected documents (in conf/docs).
 
 * s3-plain-sync.sh: backup directory is synchronized with Amazon S3, using s3cmd sync
-* s3-plain-sync-custom.sh: custom sync using s3cmd sync
+
+* custom.sh: custom commands
 
 
 LOGS
