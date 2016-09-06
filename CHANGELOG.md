@@ -8,6 +8,12 @@ Copyright Christos Pontikis http://www.pontikis.net
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
+Release 1.0.4 (06 Sep 2016)
+---------------------------
+* Guidelines to escape special characters in passwords #17
+* BUG FIX error parsing 7z_filetype variable name #18
+* Script with custom commands at the end of the backup procedure #19
+
 Release 1.0.3 (01 Sep 2016)
 ---------------------------
 * change default CMD_7z to create 7z package (not zip) #15
