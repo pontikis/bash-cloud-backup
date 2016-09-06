@@ -52,7 +52,7 @@ SCRIPTS included in bash-cloud-backup
 
 LOGS
 ----
-bash-cloud-backup is keeping logs in log directory (see initialize.sh).
+bash-cloud-backup is keeping logs (define log directory in ``initialize.sh``).
 
 You should take care for logfile rotation.
 
