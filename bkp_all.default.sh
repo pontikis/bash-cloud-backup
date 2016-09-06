@@ -44,9 +44,9 @@ createlog "Daily S3 plain backup completed."
 
 #-------------------------------------------------------------------------------
 createlog "####################"
-createlog "Daily S3 plain custom backup is starting..."
-#source ${scriptpath}s3-plain-sync-custom.sh
-createlog "Daily S3 plain custom backup completed."
+createlog "Custom commands..."
+#source ${scriptpath}custom.sh
+createlog "Custom backup completed."
 
 #-------------------------------------------------------------------------------
 
