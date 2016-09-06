@@ -10,4 +10,4 @@ source ${scriptpath}conf/initialize.sh s3_plain
 SOURCE="$backuproot/";
 DEST=$s3_plain_path
 
-$S3CMD sync $S3CMD_SYNC_PARAMS $SOURCE $DEST
+$S3CMD sync $S3CMD_SYNC_PARAMS $SOURCE $DEST 2>&1 | $TEE -a $logfile
