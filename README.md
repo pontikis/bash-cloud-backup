@@ -56,6 +56,19 @@ bash-cloud-backup is keeping logs (define log directory in ``initialize.sh``).
 
 You should take care for logfile rotation.
 
+    nano /etc/logrotate.d/bash-cloud-backup
+    
+Add something like
+    
+    /path/to/backup.log {
+        weekly
+        missingok
+        rotate 14
+        notifempty
+        create
+    }
+
+
 External software (optional)
 ----------------------------
 
