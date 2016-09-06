@@ -12,7 +12,7 @@ LOCAL FILESYSTEM BACKUP
 
 * bash-cloud-backup keeps rotating compressed tarballs or certain directories or files or MySQL databases.
 * tar (for archiving) and gzip (for compression) or 7z (for compression and encryption - RECOMMENDED) are being used.
-* Backup files are stored in specified directories and are deleted using rotating (14 days default).
+* Backup files are stored in specified directories and deleted with rotation (14 days default).
 * AMAZON S3 SYNC: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but highly recommended).
 
 COPYRIGHT
