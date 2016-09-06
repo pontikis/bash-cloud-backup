@@ -15,6 +15,7 @@ DATE="$(which date)"
 CHMOD="$(which chmod)"
 MKDIR="$(which mkdir)"
 RM="$(which rm)"
+TEE="$(which tee)"
 
 use_7z=1
 # ATTENTION -------------------------------------------------------------------------------------------
@@ -96,18 +97,15 @@ docs)
   ;;
 s3_plain)
     # define variables
+    # ATTENTION must end with /
     s3_plain_path='s3://bucket_name/path/to/plain_backup/'
   ;;
 esac
 
-# GET START TIME
-if [ ${#start} -eq 0 ]; then    # var start has no value
-  start=`$DATE "+%Y-%m-%d %H:%M:%S"`
-fi
 
 # UDF .............................................
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
-      logline="$start | $dt | $1"
+      logline="$dt | $1"
       echo -e $logline; echo -e $logline >> $logfile
 }
