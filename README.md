@@ -87,17 +87,29 @@ CONFIGURATION
 
 IMPORTANT SECURITY ISSUE: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
-    cd /root/scripts
+    cd /path/to/scripts
     chown -R root:root bash-cloud-backup
-    chmod 700 bash-cloud-backup
-    chmod 700 bash-cloud-backup/conf.default
-    chmod 600 bash-cloud-backup/conf.default/*
-    chmod -R 700 bash-cloud-backup/*.sh
-    chmod -R 700 bash-cloud-backup/conf.default/*.sh
+    ch bash-cloud-backup
+    chmod 700 *.sh
+    cd conf.default
+    chmod 600 *
+    chmod 700 initialize.sh
 
-    cp -R conf.default conf # edit conf/initialize.sh (parameters and Amazon S3 credentials)
-    cp bkp_all.default.sh bkp_all.sh #edit it (uncomment procedures to be executed)
-    cp s3-plain-custom.default.sh s3-plain-custom.sh # edit it (optional)
+edit conf/initialize.sh (parameters and Amazon S3 credentials)
+
+    cp -R conf.default conf
+    cd conf
+    nano initialize.sh
+    
+edit bkp_all.sh (uncomment procedures to be executed)    
+
+    cp bkp_all.default.sh bkp_all.sh 
+    nano bkp_all.sh 
+
+configure custom.sh (optional)
+
+    cp custom.default.sh custom.sh 
+    nano custom.sh
 
 RUN
 ---
