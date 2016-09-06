@@ -7,6 +7,13 @@ Copyright Christos Pontikis http://www.pontikis.net
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
+Release 1.0.5 (06 Sep 2016)
+---------------------------
+
+* Remove deprecated scripts #23
+* Redirect gzip output to log file #22
+* Redirect 7z output to log file #21
+* Redirect s3cmd sync output to log file #20
 
 Release 1.0.4 (06 Sep 2016)
 ---------------------------
