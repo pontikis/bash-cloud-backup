@@ -7,24 +7,24 @@ RELEASE 1.0.4 (06 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
-LOCAL FILESYSTEM BACKUP
------------------------
+Features
+--------
 
 * bash-cloud-backup keeps rotating compressed tarballs or certain directories or files or MySQL databases.
-* tar (for archiving) and gzip (for compression) or 7z (for compression and encryption - RECOMMENDED) are being used.
+* it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and encryption - RECOMMENDED).
 * Backup files are stored in specified directories and deleted with rotation (14 days default).
-* AMAZON S3 SYNC: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but highly recommended).
+* Amazon S3 sync: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but recommended).
 
-COPYRIGHT
+Copyright
 ---------
-Christos Pontikis (pontikis@gmail.com -  http://www.pontikis.gr)
+Christos Pontikis (http://www.pontikis.gr)
 
-LICENSE
+License
 -------
 MIT (see https://opensource.org/licenses/MIT)
 
-CONF FILES included in bash-cloud-backup
-----------------------------------------
+Configuration files
+-------------------
 
 * conf/initialize.sh: main configuration script
 * conf/db-mysql: mysql databases to backup
@@ -34,8 +34,8 @@ CONF FILES included in bash-cloud-backup
 * conf/docs: documents to backup
 
 
-SCRIPTS included in bash-cloud-backup
--------------------------------------
+Scripts
+-------
 
 * bkp_all.sh: the main script
 
@@ -50,41 +50,41 @@ SCRIPTS included in bash-cloud-backup
 * custom.sh: custom commands
 
 
-LOGS
+Logs
 ----
 bash-cloud-backup is keeping logs (define log directory in ``initialize.sh``).
 
 You should take care for logfile rotation.
 
-EXTERNAL SOFTWARE
------------------
+External software (optional)
+----------------------------
 
 * s3tools: http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
 * p7zip: a port of 7za.exe for POSIX systems (http://p7zip.sourceforge.net). 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org. For Debian: ``apt-get install p7zip-full``. 
 
-AMAZON S3 ACCOUNT
+Amazon S3 account
 -----------------
 
 For cloud backup, an Amazon S3 account is needed (http://aws.amazon.com/s3/)
 
-SETUP USING GIT (recommended)
+Setup using git (recommended)
 -----------------------------
-# setup (using git)
-    cd /root/scripts
+### installation
+    cd /path/to/scripts
     git clone https://github.com/pontikis/bash-cloud-backup.git
 
-# get updates (using git)
-    cd /root/scripts
+### get updates
+    cd /path/to/bash-cloud-backup
     git fetch
     git merge origin
 
-SETUP by download
+Setup by download
 -----------------
 If ``git`` is not available, download the source:
 
 https://github.com/pontikis/bash-cloud-backup/archive/master.zip
 
-CONFIGURATION
+Configuration
 -------------
 
 IMPORTANT SECURITY ISSUE: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
@@ -113,18 +113,18 @@ configure custom.sh (optional)
     cp custom.default.sh custom.sh 
     nano custom.sh
 
-RUN
+Run
 ---
 
-To perform backup, call ``bkp_all.sh`` (you may use CRON for automation).
+To perform backup, call ``bkp_all.sh`` 
 
 Each one of ``bkp_*`` or ``s3_*`` can run as stand-alone script.
 
-CRON AUTOMATION
+Cron automation
 ---------------
 
     su -l root
     crontab -e
     0 1 * * * /usr/bin/nice -n19 /root/scripts/bash-cloud-backup/bkp_all.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
 
-(every night at 01:00)
+(in this example, every night at 01:00)
