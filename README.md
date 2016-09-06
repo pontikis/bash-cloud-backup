@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a set of bash scripts, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 1.0.3 (01 Sep 2016)
+RELEASE 1.0.4 (06 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -11,8 +11,8 @@ LOCAL FILESYSTEM BACKUP
 -----------------------
 
 * bash-cloud-backup keeps rotating compressed tarballs or certain directories or files or MySQL databases.
-* tar and gzip or 7z are being used.
-* Backup files are stored in specified directories and are deleted rotating (14 days default).
+* tar (for archiving) and gzip (for compression) or 7z (for compression and encryption - RECOMMENDED) are being used.
+* Backup files are stored in specified directories and are deleted using rotating (14 days default).
 * AMAZON S3 SYNC: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but highly recommended).
 
 COPYRIGHT
@@ -52,14 +52,15 @@ SCRIPTS included in bash-cloud-backup
 
 LOGS
 ----
-bash-cloud-backup is keeping logs in log directory.
+bash-cloud-backup is keeping logs in log directory (see initialize.sh).
 
 You should take care for logfile rotation.
 
 EXTERNAL SOFTWARE
 -----------------
 
-s3tools http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
+* s3tools: http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
+* p7zip: a port of 7za.exe for POSIX systems (http://p7zip.sourceforge.net). 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org. For Debian: ``apt-get install p7zip-full``. 
 
 AMAZON S3 ACCOUNT
 -----------------
