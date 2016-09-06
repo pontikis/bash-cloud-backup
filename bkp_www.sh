@@ -43,7 +43,7 @@ do
         $RM -f $bkpfile
     else
         createlog "---zip $bkpfile..."
-        $GZIP -9 -f $bkpfile
+        $GZIP -9 -f $bkpfile 2>&1 | $TEE -a $logfile
     fi
 
     # rotating delete files of 7 days old

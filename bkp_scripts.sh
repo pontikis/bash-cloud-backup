@@ -47,8 +47,8 @@ if [ $use_7z -eq 1 ]; then
     $RM -f $bkpfile
 else
     createlog "---zip $bkpfile..."
-    $GZIP -9 -f $listfile
-    $GZIP -9 -f $bkpfile
+    $GZIP -9 -f $listfile 2>&1 | $TEE -a $logfile
+    $GZIP -9 -f $bkpfile 2>&1 | $TEE -a $logfile
 fi
 
 
