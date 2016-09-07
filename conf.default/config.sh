@@ -67,6 +67,8 @@ logfilepath='/root/backup/log'
 
 logfilename='backup.log'
 
+log_separator='################################################################################'
+
 # ------------------------------------------------------------------------------
 # 7z compression and encryption (RECOMMENDED) ----------------------------------
 # if you set value other than 1, gzip compression will be used (no encryption in this case)
