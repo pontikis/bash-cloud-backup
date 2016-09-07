@@ -74,18 +74,18 @@ log_separator='#################################################################
 # if you set value other than 1, gzip compression will be used (no encryption in this case)
 use_7z=1
 
-cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mhe -t7z"
-filetype_7z=7z
-# you may use the following (NOT recommended) ----------------------------------
-# cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
-# filetype_7z=zip
-
 # ATTENTION --------------------------------------------------------------------
 #Enclosing characters in double quotes preserves the literal value of all characters within the quotes,
 #with the exception of $, `, \, and, when history expansion is enabled, !.
 #...so if you escape those (and the quote itself, of course) you're probably okay.
 # http://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-in-bash-how-do-we-know-it
 passwd_7z="YOUR_PASSWORD_HERE"
+
+cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mhe -t7z"
+filetype_7z=7z
+# you may use the following (NOT recommended) ----------------------------------
+# cmd_7z="$(which 7z) a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+# filetype_7z=zip
 
 # ------------------------------------------------------------------------------
 # rotating delete --------------------------------------------------------------
