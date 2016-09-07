@@ -1,14 +1,17 @@
 #!/bin/bash
-
 #-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_all.default.sh
-# ACTION.........: Performs backup of selected files
+# ACTION.........: Defines which backup operations will be performed
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
-# RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
-#                  a conf directory exist for configuration files
 #-------------------------------------------------------------------------------
+
+# ##############################################################################
+# ATTENTION
+#
+# DO NOT EDIT THIS SCRIPT - copy it to bkp_all.sh and edit this file instead
+# ##############################################################################
 
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
@@ -49,6 +52,4 @@ createlog "Daily filesystem backup completed."
 #createlog "Custom commands..."
 #source ${scriptpath}custom.sh
 #createlog "Custom backup completed."
-
 #-------------------------------------------------------------------------------
-
