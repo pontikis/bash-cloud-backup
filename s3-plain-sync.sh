@@ -8,8 +8,12 @@ source ${scriptpath}conf/config.sh
 # include init script
 source ${scriptpath}common/init.sh
 
+createlog "Daily S3 plain backup is starting..."
+
 # attention: / is important to copy only the contents of $backuproot
 SOURCE="$backuproot/";
 DEST=$s3_plain_path
 
 $S3CMD sync $S3CMD_SYNC_PARAMS $SOURCE $DEST 2>&1 | $TEE -a $logfile
+
+createlog "Daily S3 plain backup completed."
