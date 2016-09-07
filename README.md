@@ -73,7 +73,7 @@ External software (optional)
 ----------------------------
 
 * s3tools: http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
-* p7zip: a port of 7za.exe for POSIX systems (http://p7zip.sourceforge.net). 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org. For Debian: ``apt-get install p7zip-full``. 
+* p7zip: http://p7zip.sourceforge.net (for Debian: ``apt-get install p7zip-full``) a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
 
 Amazon S3 account
 -----------------
@@ -100,7 +100,7 @@ https://github.com/pontikis/bash-cloud-backup/archive/master.zip
 Configuration
 -------------
 
-IMPORTANT SECURITY ISSUE: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
+**IMPORTANT SECURITY ISSUE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
     cd /path/to/scripts
     chown -R root:root bash-cloud-backup
@@ -110,18 +110,18 @@ IMPORTANT SECURITY ISSUE: Ensure that all executable (*.sh) and directories are 
     chmod 600 *
     chmod 700 initialize.sh
 
-edit conf/initialize.sh (parameters and Amazon S3 credentials)
+edit ``conf/initialize.sh`` (parameters) - **ATTENTION**: remember to configure properly ``initialize.sh`` after each update
 
     cp -R conf.default conf
     cd conf
     nano initialize.sh
     
-edit bkp_all.sh (uncomment procedures to be executed)    
+edit ``bkp_all.sh`` (uncomment procedures to be executed)    
 
     cp bkp_all.default.sh bkp_all.sh 
     nano bkp_all.sh 
 
-configure custom.sh (optional)
+configure ``custom.sh`` (optional)
 
     cp custom.default.sh custom.sh 
     nano custom.sh
@@ -129,7 +129,7 @@ configure custom.sh (optional)
 Run
 ---
 
-To perform backup, call ``bkp_all.sh`` 
+To perform backup, call ``bkp_all.sh`` as root (in most cases)
 
 Each one of ``bkp_*`` or ``s3_*`` can run as stand-alone script.
 
