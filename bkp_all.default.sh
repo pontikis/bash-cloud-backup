@@ -21,7 +21,8 @@ source ${scriptpath}conf/config.sh
 # include init script
 source ${scriptpath}common/init.sh
 
-createlog $log_separator
+echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+
 createlog "Daily filesystem backup is starting..."
 
 # include www backup script
