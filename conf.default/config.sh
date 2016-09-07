@@ -9,6 +9,7 @@
 
 # ##############################################################################
 # CONFIGURE the following parameters
+#
 # NOTE: do not configure parameters for a section you will not use
 # ##############################################################################
 
@@ -30,14 +31,14 @@ backuproot='/root/backup'
 
 # ------------------------------------------------------------------------------
 # web server (sites to backup) -------------------------------------------------
-# path relative to backuproot
+# path relative to backuproot - SET TO '' IF NOT USED
 dir_www='www'
 # web server document root
 wwwroot='/var/www/'
 
 # ------------------------------------------------------------------------------
 # mysql (databases to backup) --------------------------------------------------
-# path relative to backuproot
+# path relative to backuproot - SET TO '' IF NOT USED
 dir_mysql='mysql'
 
 mysql_user='username_here'
@@ -47,17 +48,17 @@ MYSQLDUMP="$(which mysqldump)"
 
 # ------------------------------------------------------------------------------
 # configuration files (to backup) ----------------------------------------------
-# path relative to backuproot
+# path relative to backuproot - SET TO '' IF NOT USED
 dir_conf='conf'
 
 # ------------------------------------------------------------------------------
 # scripts (to backup) ----------------------------------------------------------
-# path relative to backuproot
+# path relative to backuproot - SET TO '' IF NOT USED
 dir_scripts='scripts'
 
 # ------------------------------------------------------------------------------
 # documents (to backup) --------------------------------------------------------
-# path relative to backuproot
+# path relative to backuproot - SET TO '' IF NOT USED
 dir_docs='docs'
 
 # ------------------------------------------------------------------------------
