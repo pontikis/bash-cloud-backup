@@ -123,7 +123,8 @@ function rotate_delete {
     else
 
         total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
-        total_backups=$(( $total_backups/$files_per_backup ))
+        echo "##################################total_backups $total_backups"
+        total_backups=$(( $total_backups/2 ))
         echo "++++++++++++++++++++++++++++++++++total_backups $total_backups"
         if [ $total_backups -lt $days_rotation ]; then
             createlog "---not enough backups ($total_backups) - no time for rotating delete..."
