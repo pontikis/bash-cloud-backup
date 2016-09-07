@@ -1,14 +1,4 @@
-# CONFIGUARATION FILES
+# CONFIGURATION FILES
 # valid entries start with /
 
-# APACHE
-/etc/apache2
-
-# PHP
-/etc/php5
-
-# MYSQL
-/etc/mysql/my.cnf
-
-# FILE SYSTEM
-/etc/fstab
+/etc
