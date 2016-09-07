@@ -123,13 +123,13 @@ function rotate_delete {
     else
 
         total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
-        total_backups=$total_backups/$files_per_backup
+        total_backups=$(( $total_backups/$files_per_backup ))
 
         if [ $total_backups -lt $days_rotation ]; then
             createlog "---not enough backups ($total_backups) - no time for rotating delete..."
         else
             backups_to_keep=`$FIND $dir_to_find -maxdepth 1 -type f  -mtime -$days_rotation  | $WC -l`
-            backups_to_keep=$backups_to_keep/$files_per_backup
+            backups_to_keep=$(( $backups_to_keep/$files_per_backup ))
 
             if [ $backups_to_keep -ge $backups_to_keep_at_least ]; then
                 createlog "---rotating delete..."
