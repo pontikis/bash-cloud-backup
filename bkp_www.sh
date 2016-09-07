@@ -1,16 +1,11 @@
 #!/bin/bash
-
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_www.sh
 # ACTION.........: Performs backup of selected web sites (in conf/sites)
-# DATE...........: 2006-05-13
-# VERSION........: 1.0
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
-# RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
-#                  a conf directory exist for configuration files
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi

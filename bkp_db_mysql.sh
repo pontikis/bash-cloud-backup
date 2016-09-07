@@ -1,14 +1,11 @@
 #!/bin/bash
-
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_db_mysql.sh
 # ACTION.........: Performs backup of selected mysql databases (in conf/db-mysql)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
-# RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
-#                  a conf directory exist for configuration files
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
@@ -42,8 +39,8 @@ do
         $GZIP -9 -f $bkpfile 2>&1 | $TEE -a $logfile
     fi
 
-# rotating delete
-rotate_delete $currentdir 1
+    # rotating delete
+    rotate_delete $currentdir 1
 
     createlog "--Daily backup of MySQL database '$db' completed."
 done

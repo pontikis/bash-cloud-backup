@@ -1,13 +1,10 @@
 #!/bin/bash
-
 #----------------------------------------------------------------------------------
 # SCRIPT.........: bkp_docs
 # ACTION.........: Performs backup of selected documents (in conf/docs)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
-# RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
-#                  a conf directory exist for configuration files
 #----------------------------------------------------------------------------------
 
 scriptpath=`dirname "$0"`
@@ -33,7 +30,7 @@ do
   $FIND $line -type f >> $tmpdir/backup_list
 done
 
-# tar site files
+# tar files
 dt=`$DATE +%Y%m%d.%H%M%S`
 listfile=$currentdir/docs-$dt-list.tar
 bkpfile=$currentdir/docs-$dt.tar
@@ -57,4 +54,3 @@ fi
 rotate_delete $currentdir 2
 
 createlog "-Daily backup of DOCS completed."
-

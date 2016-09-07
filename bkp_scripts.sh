@@ -1,14 +1,11 @@
 #!/bin/bash
-
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_conf
 # ACTION.........: Performs backup of selected scripts (in conf/scripts)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
 # DOCUMENTATION..: See README for instructions
-# RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
-#                  a conf directory exist for configuration files
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
@@ -33,7 +30,7 @@ do
   $FIND $line -type f >> $tmpdir/backup_list
 done
 
-# tar site files
+# tar files
 dt=`$DATE +%Y%m%d.%H%M%S`
 listfile=$currentdir/scripts-$dt-list.tar
 bkpfile=$currentdir/scripts-$dt.tar
