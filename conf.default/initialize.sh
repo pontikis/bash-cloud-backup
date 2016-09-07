@@ -16,6 +16,7 @@ CHMOD="$(which chmod)"
 MKDIR="$(which mkdir)"
 RM="$(which rm)"
 TEE="$(which tee)"
+WC="$(which wc)"
 
 use_7z=1
 # ATTENTION -------------------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ S3CMD_SYNC_PARAMS="--verbose --config /root/.s3cfg --delete-removed --server-sid
 # add server side encryption using"--server-side-encryption"
 
 days_rotation=14
+backups_to_keep_at_least=7
 backuproot='/root/backup'
 
 # ------------------------------------------------------------------------------
@@ -103,9 +105,38 @@ s3_plain)
 esac
 
 
-# UDF .............................................
+# UDF --------------------------------------------------------------------------
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
       logline="$dt | $1"
       echo -e $logline; echo -e $logline >> $logfile
+}
+
+
+function rotate_delete {
+
+    dir_to_find=$1;
+    files_per_backup=$2;
+
+    if [ $days_rotation -le 0 ]; then
+        createlog "---rotating delete IS DISABLED..."
+    else
+
+        total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
+        total_backups=$total_backups/$files_per_backup
+
+        if [ $total_backups -lt $days_rotation ]; then
+            createlog "---not enough backups ($total_backups) - no time for rotating delete..."
+        else
+            backups_to_keep=`$FIND $dir_to_find -maxdepth 1 -type f  -mtime -$days_rotation  | $WC -l`
+            backups_to_keep=$backups_to_keep/$files_per_backup
+
+            if [ $backups_to_keep -ge $backups_to_keep_at_least ]; then
+                createlog "---rotating delete..."
+                $FIND $currentdir -mtime +$days_rotation -exec $RM {} -f \;
+            else
+                createlog "---not enough recent backups ($backups_to_keep) - rotating delete IS ABORTED..."
+            fi
+        fi
+    fi
 }
