@@ -118,7 +118,7 @@ edit ``conf/config.sh`` (parameters) - **ATTENTION**: remember to configure prop
     cd conf
     nano config.sh
     
-edit ``bkp_all.sh`` (uncomment procedures to be executed)    
+edit ``bkp_all.sh`` (uncomment procedures to be executed) - **ATTENTION**: remember to configure properly ``bkp_all.sh`` after each update
 
     cp bkp_all.default.sh bkp_all.sh 
     nano bkp_all.sh 
