@@ -18,7 +18,8 @@ if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
       logline="$dt | $1"
-      echo -e $logline; echo -e $logline >> $logfile
+      echo -e $logline;
+      echo -e $logline >> $logfile
 }
 
 
