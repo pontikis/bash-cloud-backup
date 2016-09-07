@@ -26,7 +26,7 @@ MIT (see https://opensource.org/licenses/MIT)
 Configuration files
 -------------------
 
-* conf/initialize.sh: main configuration script
+* conf/config.sh: main configuration script
 * conf/db-mysql: mysql databases to backup
 * conf/sites: web server directories to backup
 * conf/scripts: scripts to backup
@@ -47,12 +47,14 @@ Scripts
 
 * s3-plain-sync.sh: backup directory is synchronized with Amazon S3, using s3cmd sync
 
+* common/init.sh: common tasks and utility functions
+
 * custom.sh: custom commands
 
 
 Logs
 ----
-bash-cloud-backup is keeping logs (define log directory in ``initialize.sh``).
+bash-cloud-backup is keeping logs (define log directory in ``config.sh``).
 
 You should take care for logfile rotation.
 
@@ -108,13 +110,13 @@ Configuration
     chmod 700 *.sh
     cd conf.default
     chmod 600 *
-    chmod 700 initialize.sh
+    chmod 700 config.sh
 
-edit ``conf/initialize.sh`` (parameters) - **ATTENTION**: remember to configure properly ``initialize.sh`` after each update
+edit ``conf/config.sh`` (parameters) - **ATTENTION**: remember to configure properly ``config.sh`` after each update
 
     cp -R conf.default conf
     cd conf
-    nano initialize.sh
+    nano config.sh
     
 edit ``bkp_all.sh`` (uncomment procedures to be executed)    
 

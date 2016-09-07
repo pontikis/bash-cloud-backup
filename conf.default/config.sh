@@ -1,6 +1,6 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
-# SCRIPT.........: initialize.sh
+# SCRIPT.........: config.sh
 # ACTION.........: bash-cloud-backup configuration file
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)

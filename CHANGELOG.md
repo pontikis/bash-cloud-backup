@@ -7,6 +7,17 @@ Copyright Christos Pontikis http://www.pontikis.net
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
+Release 1.1.0 (08 Sep 2016)
+---------------------------
+
+* rotate delete became more flexible:
+   * days_rotation 0 = disabled
+   * with ``backups_to_keep_at_least`` a number of backups can be kept, independently of their age
+
+* conf/initialize.sh reorganized and renamed to conf/config.sh
+* common/init.sh added with common tasks and utility functions
+
+
 Release 1.0.5 (06 Sep 2016)
 ---------------------------
 
