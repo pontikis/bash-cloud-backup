@@ -42,10 +42,8 @@ do
         $GZIP -9 -f $bkpfile 2>&1 | $TEE -a $logfile
     fi
 
-    # rotating delete files of 7 days old
-    createlog "---rotating delete..."
-    $CHMOD a+rw $currentdir -R
-    $FIND $currentdir -mtime +$days_rotation -exec $RM {} -f \;
+# rotating delete
+rotate_delete $currentdir 1
 
     createlog "--Daily backup of MySQL database '$db' completed."
 done
