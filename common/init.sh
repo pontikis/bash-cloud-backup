@@ -1,4 +1,11 @@
 #!/bin/bash
+#-------------------------------------------------------------------------------
+# SCRIPT.........: init.sh
+# ACTION.........: bash-cloud-backup common tasks and utility functions
+# COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
+# LICENSE........: MIT (see https://opensource.org/licenses/MIT)
+# DOCUMENTATION..: See README for instructions
+#-------------------------------------------------------------------------------
 
 # create backup directories in case they do not exist
 if [ ! -d "$backuproot" ]; then $MKDIR -p $backuproot; fi
@@ -14,7 +21,7 @@ logfile="$logfilepath/$logfilename"
 # create log directory in case it does not exist
 if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 
-# UDF --------------------------------------------------------------------------
+# Utility Functions ------------------------------------------------------------
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
       logline="$dt | $1"
@@ -31,7 +38,6 @@ function rotate_delete {
     if [ $days_rotation -le 0 ]; then
         createlog "---rotating delete IS DISABLED..."
     else
-
         total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
         total_backups=$(( $total_backups/$files_per_backup ))
         if [ $total_backups -lt $days_rotation ]; then
