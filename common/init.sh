@@ -9,11 +9,21 @@
 
 # create backup directories in case they do not exist
 if [ ! -d "$backuproot" ]; then $MKDIR -p $backuproot; fi
+if [ -n "$dir_www" ]; then
 if [ ! -d "$backuproot/$dir_www" ]; then $MKDIR $backuproot/$dir_www; fi
+fi
+if [ -n "$dir_mysql" ]; then
 if [ ! -d "$backuproot/$dir_mysql" ]; then $MKDIR $backuproot/$dir_mysql; fi
+fi
+if [ -n "$dir_conf" ]; then
 if [ ! -d "$backuproot/$dir_conf" ]; then $MKDIR $backuproot/$dir_conf; fi
+fi
+if [ -n "$dir_scripts" ]; then
 if [ ! -d "$backuproot/$dir_scripts" ]; then $MKDIR $backuproot/$dir_scripts; fi
+fi
+if [ -n "$dir_docs" ]; then
 if [ ! -d "$backuproot/$dir_docs" ]; then $MKDIR $backuproot/$dir_docs; fi
+fi
 
 # define log file
 logfile="$logfilepath/$logfilename"
