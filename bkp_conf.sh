@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # SCRIPT.........: bkp_conf
 # ACTION.........: Performs backup of selected system configuration files (in conf/conf-files)
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
@@ -8,13 +8,15 @@
 # DOCUMENTATION..: See README for instructions
 # RESTRICTIONS...: Assumes that all scripts are in the same directory (scriptpath) and
 #                  a conf directory exist for configuration files
-#----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
 
-# include initialize script
-source ${scriptpath}conf/initialize.sh conf
+# include config script
+source ${scriptpath}conf/config.sh
+# include init script
+source ${scriptpath}common/init.sh
 
 createlog "-Daily backup of CONF files is starting..."
 

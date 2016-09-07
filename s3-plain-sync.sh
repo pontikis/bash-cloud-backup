@@ -3,8 +3,10 @@
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
 
-# include initialize script
-source ${scriptpath}conf/initialize.sh s3_plain
+# include config script
+source ${scriptpath}conf/config.sh
+# include init script
+source ${scriptpath}common/init.sh
 
 # attention: / is important to copy only the contents of $backuproot
 SOURCE="$backuproot/";

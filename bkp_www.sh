@@ -15,8 +15,10 @@
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
 
-# include initialize script
-source ${scriptpath}conf/initialize.sh www
+# include config script
+source ${scriptpath}conf/config.sh
+# include init script
+source ${scriptpath}common/init.sh
 
 createlog "-Daily backup of WWW sites is starting..."
 
