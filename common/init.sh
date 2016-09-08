@@ -94,8 +94,8 @@ function rotate_delete {
 
         if [ $backups_to_delete -gt 0 ]; then
             createlog "$backups_to_delete backups will ne deleted:"
-            2del_out=`$FIND $dir_to_find -mtime +$days_rotation | $SORT`
-            echo $2del_out 2>&1 | $TEE -a $logfile
+            del_out=`$FIND $dir_to_find -mtime +$days_rotation | $SORT`
+            echo $del_out 2>&1 | $TEE -a $logfile
             # proceed to deletion
             $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
             if [ $? -eq 0 ]

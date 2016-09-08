@@ -25,7 +25,6 @@ MKDIR="$(which mkdir)"
 RM="$(which rm)"
 TEE="$(which tee)"
 WC="$(which wc)"
-LS="$(which ls)"
 SED="$(which sed)"
 
 # ------------------------------------------------------------------------------
