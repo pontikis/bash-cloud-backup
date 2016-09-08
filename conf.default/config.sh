@@ -93,11 +93,14 @@ filetype_7z=7z
 
 # ------------------------------------------------------------------------------
 # rotating delete --------------------------------------------------------------
-# delete backups older than
+# delete backups older than days_rotation
 # set it to 0 if you want to disable it
+# PLEASE NOTE that setting days_rotation=14 (for example) and making daily backups
+# will lead to more than 14 backups (usually 15). See find +mtime documentation
 days_rotation=14
 # min number of backups in rotation period (recent backups)
 # set it to 0 if you want to disable it
+# Values greated than $days_rotation are ignored (same as 0)
 min_backups_in_rotation_period=7
 
 # ------------------------------------------------------------------------------
