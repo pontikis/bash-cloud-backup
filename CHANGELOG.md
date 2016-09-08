@@ -8,6 +8,11 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
+Release 1.1.2 (08 Sep 2016)
+---------------------------
+
+* tar options as parameter #13
+
 Release 1.1.1 (08 Sep 2016)
 ---------------------------
 
