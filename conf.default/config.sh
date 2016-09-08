@@ -15,6 +15,7 @@
 
 # ------------------------------------------------------------------------------
 # Linux commands paths (probably you do not want to change them) ---------------
+# PLEASE CHECK that all these commands are available to your system (probably they are)
 FIND="$(which find)"
 TAR="$(which tar)"
 GZIP="$(which gzip)"
@@ -24,6 +25,7 @@ MKDIR="$(which mkdir)"
 RM="$(which rm)"
 TEE="$(which tee)"
 WC="$(which wc)"
+SORT="$(which sort)"
 
 # ------------------------------------------------------------------------------
 # where to backup --------------------------------------------------------------
