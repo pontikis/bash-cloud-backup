@@ -19,7 +19,7 @@ Release 1.1.0 (08 Sep 2016)
 
 * rotate delete became more flexible:
    * setting ``days_rotation`` to 0 is disabled
-   * with ``backups_to_keep_at_least`` a number of backups can be kept, independently of their age
+   * with ``min_backups_in_rotation_period`` a number of backups can be kept, independently of their age
 
 * conf/initialize.sh reorganized and renamed to conf/config.sh
 * common/init.sh added with common tasks and utility functions

@@ -95,8 +95,8 @@ filetype_7z=7z
 # rotating delete --------------------------------------------------------------
 # delete backups older than
 days_rotation=14
-# number of backups to be kept, independently of their age
-backups_to_keep_at_least=7
+# min number of backups in rotation period
+min_backups_in_rotation_period=7
 
 # ------------------------------------------------------------------------------
 # Amazon S3 --------------------------------------------------------------------

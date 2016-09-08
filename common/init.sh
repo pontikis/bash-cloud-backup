@@ -67,16 +67,16 @@ function rotate_delete {
         if [ $total_backups -le $days_rotation ]; then
             createlog "---not enough backups ($total_backups) - no time for rotating delete..."
         else
-            backups_to_keep=`$FIND $dir_to_find -maxdepth 1 -type f  -mtime -$days_rotation  | $WC -l`
-            backups_to_keep=$(( $backups_to_keep/$files_per_backup ))
+            backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f  -mtime -$days_rotation  | $WC -l`
+            backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
 
-            if [ $backups_to_keep -ge $backups_to_keep_at_least ]; then
+            if [ $backups_in_rotation_period -gt $min_backups_in_rotation_period ]; then
                 createlog "---rotating delete..."
                 createlog "---will be deleted:"
                 $LS -la `$FIND $currentdir -mtime +$days_rotation` 2>&1 | $TEE -a $logfile
                 $FIND $currentdir -mtime +$days_rotation -exec $RM {} -f \;
             else
-                createlog "---not enough recent backups ($backups_to_keep) - rotating delete IS ABORTED..."
+                createlog "---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
             fi
         fi
     fi
