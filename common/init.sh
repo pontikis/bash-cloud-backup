@@ -94,8 +94,14 @@ function rotate_delete {
 
         if [ $backups_to_delete -gt 0 ]; then
             createlog "$backups_to_delete backups will ne deleted:"
-            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile
+            $FIND $dir_to_find -mtime +$days_rotation 2>&1 | $TEE -a $logfile
             $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
+            if [ $? -eq 0 ]
+            then
+                createlog "Rotating delete completed successfully."
+            else
+                createlog "ERROR: rotating delete failed..."
+            fi
         else
             createlog "No backups will ne deleted."
         fi
