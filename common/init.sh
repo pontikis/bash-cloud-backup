@@ -87,10 +87,12 @@ function rotate_delete {
     fi
 
     createlog $msg
-    echo $msg
+    echo "dir_to_find $dir_to_find"
     if [ $do_rotate_delete -eq 1 ]; then
         $LS -la `$FIND $dir_to_find -mtime +$days_rotation` 2>&1 | $TEE -a $logfile
+        echo "123"
         $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
+        echo "1234"
     fi
 
 }
