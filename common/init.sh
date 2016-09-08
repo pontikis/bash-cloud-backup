@@ -73,7 +73,7 @@ function rotate_delete {
             if [ $backups_to_keep -ge $backups_to_keep_at_least ]; then
                 createlog "---rotating delete..."
                 createlog "---will be deleted:"
-                echo -e `$FIND $currentdir -mtime +$days_rotation | $SORT` 2>&1 | $TEE -a $logfile
+                $LS -la `$FIND $currentdir -mtime +$days_rotation` 2>&1 | $TEE -a $logfile
                 $FIND $currentdir -mtime +$days_rotation -exec $RM {} -f \;
             else
                 createlog "---not enough recent backups ($backups_to_keep) - rotating delete IS ABORTED..."
