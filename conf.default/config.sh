@@ -94,8 +94,10 @@ filetype_7z=7z
 # ------------------------------------------------------------------------------
 # rotating delete --------------------------------------------------------------
 # delete backups older than
+# set it to 0 if you want to disable it
 days_rotation=14
-# min number of backups in rotation period
+# min number of backups in rotation period (recent backups)
+# set it to 0 if you want to disable it
 min_backups_in_rotation_period=7
 
 # ------------------------------------------------------------------------------
