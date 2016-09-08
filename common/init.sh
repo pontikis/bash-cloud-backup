@@ -76,7 +76,7 @@ function rotate_delete {
                 backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation  | $WC -l`
                 backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
                 if [ $backups_in_rotation_period -ge $min_backups_in_rotation_period ]; then
-                    msg="---123rotating 123"
+                    msg="---123rotating123"
                     do_rotate_delete=1
                 else
                     msg="---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
@@ -87,6 +87,7 @@ function rotate_delete {
     fi
 
     createlog $msg
+    echo $msg
     if [ $do_rotate_delete -eq 1 ]; then
         $LS -la `$FIND $dir_to_find -mtime +$days_rotation` 2>&1 | $TEE -a $logfile
         $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
