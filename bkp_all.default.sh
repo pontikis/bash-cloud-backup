@@ -21,8 +21,6 @@ source ${scriptpath}conf/config.sh
 # include init script
 source ${scriptpath}common/init.sh
 
-echo -e "\n$log_top_separator" 2>&1 | $TEE -a $logfile
-
 createlog "bash-cloud-backup is starting..."
 
 # include www backup script
@@ -54,4 +52,6 @@ createlog "bash-cloud-backup is starting..."
 #source ${scriptpath}custom.sh
 
 createlog "bash-cloud-backup completed."
+
+echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile
 #-------------------------------------------------------------------------------
