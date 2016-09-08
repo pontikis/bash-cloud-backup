@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a set of bash scripts, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 1.1.0 (08 Sep 2016)
+RELEASE 1.1.1 (08 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -27,6 +27,7 @@ Configuration files
 -------------------
 
 * conf/config.sh: main configuration script
+
 * conf/db-mysql: mysql databases to backup
 * conf/sites: web server directories to backup
 * conf/scripts: scripts to backup
@@ -95,6 +96,7 @@ Setup using git (recommended)
 
 Setup by download
 -----------------
+
 If ``git`` is not available, download the source:
 
 https://github.com/pontikis/bash-cloud-backup/archive/master.zip
@@ -102,7 +104,7 @@ https://github.com/pontikis/bash-cloud-backup/archive/master.zip
 Configuration
 -------------
 
-**IMPORTANT SECURITY ISSUE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
+**SECURITY ISSUE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
     cd /path/to/scripts
     chown -R root:root bash-cloud-backup
