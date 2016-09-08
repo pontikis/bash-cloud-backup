@@ -104,7 +104,7 @@ https://github.com/pontikis/bash-cloud-backup/archive/master.zip
 Configuration
 -------------
 
-**SECURITY ISSUE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
+**SECURITY NOTE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
     cd /path/to/scripts
     chown -R root:root bash-cloud-backup
