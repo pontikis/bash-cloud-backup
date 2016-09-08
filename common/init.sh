@@ -41,7 +41,7 @@ function createlog {
 
 function zip_file {
 
-    file_to_zip = $1;
+    file_to_zip=$1;
 
     if [ $use_7z -eq 1 ]; then
         createlog "---7zip $file_to_zip..."
