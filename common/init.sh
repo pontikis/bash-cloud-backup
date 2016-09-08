@@ -73,10 +73,10 @@ function rotate_delete {
                 msg="---not enough backups ($total_backups) - no time for rotating delete..."
                 do_rotate_delete=0
             else
-                backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation  | $WC -l`
+                backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation | $WC -l`
                 backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
                 if [ $backups_in_rotation_period -ge $min_backups_in_rotation_period ]; then
-                    msg="---123rotating123"
+                    msg="---rotating delete..."
                     do_rotate_delete=1
                 else
                     msg="---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
@@ -86,13 +86,20 @@ function rotate_delete {
         fi
     fi
 
-    createlog $msg
-    echo "dir_to_find $dir_to_find"
+    createlog "$msg"
     if [ $do_rotate_delete -eq 1 ]; then
-        $LS -la `$FIND $dir_to_find -mtime +$days_rotation` 2>&1 | $TEE -a $logfile
-        echo "123"
-        $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
-        echo "1234"
+
+        backups_to_delete=`$FIND $dir_to_find -maxdepth 1 -type f -mtime +$days_rotation | $WC -l`
+        backups_to_delete=$(( $backups_to_delete/$files_per_backup ))
+
+        if [ $backups_to_delete -gt 0 ]; then
+            createlog "$backups_to_delete backups will ne deleted:"
+            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile
+            $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
+        else
+            createlog "No backups will ne deleted."
+        fi
+
     fi
 
 }
