@@ -35,8 +35,8 @@ dt=`$DATE +%Y%m%d.%H%M%S`
 listfile=$currentdir/scripts-$dt-list.tar
 bkpfile=$currentdir/scripts-$dt.tar
 createlog "---creating tar $bkpfile..."
-$TAR cpfv $listfile $tmpdir/backup_list > /dev/null
-$TAR cpfv $bkpfile -T $tmpdir/backup_list > /dev/null
+$TAR $tar_scripts_list $listfile $tmpdir/backup_list > /dev/null
+$TAR $tar_scripts $bkpfile -T $tmpdir/backup_list > /dev/null
 
 # compress files
 zip_file $listfile

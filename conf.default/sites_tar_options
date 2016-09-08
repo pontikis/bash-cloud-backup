@@ -1,0 +1,4 @@
+cpvf
+--exclude='some_folder' -cpvf
+cpvf
+--exclude='some_file' -cpvf

@@ -26,6 +26,7 @@ RM="$(which rm)"
 TEE="$(which tee)"
 WC="$(which wc)"
 LS="$(which ls)"
+SED="$(which sed)"
 
 # ------------------------------------------------------------------------------
 # where to backup --------------------------------------------------------------
@@ -72,6 +73,20 @@ logfilename='backup.log'
 
 log_top_separator="################################################################################"
 log_separator="--------------------------------------------------------------------------------"
+
+# ------------------------------------------------------------------------------
+# tar options ------------------------------------------------------------------
+tar_conf='cpvf'
+tar_conf_list='cpvf'
+
+tar_scripts='cpvf'
+tar_scripts_list='cpvf'
+
+tar_docs='cpvf'
+tar_docs_list='cpvf'
+# default tar options for all sites
+# you can define tar options for each site in conf/sites_tar_options
+tar_www='cpvf'
 
 # ------------------------------------------------------------------------------
 # 7z compression and encryption (RECOMMENDED) ----------------------------------
