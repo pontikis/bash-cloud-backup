@@ -30,14 +30,8 @@ do
     bkpfile=$currentdir/$db-$dt.sql
     $MYSQLDUMP -u$mysql_user -p$mysql_password $db > $bkpfile
 
-    if [ $use_7z -eq 1 ]; then
-        createlog "---7zip $bkpfile..."
-        $cmd_7z "$bkpfile.$filetype_7z" $bkpfile 2>&1 | $TEE -a $logfile
-        $RM -f $bkpfile
-    else
-        createlog "---zip $bkpfile..."
-        $GZIP -9 -f $bkpfile 2>&1 | $TEE -a $logfile
-    fi
+    # compress file
+    zip_file $bkpfile
 
     # rotating delete
     rotate_delete $currentdir 1
