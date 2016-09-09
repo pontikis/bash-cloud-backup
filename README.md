@@ -39,24 +39,13 @@ Configuration files
 Scripts
 -------
 
-* bkp_all.sh: the main script
-
-* bkp_mysql.sh: Performs backup of selected mysql databases (in conf/db-mysql).
-* bkp_www.sh: Performs backup of selected web server directoties (in conf/sites).
-* bkp_conf.sh: Rerforms backup of selected system configuration files (in conf/conf-files).
-* bkp_scripts.sh: Performs backup of selected scripts (in conf/scripts).
-* bkp_docs.sh: Performs backup of selected documents (in conf/docs).
-
-* s3-plain-sync.sh: backup directory is synchronized with Amazon S3, using s3cmd sync
-
-* common/init.sh: common tasks and utility functions
-
+* bash-cloud-backup: the main script
 * custom.sh: custom commands
 
 
 Logs
 ----
-bash-cloud-backup is keeping logs (define log directory in ``config.sh``).
+bash-cloud-backup is keeping logs (define log directory in ``global.conf``).
 
 You should take care for logfile rotation.
 
@@ -73,11 +62,13 @@ Add something like
     }
 
 
-External software (optional)
-----------------------------
+External software
+-----------------
 
-* s3tools: http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
-* p7zip: http://p7zip.sourceforge.net (for Debian: ``apt-get install p7zip-full``) a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
+* crudini: (REQUIRED) https://github.com/pixelb/crudini (for Debian: ``apt-get install crudini``)
+* p7zip: (OPTIONAL but highly recommended) http://p7zip.sourceforge.net (for Debian: ``apt-get install p7zip-full``) a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
+* s3tools: (OPTIONAL) http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
+
 
 Amazon S3 account
 -----------------
@@ -143,6 +134,6 @@ Cron automation
 
     su -l root
     crontab -e
-    0 1 * * * /usr/bin/nice -n19 /root/scripts/bash-cloud-backup/bkp_all.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
+    0 1 * * * /usr/bin/nice -n19 /root/scripts/bash-cloud-backup.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
 
 (in this example, every night at 01:00)
