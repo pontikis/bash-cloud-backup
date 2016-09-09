@@ -14,6 +14,15 @@ Release 2.0.0 (10 Sep 2016)
 * Consolidation of all scripts to one script: bash-cloud-backup.sh #30
 
 
+    ATTENTION
+
+Version 2.0 is not compatible with previous (deprecated) version 1.0
+
+Version 1 has its own branch (version1).
+
+More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
+
 Release 1.1.3 (09 Sep 2016)
 ---------------------------
 
