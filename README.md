@@ -109,7 +109,7 @@ Configuration
 
     cd /path/to/scripts
     chown -R root:root bash-cloud-backup
-    ch bash-cloud-backup
+    cd bash-cloud-backup
     chmod 700 *.sh
     cd conf.default
     chmod 600 *
