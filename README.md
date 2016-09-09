@@ -7,6 +7,14 @@ RELEASE 1.1.3 (09 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
+    ATTENTION
+
+Version 2.0 is not compatible with previous (deprecated) version
+
+Version 1 has its own branch (version1).
+
+More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
 Features
 --------
 
@@ -26,22 +34,14 @@ MIT (see https://opensource.org/licenses/MIT)
 Configuration files
 -------------------
 
-* conf/config.sh: main configuration script
-
-* conf/db-mysql: mysql databases to backup
-* conf/sites: web server directories to backup
-* conf/sites_tar_options: tar options for each site (optional)
-* conf/scripts: scripts to backup
-* conf/conf-files: configuration files to backup
-* conf/docs: documents to backup
-
+* conf/global.conf: global options
+* conf/backup.conf: configuration of a backup set
 
 Scripts
 -------
 
 * bash-cloud-backup: the main script
 * custom.sh: custom commands
-
 
 Logs
 ----
@@ -98,36 +98,33 @@ Configuration
 
 **SECURITY NOTE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
-    cd /path/to/scripts
-    chown -R root:root bash-cloud-backup
-    ch bash-cloud-backup
-    chmod 700 *.sh
-    cd conf.default
-    chmod 600 *
-    chmod 700 config.sh
-
-edit ``conf/config.sh`` (parameters) - **ATTENTION**: remember to configure properly ``config.sh`` after each update
-
-    cp -R conf.default conf
-    cd conf
-    nano config.sh
+    chown root:root bash-cloud-backup.sh
+    chmod 700 bash-cloud-backup.sh
     
-edit ``bkp_all.sh`` (uncomment procedures to be executed) - **ATTENTION**: remember to configure properly ``bkp_all.sh`` after each update
+    chown root:root conf/global.conf
+    chmod 600 conf/global.conf
+    chown root:root conf/backup.conf
+    chmod 600 conf/backup.conf
 
-    cp bkp_all.default.sh bkp_all.sh 
-    nano bkp_all.sh 
+edit ``global.conf`` (global parameters) - **ATTENTION**: remember to configure properly ``global.conf`` after each update
+
+    cp conf.default/global.conf /etc/bash-cloud-backup/global.conf
+    nano /etc/bash-cloud-backup/global.conf
+    
+edit ``bkp_all.sh`` (create your own backup set) - **ATTENTION**: remember to configure properly ``backup.conf`` after each update
+
+    cp conf.default/backup.conf /etc/bash-cloud-backup/backup.conf
+    nano /etc/bash-cloud-backup/backup.conf
 
 configure ``custom.sh`` (optional)
 
-    cp custom.default.sh custom.sh 
     nano custom.sh
 
 Run
 ---
 
-To perform backup, call ``bkp_all.sh`` as root (in most cases)
+To perform backup, call ``bash-cloud-backup.sh`` as root (in most cases)
 
-Each one of ``bkp_*`` or ``s3_*`` can run as stand-alone script.
 
 Cron automation
 ---------------
