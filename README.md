@@ -65,7 +65,7 @@ Add something like
 External software
 -----------------
 
-* crudini: (**REQUIRED**) https://github.com/pixelb/crudini (for Debian: ``apt-get install crudini``)
+* crudini: (**REQUIRED**) https://github.com/pixelb/crudini (for Debian: ``apt-get install crudini``). See also http://www.pixelbeat.org/programs/crudini/
 * p7zip: (OPTIONAL but highly recommended) http://p7zip.sourceforge.net (for Debian: ``apt-get install p7zip-full``) a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
 * s3tools: (OPTIONAL) http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
 
