@@ -34,14 +34,14 @@ MIT (see https://opensource.org/licenses/MIT)
 Configuration files
 -------------------
 
-* ``conf.default/global.conf``: global options
-* ``conf.default/backup.conf``: configuration of a backup set
+* ``conf.default/global.conf``: global options (sample file)
+* ``conf.default/backup.conf``: configuration of a backup set (sample file)
 
 Scripts
 -------
 
 * ``bash-cloud-backup.sh``: the main script
-* ``custom.default.sh``: custom commands
+* ``custom.sh``: custom commands (you may create it, if needed)
 
 Logs
 ----
