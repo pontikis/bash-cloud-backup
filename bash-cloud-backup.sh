@@ -262,7 +262,7 @@ do
         # rotating delete
         rotate_delete $currentdir 2
 
-    elif [ "$section_type" == 'mysql' ]; then
+    elif [ "$type" == 'mysql' ]; then
 
         # get specific properties of section with type = 'files'
         database=$(crudini --get "$backup_conf" "$section" database)
