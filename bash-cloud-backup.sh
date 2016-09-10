@@ -94,9 +94,9 @@ if [ $use_7z -eq 1 ]; then
     elif [ "$filetype_7z" == 'zip' ]; then
         if [ -z "$passwd_7z" ]
         then
-            cmd_7z="$CMD7Z a -mx=9 -mm=Deflate -mem=AES256 -tzip"
+            cmd_7z="$CMD7Z a -mx=9 -mhe -mm=Deflate -mem=AES256 -tzip"
         else
-            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mhe -mm=Deflate -mem=AES256 -tzip"
         fi
     else
         use_7z=0
