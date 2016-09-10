@@ -66,7 +66,7 @@ then
 fi
 
 # get version ------------------------------------------------------------------
-version=`$CAT ${scriptpath}conf/VERSION`
+version=`$CAT ${scriptpath}VERSION`
 
 # parse backup sections (SPACES NOT PERMITTED) ---------------------------------
 sections=( $($SED 's/^[ ]*//g' $global_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
