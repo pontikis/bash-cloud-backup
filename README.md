@@ -78,10 +78,12 @@ For cloud backup, an Amazon S3 account is needed (http://aws.amazon.com/s3/)
 Setup using git (recommended)
 -----------------------------
 ### installation
+
     cd /path/to/scripts
     git clone https://github.com/pontikis/bash-cloud-backup.git
 
 ### get updates
+
     cd /path/to/scripts/bash-cloud-backup
     git fetch
     git merge origin
@@ -90,12 +92,14 @@ Setup using git (recommended)
 If you are interested on (deprecated) version 1
 
 ### installation
+
     cd /path/to/scripts
     git clone https://github.com/pontikis/bash-cloud-backup.git
     cd /path/to/scripts/bash-cloud-backup
     git checkout -b version1 origin/version1
 
 ### get updates
+
     cd /path/to/scripts/bash-cloud-backup
     git fetch
     git merge origin/version1
@@ -127,22 +131,28 @@ By default, bash-cloud-backup expects these files to be
 
 You may define your own ``global.conf`` and as many ``backup.conf`` you like. So:
 
-* Edit ``backup.conf`` (global parameters) - **ATTENTION**: remember to configure properly ``global.conf`` after each update
+### Edit ``backup.conf`` (global parameters) 
+
+**ATTENTION**: remember to configure properly ``global.conf`` after each update
 
     cp conf.default/global.conf /etc/bash-cloud-backup/global.conf
     nano /etc/bash-cloud-backup/global.conf
     
-* Edit ``backup.conf`` (create your own backup set) - **ATTENTION**: remember to configure properly ``backup.conf`` after each update
+### Edit ``backup.conf`` (create your own backup set)
+
+**ATTENTION**: remember to configure properly ``backup.conf`` after each update
 
     cp conf.default/backup.conf /etc/bash-cloud-backup/backup.conf
     nano /etc/bash-cloud-backup/backup.conf
 
-* You may add custom commands at ``custom.sh`` (optional)
+### You may add custom commands at ``custom.sh`` (optional)
 
     nano custom.sh
 
 
-* **SECURITY NOTE**: Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
+### **SECURITY NOTE**
+
+Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
 
     chown root:root bash-cloud-backup.sh
     chmod 700 bash-cloud-backup.sh
