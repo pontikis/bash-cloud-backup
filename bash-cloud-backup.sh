@@ -87,7 +87,7 @@ tar_options=$(crudini --get "$global_conf" '' tar_options)
 
 use_7z=$(crudini --get "$global_conf" '' use_7z)
 passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
-cmd_7z=$(crudini --get "$global_conf" '' cmd_7z)
+cmd_7z=$($(crudini --get "$global_conf" '' cmd_7z))
 filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
 
 days_rotation=$(crudini --get "$global_conf" '' days_rotation)
