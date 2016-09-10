@@ -214,10 +214,10 @@ do
         delimiter=$(crudini --get "$backup_conf" "$section" delimiter)
 
         tar_options_backup_list=$(crudini --get "$backup_conf" "$section" tar_options_backup_list)
-        if [ -n "$tar_options_backup_list" ]; then tar_options_backup_list=$(crudini --get "$global_conf" "" tar_options_backup_list); fi
+        if [ -n "$tar_options_backup_list" ]; then tar_options_backup_list=$(crudini --get "$global_conf" '' tar_options_backup_list); fi
 
         tar_options_backup_file=$(crudini --get "$backup_conf" "$section" tar_options_backup_file)
-        if [ -n "$tar_options_backup_file" ]; then tar_options_backup_file=$(crudini --get "$global_conf" "" tar_options_backup_file); fi
+        if [ -n "$tar_options_backup_file" ]; then tar_options_backup_file=$(crudini --get "$global_conf" '' tar_options_backup_file); fi
 
         # create temp dir to store backup_list
         tmpdir=$currentdir/tmp
@@ -256,10 +256,10 @@ do
         database=$(crudini --get "$backup_conf" "$section" database)
 
         mysql_user=$(crudini --get "$backup_conf" "$section" mysql_user)
-        if [ -n "$mysql_user" ]; then mysql_user=$(crudini --get "$global_conf" "" mysql_user); fi
+        if [ -n "$mysql_user" ]; then mysql_user=$(crudini --get "$global_conf" '' mysql_user); fi
 
         mysql_password=$(crudini --get "$backup_conf" "$section" mysql_password)
-        if [ -n "$mysql_password" ]; then mysql_password=$(crudini --get "$global_conf" "" mysql_password); fi
+        if [ -n "$mysql_password" ]; then mysql_password=$(crudini --get "$global_conf" '' mysql_password); fi
 
         # export mysql database with data using mysqldump
         dt=`$DATE +%Y%m%d.%H%M%S`
