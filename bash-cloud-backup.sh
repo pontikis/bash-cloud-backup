@@ -122,11 +122,11 @@ function zip_file {
     file_to_zip=$1;
 
     if [ $use_7z -eq 1 ]; then
-        createlog "---7zip $file_to_zip..."
+        createlog "7zip $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
         $RM -f $file_to_zip
     else
-        createlog "---zip $file_to_zip..."
+        createlog "gzip $file_to_zip..."
         $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile
     fi
 
