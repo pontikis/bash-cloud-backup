@@ -7,6 +7,31 @@
 # DOCUMENTATION..: See README for instructions
 #-------------------------------------------------------------------------------
 
+# Linux commands ---------------------------------------------------------------
+FIND="$(which find)"
+TAR="$(which tar)"
+GZIP="$(which gzip)"
+DATE="$(which date)"
+CHMOD="$(which chmod)"
+MKDIR="$(which mkdir)"
+RM="$(which rm)"
+TEE="$(which tee)"
+WC="$(which wc)"
+SORT="$(which sort)"
+SED="$(which sed)"
+GREP="$(which grep)"
+TR="$(which tr)"
+MYSQLDUMP="$(which mysqldump)"
+S3CMD="$(which s3cmd)"
+CAT="$(which cat)"
+
+# Get start time ------------------------------------------------------------------
+START=$($DATE +"%s")
+
+# Script path ------------------------------------------------------------------
+scriptpath=`dirname "$0"`
+if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
+
 # Initialize configuration files -----------------------------------------------
 global_conf="/etc/bash-cloud-backup/global.conf"
 backup_conf="/etc/bash-cloud-backup/backup.conf"
@@ -38,22 +63,8 @@ then
     exit 1
 fi
 
-# Linux commands ---------------------------------------------------------------
-FIND="$(which find)"
-TAR="$(which tar)"
-GZIP="$(which gzip)"
-DATE="$(which date)"
-CHMOD="$(which chmod)"
-MKDIR="$(which mkdir)"
-RM="$(which rm)"
-TEE="$(which tee)"
-WC="$(which wc)"
-SORT="$(which sort)"
-SED="$(which sed)"
-GREP="$(which grep)"
-TR="$(which tr)"
-MYSQLDUMP="$(which mysqldump)"
-S3CMD="$(which s3cmd)"
+# get version ------------------------------------------------------------------
+version=`$CAT ${scriptpath}conf/VERSION`
 
 # parse backup sections (SPACES NOT PERMITTED) ---------------------------------
 sections=( $($SED 's/^[ ]*//g' $global_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
@@ -73,7 +84,7 @@ if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 # define log file
 logfile="$logfilepath/$logfilename"
 
-createlog "bash-cloud-backup is starting..."
+createlog "bash-cloud-backup (version $version) is starting..."
 
 # perform backup ---------------------------------------------------------------
 for (( i=0; i<${#sections[@]}; i++ ));
@@ -163,8 +174,6 @@ do
 done
 
 # Custom commands --------------------------------------------------------------
-scriptpath=`dirname "$0"`
-if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
 if [ -f "$backup_conf" ]; then source ${scriptpath}conf/custom.sh; fi
 
 # Amazon S3 sync ---------------------------------------------------------------
@@ -177,17 +186,22 @@ if [ $s3sync -eq 1 ]; then
     createlog "Amazon S3 sync is starting..."
 
     # attention: / is important to copy only the contents of $backuproot
-    SOURCE="$backuproot/"
-    DEST=$s3_path
+    S3_SOURCE="$backuproot/"
+    S3_DEST=$s3_path
 
-    $S3CMD sync $s3cmd_sync_params $SOURCE $DEST 2>&1 | $TEE -a $logfile
+    $S3CMD sync $s3cmd_sync_params $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile
 
     createlog "Amazon S3 sync completed."
 fi
 
 # Finish -----------------------------------------------------------------------
+END=$($DATE +"%s")
+DIFF=$(($END-$START))
+ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
+
 echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
-createlog "bash-cloud-backup completed."
+createlog "bash-cloud-backup (version $version) completed."
+echo "$ELAPSED"  2>&1 | $TEE -a $logfile
 echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile
 
 # Utility Functions ------------------------------------------------------------
