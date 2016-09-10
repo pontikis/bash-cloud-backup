@@ -138,26 +138,26 @@ function rotate_delete {
     files_per_backup=$2;
 
     if [ $days_rotation -le 0 ]; then
-        msg="---rotating delete IS DISABLED..."
+        msg="Rotating delete IS DISABLED..."
         do_rotate_delete=0
     else
         if [ $min_backups_in_rotation_period -eq 0 ] || [ $min_backups_in_rotation_period -gt $days_rotation ]; then
-            msg="---rotating delete (without checking number of recent backups):"
+            msg="Rotating delete (without checking number of recent backups):"
             do_rotate_delete=1
         else
             total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
             total_backups=$(( $total_backups/$files_per_backup ))
             if [ $total_backups -le $days_rotation ]; then
-                msg="---not enough backups ($total_backups) - no time for rotating delete..."
+                msg="Not enough backups ($total_backups) - no time for rotating delete..."
                 do_rotate_delete=0
             else
                 backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation | $WC -l`
                 backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
                 if [ $backups_in_rotation_period -ge $min_backups_in_rotation_period ]; then
-                    msg="---rotating delete..."
+                    msg="Rotating delete..."
                     do_rotate_delete=1
                 else
-                    msg="---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
+                    msg="Not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
                     do_rotate_delete=0
                 fi
             fi
@@ -178,9 +178,9 @@ function rotate_delete {
             $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
             if [ $? -eq 0 ]
             then
-                createlog "---Rotating delete completed successfully."
+                createlog "Rotating delete completed successfully."
             else
-                createlog "---ERROR: rotating delete failed..."
+                createlog "ERROR: rotating delete failed..."
             fi
         else
             createlog "No backups will ne deleted."
@@ -238,8 +238,9 @@ do
         dt=`$DATE +%Y%m%d.%H%M%S`
         listfile=$currentdir/$prefix-$dt-list.tar
         bkpfile=$currentdir/$prefix-$dt.tar
-        createlog "creating tar $bkpfile..."
+        createlog "creating tar $listfile..."
         $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
+        createlog "creating tar $bkpfile..."
         $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
 
         # compress (and encrypt) files
