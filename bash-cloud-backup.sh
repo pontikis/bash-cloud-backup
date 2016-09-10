@@ -12,6 +12,7 @@
 # Linux commands ---------------------------------------------------------------
 FIND="$(which find)"
 TAR="$(which tar)"
+CMD7Z="$(which 7z)"
 GZIP="$(which gzip)"
 DATE="$(which date)"
 CHMOD="$(which chmod)"
@@ -86,9 +87,17 @@ log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
 tar_options=$(crudini --get "$global_conf" '' tar_options)
 
 use_7z=$(crudini --get "$global_conf" '' use_7z)
-passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
-cmd_7z=$($(crudini --get "$global_conf" '' cmd_7z))
-filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
+if [ $use_7z -eq 1 ]; then
+    passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
+    filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
+    if [ "$filetype_7z" == '7z' ]; then
+        cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mhe -t7z"
+    elif [ "$filetype_7z" == 'zip' ]; then
+        cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+    else
+        use_7z=0
+    fi
+fi
 
 days_rotation=$(crudini --get "$global_conf" '' days_rotation)
 min_backups_in_rotation_period=$(crudini --get "$global_conf" '' min_backups_in_rotation_period)
