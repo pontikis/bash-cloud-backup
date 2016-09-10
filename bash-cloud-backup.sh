@@ -74,12 +74,28 @@ sections=( $($SED 's/^[ ]*//g' $global_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$'
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
+
+mysql_user=$(crudini --get "$global_conf" '' mysql_user)
+mysql_password=$(crudini --get "$global_conf" '' mysql_password)
+
 logfilepath=$(crudini --get "$global_conf" '' logfilepath)
 logfilename=$(crudini --get "$global_conf" '' logfilename)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
 log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
+
 tar_options=$(crudini --get "$global_conf" '' tar_options)
+
+use_7z=$(crudini --get "$global_conf" '' use_7z)
+passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
+cmd_7z=$(crudini --get "$global_conf" '' cmd_7z)
+filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
+
+days_rotation=$(crudini --get "$global_conf" '' days_rotation)
+min_backups_in_rotation_period=$(crudini --get "$global_conf" '' min_backups_in_rotation_period)
+
 s3_sync=$(crudini --get "$global_conf" '' s3_sync)
+s3_path=$(crudini --get "$global_conf" '' s3_path)
+s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
 
 # create log directory in case it does not exist
 if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
