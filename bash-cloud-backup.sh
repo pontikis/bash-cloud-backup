@@ -70,9 +70,10 @@ fi
 version=`$CAT ${scriptpath}VERSION`
 
 # parse backup sections (SPACES NOT PERMITTED) ---------------------------------
-sections=( $($SED 's/^[ ]*//g' $global_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
+sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
 
 echo $sections
+exit 0;
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
