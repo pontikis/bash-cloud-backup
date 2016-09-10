@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 #-------------------------------------------------------------------------------
 # SCRIPT.........: bash-cloud-backup.sh
-# ACTION.........: Performs backup of selected system configuration files (in conf/conf-files)
+# ACTION.........: bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 # COPYRIGHT......: Christos Pontikis - http://www.pontikis.gr
 # LICENSE........: MIT (see https://opensource.org/licenses/MIT)
-# DOCUMENTATION..: See README for instructions
+# PROJECT PAGE...: https://github.com/pontikis/bash-cloud-backup
+# DOCUMENTATION..: See README.md for instructions
+#                  See /conf.default for sample configuration files
 #-------------------------------------------------------------------------------
 
 # Linux commands ---------------------------------------------------------------
@@ -25,7 +27,7 @@ MYSQLDUMP="$(which mysqldump)"
 S3CMD="$(which s3cmd)"
 CAT="$(which cat)"
 
-# Get start time ------------------------------------------------------------------
+# Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
 
 # Script path ------------------------------------------------------------------
