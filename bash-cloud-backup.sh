@@ -113,7 +113,6 @@ do
 
     # get backup section properties
     type=$(crudini --get "$backup_conf" "$section" type)
-    name=$(crudini --get "$backup_conf" "$section" name)
     path=$(crudini --get "$backup_conf" "$section" path)
     prefix=$(crudini --get "$backup_conf" "$section" prefix)
     fileset=$(crudini --get "$backup_conf" "$section" fileset)
