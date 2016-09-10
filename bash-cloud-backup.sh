@@ -71,7 +71,8 @@ version=`$CAT ${scriptpath}VERSION`
 
 # parse backup sections (SPACES NOT PERMITTED) ---------------------------------
 sections=( $($SED 's/^[ ]*//g' $global_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
-#sections=( $(crudini --get test.ini | sed 's/:.*//') )
+
+echo $sections
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
