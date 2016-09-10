@@ -8,7 +8,7 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
-Release 2.0.0 (10 Sep 2016)
+Release 2.0.0 (11 Sep 2016)
 ---------------------------
 
 * Consolidation of all scripts to one script: bash-cloud-backup.sh #30
@@ -18,7 +18,7 @@ Release 2.0.0 (10 Sep 2016)
 
     ATTENTION
 
-Version 2.0 is not compatible with previous (deprecated) version 1.0
+Version 2.* is not compatible with previous (deprecated) version 1.*
 
 Version 1 has its own branch (version1).
 
