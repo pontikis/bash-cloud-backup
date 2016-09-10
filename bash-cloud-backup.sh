@@ -48,7 +48,7 @@ while getopts ":g:b:" opt; do
             backup_conf=$OPTARG
             ;;
         '?')
-            createlog "FATAL ERROR: invalid options..."
+            echo "FATAL ERROR: invalid options..."
             exit 1
             ;;
     esac
@@ -56,13 +56,13 @@ done
 
 if [ ! -f "$global_conf" ]
 then
-    createlog "FATAL ERROR: global configuration file $global_conf does not exist..."
+    echo "FATAL ERROR: global configuration file $global_conf does not exist..."
     exit 1
 fi
 
 if [ ! -f "$backup_conf" ]
 then
-    createlog "FATAL ERROR: backup configuration file $backup_conf does not exist..."
+    echo "FATAL ERROR: backup configuration file $backup_conf does not exist..."
     exit 1
 fi
 
@@ -71,9 +71,6 @@ version=`$CAT ${scriptpath}VERSION`
 
 # parse backup sections (SPACES NOT PERMITTED) ---------------------------------
 sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
-
-echo $sections
-exit 0;
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
@@ -113,9 +110,89 @@ if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 # define log file
 logfile="$logfilepath/$logfilename"
 
-createlog "bash-cloud-backup (version $version) is starting..."
+# Utility Functions ------------------------------------------------------------
+function createlog {
+      dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
+      logline="$dt | $1"
+      echo -e $logline 2>&1 | $TEE -a $logfile
+}
+
+function zip_file {
+
+    file_to_zip=$1;
+
+    if [ $use_7z -eq 1 ]; then
+        createlog "---7zip $file_to_zip..."
+        $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
+        $RM -f $file_to_zip
+    else
+        createlog "---zip $file_to_zip..."
+        $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile
+    fi
+
+}
+
+function rotate_delete {
+
+    dir_to_find=$1;
+    files_per_backup=$2;
+
+    if [ $days_rotation -le 0 ]; then
+        msg="---rotating delete IS DISABLED..."
+        do_rotate_delete=0
+    else
+        if [ $min_backups_in_rotation_period -eq 0 ] || [ $min_backups_in_rotation_period -gt $days_rotation ]; then
+            msg="---rotating delete (without checking number of recent backups):"
+            do_rotate_delete=1
+        else
+            total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
+            total_backups=$(( $total_backups/$files_per_backup ))
+            if [ $total_backups -le $days_rotation ]; then
+                msg="---not enough backups ($total_backups) - no time for rotating delete..."
+                do_rotate_delete=0
+            else
+                backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation | $WC -l`
+                backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
+                if [ $backups_in_rotation_period -ge $min_backups_in_rotation_period ]; then
+                    msg="---rotating delete..."
+                    do_rotate_delete=1
+                else
+                    msg="---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
+                    do_rotate_delete=0
+                fi
+            fi
+        fi
+    fi
+
+    createlog "$msg"
+    if [ $do_rotate_delete -eq 1 ]; then
+
+        backups_to_delete=`$FIND $dir_to_find -maxdepth 1 -type f -mtime +$days_rotation | $WC -l`
+        backups_to_delete=$(( $backups_to_delete/$files_per_backup ))
+
+        if [ $backups_to_delete -gt 0 ]; then
+            createlog "$backups_to_delete backups will ne deleted:"
+            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile
+
+            # proceed to deletion
+            $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
+            if [ $? -eq 0 ]
+            then
+                createlog "---Rotating delete completed successfully."
+            else
+                createlog "---ERROR: rotating delete failed..."
+            fi
+        else
+            createlog "No backups will ne deleted."
+        fi
+
+    fi
+
+}
 
 # perform backup ---------------------------------------------------------------
+createlog "bash-cloud-backup (version $version) is starting..."
+
 for (( i=0; i<${#sections[@]}; i++ ));
 
 do
@@ -232,83 +309,3 @@ echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
 createlog "bash-cloud-backup (version $version) completed."
 echo "$ELAPSED"  2>&1 | $TEE -a $logfile
 echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile
-
-# Utility Functions ------------------------------------------------------------
-function createlog {
-      dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
-      logline="$dt | $1"
-      echo -e $logline 2>&1 | $TEE -a $logfile
-}
-
-function zip_file {
-
-    file_to_zip=$1;
-
-    if [ $use_7z -eq 1 ]; then
-        createlog "---7zip $file_to_zip..."
-        $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
-        $RM -f $file_to_zip
-    else
-        createlog "---zip $file_to_zip..."
-        $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile
-    fi
-
-}
-
-function rotate_delete {
-
-    dir_to_find=$1;
-    files_per_backup=$2;
-
-    if [ $days_rotation -le 0 ]; then
-        msg="---rotating delete IS DISABLED..."
-        do_rotate_delete=0
-    else
-        if [ $min_backups_in_rotation_period -eq 0 ] || [ $min_backups_in_rotation_period -gt $days_rotation ]; then
-            msg="---rotating delete (without checking number of recent backups):"
-            do_rotate_delete=1
-        else
-            total_backups=`$FIND $dir_to_find -maxdepth 1 -type f | $WC -l`
-            total_backups=$(( $total_backups/$files_per_backup ))
-            if [ $total_backups -le $days_rotation ]; then
-                msg="---not enough backups ($total_backups) - no time for rotating delete..."
-                do_rotate_delete=0
-            else
-                backups_in_rotation_period=`$FIND $dir_to_find -maxdepth 1 -type f -mtime -$days_rotation | $WC -l`
-                backups_in_rotation_period=$(( $backups_in_rotation_period/$files_per_backup ))
-                if [ $backups_in_rotation_period -ge $min_backups_in_rotation_period ]; then
-                    msg="---rotating delete..."
-                    do_rotate_delete=1
-                else
-                    msg="---not enough recent backups ($backups_in_rotation_period) - rotating delete IS ABORTED..."
-                    do_rotate_delete=0
-                fi
-            fi
-        fi
-    fi
-
-    createlog "$msg"
-    if [ $do_rotate_delete -eq 1 ]; then
-
-        backups_to_delete=`$FIND $dir_to_find -maxdepth 1 -type f -mtime +$days_rotation | $WC -l`
-        backups_to_delete=$(( $backups_to_delete/$files_per_backup ))
-
-        if [ $backups_to_delete -gt 0 ]; then
-            createlog "$backups_to_delete backups will ne deleted:"
-            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile
-
-            # proceed to deletion
-            $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
-            if [ $? -eq 0 ]
-            then
-                createlog "---Rotating delete completed successfully."
-            else
-                createlog "---ERROR: rotating delete failed..."
-            fi
-        else
-            createlog "No backups will ne deleted."
-        fi
-
-    fi
-
-}
