@@ -85,9 +85,19 @@ if [ $use_7z -eq 1 ]; then
     passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
     filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
     if [ "$filetype_7z" == '7z' ]; then
-        cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mhe -t7z"
+        if [ -z "$passwd_7z" ]
+        then
+            cmd_7z="$CMD7Z a -mx=9 -mhe -t7z"
+        else
+            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mhe -t7z"
+        fi
     elif [ "$filetype_7z" == 'zip' ]; then
-        cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+        if [ -z "$passwd_7z" ]
+        then
+            cmd_7z="$CMD7Z a -mx=9 -mm=Deflate -mem=AES256 -tzip"
+        else
+            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+        fi
     else
         use_7z=0
     fi
@@ -117,7 +127,8 @@ function zip_file {
     file_to_zip=$1;
 
     if [ $use_7z -eq 1 ]; then
-        createlog "7zip $file_to_zip..."
+        if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
+        createlog "7zip$aes $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
         $RM -f $file_to_zip
     else
@@ -238,10 +249,10 @@ do
         listfile=$currentdir/$prefix-$dt-list.tar
         bkpfile=$currentdir/$prefix-$dt.tar
         createlog "Creating tar $listfile..."
-        createlog "tar options: $tar_options_backup_list..."
+        createlog "tar options: $tar_options_backup_list"
         $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
         createlog "Creating tar $bkpfile..."
-        createlog "tar options: $tar_options_backup_file..."
+        createlog "tar options: $tar_options_backup_file"
         $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
 
         # compress (and encrypt) files
