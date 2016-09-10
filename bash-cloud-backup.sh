@@ -200,10 +200,11 @@ do
 done
 
 # Custom commands --------------------------------------------------------------
-if [ -f "$backup_conf" ]; then source ${scriptpath}conf/custom.sh; fi
+custom_script=${scriptpath}custom.sh
+if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Amazon S3 sync ---------------------------------------------------------------
-if [ $s3sync -eq 1 ]; then
+if [ $s3_sync -eq 1 ]; then
 
     s3_path=$(crudini --get "$global_conf" '' s3_path)
     s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
