@@ -12,6 +12,8 @@ Release 2.0.0 (10 Sep 2016)
 ---------------------------
 
 * Consolidation of all scripts to one script: bash-cloud-backup.sh #30
+* use crudini (https://github.com/pixelb/crudini) to manipulate config files
+* Display elapsed time #34
 
 
     ATTENTION
