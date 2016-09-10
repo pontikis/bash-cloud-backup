@@ -74,7 +74,7 @@ sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$'
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
-
+hostname=$(crudini --get "$global_conf" '' hostname)
 logfilepath=$(crudini --get "$global_conf" '' logfilepath)
 logfilename=$(crudini --get "$global_conf" '' logfilename)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
@@ -186,7 +186,8 @@ function rotate_delete {
 }
 
 # perform backup ---------------------------------------------------------------
-createlog "bash-cloud-backup (version $version) is starting..."
+if [ -n "$hostname" ]; then onhost=''; else onhost=" on $hostname"; fi
+createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
 for (( i=0; i<${#sections[@]}; i++ ));
 
