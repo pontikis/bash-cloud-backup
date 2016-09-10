@@ -75,15 +75,10 @@ sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$'
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
 
-mysql_user=$(crudini --get "$global_conf" '' mysql_user)
-mysql_password=$(crudini --get "$global_conf" '' mysql_password)
-
 logfilepath=$(crudini --get "$global_conf" '' logfilepath)
 logfilename=$(crudini --get "$global_conf" '' logfilename)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
 log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
-
-tar_options=$(crudini --get "$global_conf" '' tar_options)
 
 use_7z=$(crudini --get "$global_conf" '' use_7z)
 if [ $use_7z -eq 1 ]; then
@@ -199,28 +194,30 @@ do
 
     section=${sections[i]};
 
-    # get backup section properties
+    # get backup section properties (common for all types)
     type=$(crudini --get "$backup_conf" "$section" type)
     path=$(crudini --get "$backup_conf" "$section" path)
     prefix=$(crudini --get "$backup_conf" "$section" prefix)
-    fileset=$(crudini --get "$backup_conf" "$section" fileset)
-    delimiter=$(crudini --get "$backup_conf" "$section" delimiter)
     starting_message=$(crudini --get "$backup_conf" "$section" starting_message)
     finish_message=$(crudini --get "$backup_conf" "$section" finish_message)
 
-    tar_options_tmp=$(crudini --get "$backup_conf" "$section" tar_options_backup_file)
-    if [ -n "$tar_options_tmp" ]; then tar_options_backup_file=$tar_options_tmp; else tar_options_backup_file=$tar_options; fi
+    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+    createlog "$starting_message"
 
-    tar_options_tmp=$(crudini --get "$backup_conf" "$section" tar_options_backup_list)
-    if [ -n "$tar_options_tmp" ]; then tar_options_backup_list=$tar_options_tmp; else tar_options_backup_list=$tar_options; fi
+    currentdir="$backuproot/$path"
+    if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
 
     if [ "$type" == 'files' ]; then
 
-        echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
-        createlog "$starting_message"
+        # get specific properties of section with type = 'files'
+        fileset=$(crudini --get "$backup_conf" "$section" fileset)
+        delimiter=$(crudini --get "$backup_conf" "$section" delimiter)
 
-        currentdir="$backuproot/$path"
-        if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
+        tar_options_backup_list=$(crudini --get "$backup_conf" "$section" tar_options_backup_list)
+        if [ -n "$tar_options_backup_list" ]; then tar_options_backup_list=$(crudini --get "$global_conf" "" tar_options_backup_list); fi
+
+        tar_options_backup_file=$(crudini --get "$backup_conf" "$section" tar_options_backup_file)
+        if [ -n "$tar_options_backup_file" ]; then tar_options_backup_file=$(crudini --get "$global_conf" "" tar_options_backup_file); fi
 
         # create temp dir to store backup_list
         tmpdir=$currentdir/tmp
@@ -228,6 +225,7 @@ do
         $MKDIR $tmpdir;
 
         # create backup list from file set
+        createlog "Creating backup list..."
         IFS=$delimiter read -r -a afiles <<< "$fileset"
         for element in "${afiles[@]}"
         do
@@ -238,9 +236,11 @@ do
         dt=`$DATE +%Y%m%d.%H%M%S`
         listfile=$currentdir/$prefix-$dt-list.tar
         bkpfile=$currentdir/$prefix-$dt.tar
-        createlog "creating tar $listfile..."
+        createlog "Creating tar $listfile..."
+        createlog "tar options: $tar_options_backup_list..."
         $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
-        createlog "creating tar $bkpfile..."
+        createlog "Creating tar $bkpfile..."
+        createlog "tar options: $tar_options_backup_file..."
         $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
 
         # compress (and encrypt) files
@@ -250,20 +250,22 @@ do
         # rotating delete
         rotate_delete $currentdir 2
 
-        createlog "$finish_message"
-
     elif [ "$section_type" == 'mysql' ]; then
 
-        createlog "--Daily backup of MySQL database '$db' is starting..."
+        # get specific properties of section with type = 'files'
+        database=$(crudini --get "$backup_conf" "$section" database)
 
-        currentdir="$backuproot/$dir_mysql/$db"
-        if [ ! -d $currentdir ]; then $MKDIR $currentdir; fi
+        mysql_user=$(crudini --get "$backup_conf" "$section" mysql_user)
+        if [ -n "$mysql_user" ]; then mysql_user=$(crudini --get "$global_conf" "" mysql_user); fi
 
-        # export database with data using mysqldump
-        createlog "---dump sql of MySQL database '$db' is starting..."
+        mysql_password=$(crudini --get "$backup_conf" "$section" mysql_password)
+        if [ -n "$mysql_password" ]; then mysql_password=$(crudini --get "$global_conf" "" mysql_password); fi
+
+        # export mysql database with data using mysqldump
         dt=`$DATE +%Y%m%d.%H%M%S`
-        bkpfile=$currentdir/$db-$dt.sql
-        $MYSQLDUMP -u$mysql_user -p$mysql_password $db > $bkpfile
+        bkpfile=$currentdir/$prefix-$dt.sql
+        createlog "mysqldump $bkpfile..."
+        $MYSQLDUMP -u$mysql_user -p$mysql_password $database > $bkpfile
 
         # compress file
         zip_file $bkpfile
@@ -271,12 +273,12 @@ do
         # rotating delete
         rotate_delete $currentdir 1
 
-        createlog "--Daily backup of MySQL database '$db' completed."
-
     else
-       createlog "ERROR: Unknown backup type. $section is ingored..."
+        echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+        createlog "ERROR: Unknown backup type. $section is ingored..."
     fi
 
+    createlog "$finish_message"
 done
 
 # Custom commands --------------------------------------------------------------
