@@ -264,8 +264,9 @@ do
 
     elif [ "$type" == 'mysql' ]; then
 
-        # get specific properties of section with type = 'files'
+        # get specific properties of section with type = 'mysql'
         database=$(crudini --get "$backup_conf" "$section" database)
+        mysqldump_options=$(crudini --get "$backup_conf" "$section" mysqldump_options)
 
         mysql_user=$(crudini --get "$backup_conf" "$section" mysql_user)
         if [ -z "$mysql_user" ]; then mysql_user=$(crudini --get "$global_conf" '' mysql_user); fi
@@ -273,11 +274,11 @@ do
         mysql_password=$(crudini --get "$backup_conf" "$section" mysql_password)
         if [ -z "$mysql_password" ]; then mysql_password=$(crudini --get "$global_conf" '' mysql_password); fi
 
-        # export mysql database with data using mysqldump
+        # export mysql object(s) using mysqldump
         dt=`$DATE +%Y%m%d.%H%M%S`
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "mysqldump $bkpfile..."
-        $MYSQLDUMP -u$mysql_user -p$mysql_password $database > $bkpfile
+        $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
 
         # compress file
         zip_file $bkpfile
