@@ -27,7 +27,7 @@ More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 Release 2.0.0 (11 Sep 2016)
 ---------------------------
 
-* Consolidation of all scripts to one script: bash-cloud-backup.sh #30
+* **Consolidation of all scripts to one script: bash-cloud-backup.sh** #30
 * use crudini (https://github.com/pixelb/crudini) to manipulate config files
 * Display elapsed time #34
 
