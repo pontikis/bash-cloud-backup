@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.0.0 (11 Sep 2016)
+RELEASE 2.0.1 (11 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -131,40 +131,46 @@ By default, bash-cloud-backup expects these files to be
 
 You may define your own ``global.conf`` and as many ``backup.conf`` you like. So:
 
-### Edit ``backup.conf`` (global parameters) 
-
-**ATTENTION**: remember to configure properly ``global.conf`` after each update
+### Edit ``global.conf`` (global parameters) 
 
     cp conf.default/global.conf /etc/bash-cloud-backup/global.conf
     nano /etc/bash-cloud-backup/global.conf
 
-### Directories
+For instructions, see sample ``conf.default/global.conf`` 
 
-``bash-cloud-backup`` will create all directories you define in configuration files (assuming it has the required permissions)
-    
+**ATTENTION**: remember to configure properly ``global.conf`` after each update
+
+
 ### Edit ``backup.conf`` (create your own backup set)
-
-**ATTENTION**: remember to configure properly ``backup.conf`` after each update
 
     cp conf.default/backup.conf /etc/bash-cloud-backup/backup.conf
     nano /etc/bash-cloud-backup/backup.conf
+
+For instructions, see sample ``conf.default/backup.conf`` 
+
+**ATTENTION**: remember to configure properly ``backup.conf`` after each update
+
+
+### Directories
+
+``bash-cloud-backup`` will create all directories you define in configuration files (assuming it has the required permissions)
+
 
 ### You may add custom commands at ``custom.sh`` (optional)
 
     nano custom.sh
 
 
-### **SECURITY NOTE**
+### SECURITY NOTE
 
-Ensure that all executable (*.sh) and directories are mod 700 and text files 600:
+It is recommended that all executable (*.sh) are mod 700 and text files 600:
 
     chown root:root bash-cloud-backup.sh
     chmod 700 bash-cloud-backup.sh
     
-    chown root:root conf/global.conf
-    chmod 600 conf/global.conf
-    chown root:root conf/backup.conf
-    chmod 600 conf/backup.conf
+    chown root:root /etc/bash-cloud-backup/*.conf
+    chmod 600 /etc/bash-cloud-backup/*.conf
+
 
 Run
 ---
