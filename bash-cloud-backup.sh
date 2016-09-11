@@ -80,8 +80,9 @@ logfilename=$(crudini --get "$global_conf" '' logfilename)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
 log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
 
-use_7z=$(crudini --get "$global_conf" '' use_7z)
-if [ $use_7z -eq 1 ]; then
+use_compression=$(crudini --get "$global_conf" '' use_compression)
+if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
+if [ $use_compression == '7z' ]; then
     passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
     filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
     if [ "$filetype_7z" == '7z' ]; then
@@ -126,14 +127,16 @@ function zip_file {
 
     file_to_zip=$1;
 
-    if [ $use_7z -eq 1 ]; then
+    if [ $use_compression == '7z' ]; then
         if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
         createlog "7zip$aes $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
         $RM -f $file_to_zip
-    else
+    elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
         $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile
+    else
+        createlog "No compression selected for $file_to_zip..."
     fi
 
 }
@@ -212,6 +215,10 @@ do
     prefix=$(crudini --get "$backup_conf" "$section" prefix)
     starting_message=$(crudini --get "$backup_conf" "$section" starting_message)
     finish_message=$(crudini --get "$backup_conf" "$section" finish_message)
+
+    use_compression=$(crudini --get "$backup_conf" "$section" use_compression)
+    if [ -z "$use_compression" ]; then use_compression=$(crudini --get "$global_conf" '' use_compression); fi
+    if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 
     echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
     createlog "$starting_message"
