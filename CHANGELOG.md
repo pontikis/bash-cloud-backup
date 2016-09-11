@@ -10,8 +10,9 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 Release 2.0.1 (11 Sep 2016)
 ---------------------------
 
-* mysqldump_options added to backup section #37
 * use_7z option replaced by use_compression option #41
+* mysqldump_options added to backup section #37
+
 
     ATTENTION
 
