@@ -7,13 +7,10 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
-
-Release 2.0.0 (11 Sep 2016)
+Release 2.0.1 (11 Sep 2016)
 ---------------------------
 
-* Consolidation of all scripts to one script: bash-cloud-backup.sh #30
-* use crudini (https://github.com/pixelb/crudini) to manipulate config files
-* Display elapsed time #34
+* mysqldump_options added to backup section #37
 
 
     ATTENTION
@@ -23,6 +20,15 @@ Version 2.* is not compatible with previous (deprecated) version 1.*
 Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
+
+
+Release 2.0.0 (11 Sep 2016)
+---------------------------
+
+* Consolidation of all scripts to one script: bash-cloud-backup.sh #30
+* use crudini (https://github.com/pixelb/crudini) to manipulate config files
+* Display elapsed time #34
 
 
 Release 1.1.3 (09 Sep 2016)
