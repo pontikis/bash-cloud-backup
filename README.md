@@ -137,6 +137,10 @@ You may define your own ``global.conf`` and as many ``backup.conf`` you like. So
 
     cp conf.default/global.conf /etc/bash-cloud-backup/global.conf
     nano /etc/bash-cloud-backup/global.conf
+
+### Directories
+
+``bash-cloud-backup`` will create all directories you define in configuration files (assuming it has the required permissions)
     
 ### Edit ``backup.conf`` (create your own backup set)
 
