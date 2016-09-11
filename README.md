@@ -138,6 +138,8 @@ You may define your own ``global.conf`` and as many ``backup.conf`` you like. So
 
 For instructions, see sample ``conf.default/global.conf`` 
 
+https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/global.conf
+
 **ATTENTION**: remember to configure properly ``global.conf`` after each update
 
 
@@ -147,6 +149,8 @@ For instructions, see sample ``conf.default/global.conf``
     nano /etc/bash-cloud-backup/backup.conf
 
 For instructions, see sample ``conf.default/backup.conf`` 
+
+https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.conf
 
 **ATTENTION**: remember to configure properly ``backup.conf`` after each update
 
