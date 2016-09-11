@@ -11,7 +11,7 @@ Release 2.0.1 (11 Sep 2016)
 ---------------------------
 
 * mysqldump_options added to backup section #37
-
+* use_7z option replaced by use_compression option #41
 
     ATTENTION
 
