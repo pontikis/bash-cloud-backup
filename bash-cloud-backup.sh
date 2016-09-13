@@ -27,6 +27,7 @@ TR="$(which tr)"
 MYSQLDUMP="$(which mysqldump)"
 S3CMD="$(which s3cmd)"
 CAT="$(which cat)"
+MAIL="$(which mail)"
 
 # Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
@@ -74,9 +75,13 @@ sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$'
 
 # get global configuration -----------------------------------------------------
 backuproot=$(crudini --get "$global_conf" '' backuproot)
+
 hostname=$(crudini --get "$global_conf" '' hostname)
+if [ -z "$hostname" ]; then onhost=''; else onhost=" on $hostname"; fi
+
 logfilepath=$(crudini --get "$global_conf" '' logfilepath)
 logfilename=$(crudini --get "$global_conf" '' logfilename)
+logfilename_tmp=$(crudini --get "$global_conf" '' logfilename_tmp)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
 log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
 
@@ -111,16 +116,19 @@ s3_sync=$(crudini --get "$global_conf" '' s3_sync)
 s3_path=$(crudini --get "$global_conf" '' s3_path)
 s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
 
+mail_to=$(crudini --get "$global_conf" '' mail_to)
+
 # create log directory in case it does not exist
 if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
-# define log file
+# define log files
 logfile="$logfilepath/$logfilename"
+logfile_tmp="$logfilepath/$logfilename_tmp"
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
       logline="$dt | $1"
-      echo -e $logline 2>&1 | $TEE -a $logfile
+      echo -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
 function zip_file {
@@ -130,11 +138,11 @@ function zip_file {
     if [ $use_compression == '7z' ]; then
         if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
         createlog "7zip$aes $file_to_zip..."
-        $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile
+        $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
         $RM -f $file_to_zip
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
-        $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile
+        $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
     else
         createlog "No compression selected for $file_to_zip..."
     fi
@@ -181,7 +189,7 @@ function rotate_delete {
 
         if [ $backups_to_delete -gt 0 ]; then
             createlog "$backups_to_delete backups will ne deleted:"
-            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile
+            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile_tmp
 
             # proceed to deletion
             $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
@@ -200,7 +208,6 @@ function rotate_delete {
 }
 
 # perform backup ---------------------------------------------------------------
-if [ -z "$hostname" ]; then onhost=''; else onhost=" on $hostname"; fi
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
 for (( i=0; i<${#sections[@]}; i++ ));
@@ -220,7 +227,7 @@ do
     if [ -z "$use_compression" ]; then use_compression=$(crudini --get "$global_conf" '' use_compression); fi
     if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 
-    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "$starting_message"
 
     currentdir="$backuproot/$path"
@@ -294,7 +301,7 @@ do
         rotate_delete $currentdir 1
 
     else
-        echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+        echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
         createlog "ERROR: Unknown backup type. $section is ingored..."
     fi
 
@@ -311,14 +318,14 @@ if [ $s3_sync -eq 1 ]; then
     s3_path=$(crudini --get "$global_conf" '' s3_path)
     s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
 
-    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "Amazon S3 sync is starting..."
 
     # attention: / is important to copy only the contents of $backuproot
     S3_SOURCE="$backuproot/"
     S3_DEST=$s3_path
 
-    $S3CMD sync $s3cmd_sync_params $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile
+    $S3CMD sync $s3cmd_sync_params $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
 
     createlog "Amazon S3 sync completed."
 fi
@@ -328,7 +335,13 @@ END=$($DATE +"%s")
 DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
 
-echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile
+echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
 createlog "bash-cloud-backup (version $version) completed."
-echo "$ELAPSED"  2>&1 | $TEE -a $logfile
-echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile
+echo "$ELAPSED"  2>&1 | $TEE -a $logfile_tmp
+echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile_tmp
+
+# update main logfile
+$CAT $logfile_tmp >> $logfile
+
+# send mail report -------------------------------------------------------------
+if [ -n "$mail_to" ]; then $MAIL -s "bash-cloud-backup$onhost" $mail_to  < $logfile_tmp; fi
