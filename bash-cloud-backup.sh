@@ -124,6 +124,9 @@ if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 logfile="$logfilepath/$logfilename"
 logfile_tmp="$logfilepath/$logfilename_tmp"
 
+# initialize tmp backup log
+$CAT /dev/null > $logfile_tmp
+
 # Utility Functions ------------------------------------------------------------
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
