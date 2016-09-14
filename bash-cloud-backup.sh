@@ -12,7 +12,6 @@
 # Linux commands ---------------------------------------------------------------
 FIND="$(which find)"
 TAR="$(which tar)"
-CMD7Z="$(which 7z)"
 GZIP="$(which gzip)"
 DATE="$(which date)"
 CHMOD="$(which chmod)"
@@ -24,10 +23,13 @@ SORT="$(which sort)"
 SED="$(which sed)"
 GREP="$(which grep)"
 TR="$(which tr)"
-MYSQLDUMP="$(which mysqldump)"
-S3CMD="$(which s3cmd)"
 CAT="$(which cat)"
 MAIL="$(which mail)"
+DU="$(which du)"
+AWK="$(which awk)"
+MYSQLDUMP="$(which mysqldump)"
+CMD7Z="$(which 7z)"
+S3CMD="$(which s3cmd)"
 
 # Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
@@ -85,6 +87,8 @@ logfilename_tmp=$(crudini --get "$global_conf" '' logfilename_tmp)
 log_separator=$(crudini --get "$global_conf" '' log_separator)
 log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
 
+log_filesize=$(crudini --get "$global_conf" '' log_filesize)
+
 use_compression=$(crudini --get "$global_conf" '' use_compression)
 if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 if [ $use_compression == '7z' ]; then
@@ -134,8 +138,8 @@ function createlog {
       echo -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
-function log_filesize {
-    filesize=$(du -h "$1" | awk '{print $1}')
+function get_filesize {
+    filesize=$($DU -h "$1" | $AWK '{print $1}')
     echo -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
 }
 
@@ -148,11 +152,11 @@ function zip_file {
         createlog "7zip$aes $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
         $RM -f $file_to_zip
-        log_filesize "$file_to_zip.$filetype_7z"
+        get_filesize "$file_to_zip.$filetype_7z"
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
         $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
-        log_filesize "$file_to_zip.gz"
+        get_filesize "$file_to_zip.gz"
     else
         createlog "No compression selected for $file_to_zip..."
     fi
@@ -275,11 +279,11 @@ do
         createlog "tar options: $tar_options_backup_list"
         createlog "Creating tar $listfile..."
         $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
+        get_filesize $listfile
         createlog "tar options: $tar_options_backup_file"
         createlog "Creating tar $bkpfile..."
         $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
-
-        log_filesize $bkpfile
+        get_filesize $bkpfile
 
         # compress (and encrypt) files
         zip_file $listfile
@@ -305,6 +309,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "mysqldump $bkpfile..."
         $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
+        get_filesize $bkpfile
 
         # compress file
         zip_file $bkpfile
