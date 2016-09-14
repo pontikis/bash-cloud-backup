@@ -314,6 +314,12 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "mysqldump $bkpfile..."
         $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
+        if [ $? -eq 0 ]; then
+            check_err_msg="mysqldump completed successfully."
+        else
+            check_err_msg="ERROR: mysqldump failed..."
+        fi
+        createlog "$check_err_msg"
         get_filesize $bkpfile
 
         # compress file
@@ -340,7 +346,11 @@ do
         createlog "pg_dump $bkpfile..."
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
         $PG_DUMP -U $pg_user $pg_dump_options $database > $bkpfile
-        if [ $? -eq 0 ]; then check_err_msg="pg_dump completed successfully."; else check_err_msg="ERROR: pg_dump failed..."; fi
+        if [ $? -eq 0 ]; then
+            check_err_msg="pg_dump completed successfully."
+        else
+            check_err_msg="ERROR: pg_dump failed..."
+        fi
         createlog "$check_err_msg"
         if [ -n "$pg_password" ]; then unset PGPASSWORD; fi
         get_filesize $bkpfile
