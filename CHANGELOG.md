@@ -7,10 +7,11 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
-Release 2.0.2 (14 Sep 2016)
+
+Release 2.0.3 (14 Sep 2016)
 ---------------------------
 
-* send mail report #46
+* Log filesize of backup file #45
 
 
     ATTENTION
@@ -21,6 +22,12 @@ Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
+
+
+Release 2.0.2 (14 Sep 2016)
+---------------------------
+
+* send mail report #46
 
 Release 2.0.1 (11 Sep 2016)
 ---------------------------
