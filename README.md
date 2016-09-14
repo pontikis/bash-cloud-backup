@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.0.4 (14 Sep 2016)
+RELEASE 2.0.5 (14 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -42,7 +42,14 @@ Scripts
 -------
 
 * ``bash-cloud-backup.sh``: the main script
-* ``custom.sh``: custom commands (you may create it, if needed)
+
+You may create and use 
+
+* ``custom1.sh`` - after backup finished and before Amazon S3 sync
+* ``custom2.sh`` - after Amazon S3 sync
+* ``custom3.sh`` - after logfile created and main script finished
+
+(these scripts are git ignored)
 
 Logs
 ----

@@ -329,8 +329,8 @@ do
     createlog "$finish_message"
 done
 
-# Custom commands --------------------------------------------------------------
-custom_script=${scriptpath}custom.sh
+# Custom script 1 --------------------------------------------------------------
+custom_script=${scriptpath}custom1.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Amazon S3 sync ---------------------------------------------------------------
@@ -351,6 +351,10 @@ if [ $s3_sync -eq 1 ]; then
     createlog "Amazon S3 sync completed."
 fi
 
+# Custom script 2 --------------------------------------------------------------
+custom_script=${scriptpath}custom2.sh
+if [ -f "$custom_script" ]; then source $custom_script; fi
+
 # Finish -----------------------------------------------------------------------
 END=$($DATE +"%s")
 DIFF=$(($END-$START))
@@ -366,3 +370,7 @@ $CAT $logfile_tmp >> $logfile
 
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then $MAIL -s "bash-cloud-backup$onhost" $mail_to  < $logfile_tmp; fi
+
+# Custom script 3 --------------------------------------------------------------
+custom_script=${scriptpath}custom3.sh
+if [ -f "$custom_script" ]; then source $custom_script; fi

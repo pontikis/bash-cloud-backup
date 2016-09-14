@@ -8,6 +8,20 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
+
+Release 2.0.5 (14 Sep 2016)
+---------------------------
+
+* Custom scripts #47
+    You may create and use 
+    
+    * ``custom1.sh`` - after backup finished and before Amazon S3 sync
+    * ``custom2.sh`` - after Amazon S3 sync
+    * ``custom3.sh`` - after logfile created and main script finished
+    
+    (these scripts are git ignored)
+
+
 Release 2.0.4 (14 Sep 2016)
 ---------------------------
 
