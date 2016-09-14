@@ -11,7 +11,7 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 Release 2.0.5 (14 Sep 2016)
 ---------------------------
-
+* Postgresql support #12
 * Custom scripts #47
     You may create and use 
     
@@ -22,12 +22,6 @@ Release 2.0.5 (14 Sep 2016)
     (these scripts are git ignored)
 
 
-Release 2.0.4 (14 Sep 2016)
----------------------------
-
-* Log filesize of backup file #45 (bug fix)
-
-
     ATTENTION
 
 Version 2.* is not compatible with previous (deprecated) version 1.*
@@ -35,6 +29,12 @@ Version 2.* is not compatible with previous (deprecated) version 1.*
 Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
+
+Release 2.0.4 (14 Sep 2016)
+---------------------------
+
+* Log filesize of backup file #45 (bug fix)
 
 
 Release 2.0.3 (14 Sep 2016)

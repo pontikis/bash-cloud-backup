@@ -18,7 +18,7 @@ More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 Features
 --------
 
-* bash-cloud-backup keeps rotating compressed tarballs or certain directories or files or databases.
+* bash-cloud-backup keeps rotating compressed tarballs of certain directories/files or databases (MySQL, Postgresql).
 * it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and encryption - RECOMMENDED).
 * Backup files are stored in specified directories and (optionally) deleted with rotation (14 days default).
 * Amazon S3 sync: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but recommended).
@@ -168,9 +168,11 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
 ``bash-cloud-backup`` will create all directories you define in configuration files (assuming it has the required permissions)
 
 
-### You may add custom commands at ``custom.sh`` (optional)
+### You may add custom commands (optional)
 
-    nano custom.sh
+    nano custom1.sh
+    nano custom2.sh
+    nano custom3.sh
 
 
 ### SECURITY NOTE

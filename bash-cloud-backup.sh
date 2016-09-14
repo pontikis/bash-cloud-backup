@@ -29,6 +29,7 @@ MAIL="$(which mail)"
 DU="$(which du)"
 AWK="$(which awk)"
 MYSQLDUMP="$(which mysqldump)"
+PG_DUMP="$(which pg_dump)"
 CMD7Z="$(which 7z)"
 S3CMD="$(which s3cmd)"
 
@@ -313,6 +314,33 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "mysqldump $bkpfile..."
         $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
+        get_filesize $bkpfile
+
+        # compress file
+        zip_file $bkpfile
+
+        # rotating delete
+        rotate_delete $currentdir 1
+
+    elif [ "$type" == 'postgresql' ]; then
+
+        # get specific properties of section with type = 'postgresql'
+        database=$(crudini --get "$backup_conf" "$section" database)
+        pg_dump_options=$(crudini --get "$backup_conf" "$section" pg_dump_options)
+
+        $pg_user=$(crudini --get "$backup_conf" "$section" $pg_user)
+        if [ -z "$pg_user" ]; then $pg_user=$(crudini --get "$global_conf" '' $pg_user); fi
+
+        pg_password=$(crudini --get "$backup_conf" "$section" pg_password)
+        if [ -z "$pg_password" ]; then pg_password=$(crudini --get "$global_conf" '' pg_password); fi
+
+        # export postgresql object(s) using pg_dump
+        dt=`$DATE +%Y%m%d.%H%M%S`
+        bkpfile=$currentdir/$prefix-$dt.sql
+        createlog "pg_dump $bkpfile..."
+        if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
+        $PG_DUMP -U $pg_user $pg_dump_options $database > $bkpfile
+        if [ -n "$pg_password" ]; then unset PGPASSWORD; fi
         get_filesize $bkpfile
 
         # compress file
