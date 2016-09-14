@@ -328,8 +328,8 @@ do
         database=$(crudini --get "$backup_conf" "$section" database)
         pg_dump_options=$(crudini --get "$backup_conf" "$section" pg_dump_options)
 
-        $pg_user=$(crudini --get "$backup_conf" "$section" $pg_user)
-        if [ -z "$pg_user" ]; then $pg_user=$(crudini --get "$global_conf" '' $pg_user); fi
+        pg_user=$(crudini --get "$backup_conf" "$section" pg_user)
+        if [ -z "$pg_user" ]; then $pg_user=$(crudini --get "$global_conf" '' pg_user); fi
 
         pg_password=$(crudini --get "$backup_conf" "$section" pg_password)
         if [ -z "$pg_password" ]; then pg_password=$(crudini --get "$global_conf" '' pg_password); fi
