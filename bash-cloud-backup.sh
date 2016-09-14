@@ -134,6 +134,13 @@ function createlog {
       echo -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
+function log_filesize {
+
+    echo -e "\nFilesize: "  2>&1 | $TEE -a $logfile_tmp
+    echo -e  $(du -h "$1" | awk '{print $1}')  2>&1 | $TEE -a $logfile_tmp
+    echo -e "\n"  2>&1 | $TEE -a $logfile_tmp
+}
+
 function zip_file {
 
     file_to_zip=$1;
@@ -143,9 +150,11 @@ function zip_file {
         createlog "7zip$aes $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
         $RM -f $file_to_zip
+        log_filesize "$file_to_zip.$filetype_7z"
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
         $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        log_filesize "$file_to_zip.gz"
     else
         createlog "No compression selected for $file_to_zip..."
     fi
@@ -265,12 +274,14 @@ do
         dt=`$DATE +%Y%m%d.%H%M%S`
         listfile=$currentdir/$prefix-$dt-list.tar
         bkpfile=$currentdir/$prefix-$dt.tar
-        createlog "Creating tar $listfile..."
         createlog "tar options: $tar_options_backup_list"
+        createlog "Creating tar $listfile..."
         $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
-        createlog "Creating tar $bkpfile..."
         createlog "tar options: $tar_options_backup_file"
+        createlog "Creating tar $bkpfile..."
         $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
+
+        log_filesize $bkpfile
 
         # compress (and encrypt) files
         zip_file $listfile
