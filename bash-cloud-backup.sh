@@ -140,8 +140,11 @@ function createlog {
 }
 
 function get_filesize {
-    filesize=$($DU -h "$1" | $AWK '{print $1}')
-    $ECHO -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
+    if [ $log_filesize -eq 1 ]
+    then
+        filesize=$($DU -h "$1" | $AWK '{print $1}')
+        $ECHO -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
+    fi
 }
 
 function zip_file {
