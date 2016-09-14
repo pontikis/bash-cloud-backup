@@ -9,7 +9,7 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
 
-Release 2.0.5 (14 Sep 2016)
+Release 2.0.5 (15 Sep 2016)
 ---------------------------
 * Postgresql support #12
 * Custom scripts #47
