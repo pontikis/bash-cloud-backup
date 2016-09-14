@@ -135,7 +135,6 @@ function createlog {
 }
 
 function log_filesize {
-
     echo -e "\nFilesize: "  2>&1 | $TEE -a $logfile_tmp
     echo -e  $(du -h "$1" | awk '{print $1}')  2>&1 | $TEE -a $logfile_tmp
     echo -e "\n"  2>&1 | $TEE -a $logfile_tmp
