@@ -10,6 +10,7 @@
 #-------------------------------------------------------------------------------
 
 # Linux commands ---------------------------------------------------------------
+ECHO="$(which echo)"
 FIND="$(which find)"
 TAR="$(which tar)"
 GZIP="$(which gzip)"
@@ -51,7 +52,7 @@ while getopts ":g:b:" opt; do
             backup_conf=$OPTARG
             ;;
         '?')
-            echo "FATAL ERROR: invalid options..."
+            $ECHO "FATAL ERROR: invalid options..."
             exit 1
             ;;
     esac
@@ -59,13 +60,13 @@ done
 
 if [ ! -f "$global_conf" ]
 then
-    echo "FATAL ERROR: global configuration file $global_conf does not exist..."
+    $ECHO "FATAL ERROR: global configuration file $global_conf does not exist..."
     exit 1
 fi
 
 if [ ! -f "$backup_conf" ]
 then
-    echo "FATAL ERROR: backup configuration file $backup_conf does not exist..."
+    $ECHO "FATAL ERROR: backup configuration file $backup_conf does not exist..."
     exit 1
 fi
 
@@ -135,12 +136,12 @@ $CAT /dev/null > $logfile_tmp
 function createlog {
       dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
       logline="$dt | $1"
-      echo -e $logline 2>&1 | $TEE -a $logfile_tmp
+      $ECHO -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
 function get_filesize {
     filesize=$($DU -h "$1" | $AWK '{print $1}')
-    echo -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
+    $ECHO -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
 }
 
 function zip_file {
@@ -241,7 +242,7 @@ do
     if [ -z "$use_compression" ]; then use_compression=$(crudini --get "$global_conf" '' use_compression); fi
     if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 
-    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+    $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "$starting_message"
 
     currentdir="$backuproot/$path"
@@ -318,7 +319,7 @@ do
         rotate_delete $currentdir 1
 
     else
-        echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+        $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
         createlog "ERROR: Unknown backup type. $section is ingored..."
     fi
 
@@ -335,7 +336,7 @@ if [ $s3_sync -eq 1 ]; then
     s3_path=$(crudini --get "$global_conf" '' s3_path)
     s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
 
-    echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+    $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "Amazon S3 sync is starting..."
 
     # attention: / is important to copy only the contents of $backuproot
@@ -352,10 +353,10 @@ END=$($DATE +"%s")
 DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
 
-echo -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
 createlog "bash-cloud-backup (version $version) completed."
-echo "$ELAPSED"  2>&1 | $TEE -a $logfile_tmp
-echo -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile_tmp
+$ECHO "$ELAPSED"  2>&1 | $TEE -a $logfile_tmp
+$ECHO -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile_tmp
 
 # update main logfile
 $CAT $logfile_tmp >> $logfile
