@@ -425,7 +425,7 @@ createlog "bash-cloud-backup (version $version) completed."
 
 # report errors
 $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-if [ $errors -eq 0 ]; then
+if [ $errors -eq -1 ]; then
     $ECHO -e "No errors detected." 2>&1 | $TEE -a $logfile_tmp
 else
     $ECHO -e "$errors ERRORS detected..." 2>&1 | $TEE -a $logfile_tmp
