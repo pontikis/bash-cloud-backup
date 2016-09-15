@@ -382,7 +382,7 @@ do
 
     else
         $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-        report_error "ERROR: Unknown backup type $type. Section $section is ingored..."
+        report_error "ERROR: Unknown backup type <$type>. Section $section is ingored..."
     fi
 
     createlog "$finish_message"
@@ -428,7 +428,7 @@ $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
 if [ $errors -eq -1 ]; then
     $ECHO -e "No errors encountered." 2>&1 | $TEE -a $logfile_tmp
 else
-    $ECHO -e "$errors ERRORS encountered..." 2>&1 | $TEE -a $logfile_tmp
+    $ECHO -e "${#err[@]} ERRORS encountered..." 2>&1 | $TEE -a $logfile_tmp
     counter=1
     for (( i=0; i<${#err[@]}; i++ ));
     do
