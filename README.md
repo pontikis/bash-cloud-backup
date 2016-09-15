@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.0.5 (15 Sep 2016)
+RELEASE 2.0.6 (15 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -18,11 +18,13 @@ More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 Features
 --------
 
-* bash-cloud-backup keeps rotating compressed tarballs of certain directories/files or databases (MySQL, Postgresql).
+* bash-cloud-backup keeps rotating compressed tarballs of certain directories/files or databases.
+* supported databases MySQL (using ``mysqldump``), Postgresql (using ``pg_dump``)
 * it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and encryption - RECOMMENDED).
-* Backup files are stored in specified directories and (optionally) deleted with rotation (14 days default).
+* backup files are stored in specified directories and (optionally) deleted with rotation (14 days default).
 * Amazon S3 sync: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but recommended).
-* detailed logs, email report
+* detailed logs, error reporting, email report
+* advanced customization using configuration files
 
 Copyright
 ---------

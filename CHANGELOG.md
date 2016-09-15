@@ -7,6 +7,18 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
+Release 2.0.6 (15 Sep 2016)
+---------------------------
+* Simple error reporting #48
+
+
+    ATTENTION
+
+Version 2.* is not compatible with previous (deprecated) version 1.*
+
+Version 1 has its own branch (version1).
+
+More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
 
 Release 2.0.5 (15 Sep 2016)
@@ -20,16 +32,6 @@ Release 2.0.5 (15 Sep 2016)
     * ``custom3.sh`` - after logfile created and main script finished
     
     (these scripts are git ignored)
-
-
-    ATTENTION
-
-Version 2.* is not compatible with previous (deprecated) version 1.*
-
-Version 1 has its own branch (version1).
-
-More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
-
 
 Release 2.0.4 (14 Sep 2016)
 ---------------------------
