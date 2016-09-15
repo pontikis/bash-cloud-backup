@@ -254,7 +254,7 @@ for (( i=0; i<${#sections[@]}; i++ ));
 
 do
 
-    section=${sections[i]};
+    section=${sections[i]}
 
     # get backup section properties (common for all types)
     type=$(crudini --get "$backup_conf" "$section" type)
