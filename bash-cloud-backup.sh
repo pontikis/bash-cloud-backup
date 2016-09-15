@@ -382,7 +382,7 @@ do
 
     else
         $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-        report_error "ERROR: Unknown backup type. $section is ingored..."
+        report_error "ERROR: Unknown backup type $type. Section $section is ingored..."
     fi
 
     createlog "$finish_message"
