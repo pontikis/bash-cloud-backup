@@ -36,6 +36,9 @@ S3CMD="$(which s3cmd)"
 # Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
 
+# errors counter ---------------------------------------------------------------
+errors=-1
+
 # Script path ------------------------------------------------------------------
 scriptpath=`dirname "$0"`
 if [ $scriptpath = "." ]; then scriptpath=''; else scriptpath=${scriptpath}/; fi
@@ -140,6 +143,12 @@ function createlog {
       $ECHO -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
+function report_error {
+    ((errors++))
+    err[$errors]=$1
+    createlog "$1"
+}
+
 function get_filesize {
     if [ $log_filesize -eq 1 ]
     then
@@ -156,11 +165,23 @@ function zip_file {
         if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
         createlog "7zip$aes $file_to_zip..."
         $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]
+        then
+            createlog "File compression completed successfully."
+        else
+            report_error "ERROR: $file_to_zip 7z compression failed..."
+        fi
         $RM -f $file_to_zip
         get_filesize "$file_to_zip.$filetype_7z"
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
         $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]
+        then
+            createlog "File compression completed successfully."
+        else
+            report_error "ERROR: $file_to_zip gzip compression failed..."
+        fi
         get_filesize "$file_to_zip.gz"
     else
         createlog "No compression selected for $file_to_zip..."
@@ -216,7 +237,7 @@ function rotate_delete {
             then
                 createlog "Rotating delete completed successfully."
             else
-                createlog "ERROR: rotating delete failed..."
+                report_error "ERROR: rotating delete failed..."
             fi
         else
             createlog "No backups will ne deleted."
@@ -315,11 +336,10 @@ do
         createlog "mysqldump $bkpfile..."
         $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
         if [ $? -eq 0 ]; then
-            check_err_msg="mysqldump completed successfully."
+            createlog "mysqldump completed successfully."
         else
-            check_err_msg="ERROR: mysqldump failed..."
+            report_error "ERROR: $bkpfile mysqldump failed..."
         fi
-        createlog "$check_err_msg"
         get_filesize $bkpfile
 
         # compress file
@@ -347,11 +367,10 @@ do
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
         $PG_DUMP -U $pg_user $pg_dump_options $database > $bkpfile
         if [ $? -eq 0 ]; then
-            check_err_msg="pg_dump completed successfully."
+            createlog "pg_dump completed successfully."
         else
-            check_err_msg="ERROR: pg_dump failed..."
+            report_error "ERROR: $bkpfile pg_dump failed..."
         fi
-        createlog "$check_err_msg"
         if [ -n "$pg_password" ]; then unset PGPASSWORD; fi
         get_filesize $bkpfile
 
@@ -363,7 +382,7 @@ do
 
     else
         $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-        createlog "ERROR: Unknown backup type. $section is ingored..."
+        report_error "ERROR: Unknown backup type. $section is ingored..."
     fi
 
     createlog "$finish_message"
@@ -387,8 +406,13 @@ if [ $s3_sync -eq 1 ]; then
     S3_DEST=$s3_path
 
     $S3CMD sync $s3cmd_sync_params $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+    if [ ${PIPESTATUS[0]} -eq 0 ]
+    then
+        createlog "Amazon S3 sync completed."
+    else
+        report_error "ERROR: Amazon S3 sync failed..."
+    fi
 
-    createlog "Amazon S3 sync completed."
 fi
 
 # Custom script 2 --------------------------------------------------------------
@@ -396,13 +420,31 @@ custom_script=${scriptpath}custom2.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
+$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+createlog "bash-cloud-backup (version $version) completed."
+
+# report errors
+$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+if [ $errors -eq 0 ]; then
+    $ECHO -e "No errors detected." 2>&1 | $TEE -a $logfile_tmp
+else
+    $ECHO -e "$errors ERRORS detected..." 2>&1 | $TEE -a $logfile_tmp
+    counter=1
+    for (( i=0; i<${#err[@]}; i++ ));
+    do
+        err_msg=${err[i]};
+        $ECHO -e "$counter) $err_msg" 2>&1 | $TEE -a $logfile_tmp
+        ((counter++))
+    done
+fi
+
+# report tome elapsed
+$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
 END=$($DATE +"%s")
 DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
-
-$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-createlog "bash-cloud-backup (version $version) completed."
 $ECHO "$ELAPSED"  2>&1 | $TEE -a $logfile_tmp
+
 $ECHO -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile_tmp
 
 # update main logfile
