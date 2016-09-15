@@ -432,7 +432,7 @@ else
     counter=1
     for (( i=0; i<${#err[@]}; i++ ));
     do
-        err_msg=${err[i]};
+        err_msg=${err[i]}
         $ECHO -e "$counter) $err_msg" 2>&1 | $TEE -a $logfile_tmp
         ((counter++))
     done
