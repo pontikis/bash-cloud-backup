@@ -203,6 +203,22 @@ then
 More at http://dev.mysql.com/doc/refman/5.7/en/password-security-user.html
 
 
+#### About Postgresql password
+
+DO NOT expose ``postgres`` password to create backups. Create a 'read only' user for backup purposes.
+In most cases the following commands are enough:
+
+    CREATE USER bkpadm SUPERUSER  password 'password';
+    ALTER USER bkpadm set default_transaction_read_only = on;
+
+In Postgresql you may use ``.pgpass`` file (similar to MySQL ``.my.cnf``, but more advanced)
+
+More https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html
+
+**So YOU DO NOT NEED TO PROVIDE mysql_password**
+
+However, providing a password in ``bash-cloud-backup`` configuration files is quite secure, as ``PGPASSWORD`` ENVIRONMENTAL VARIABLE is used.
+
 
 #### Secure files permissions
 
