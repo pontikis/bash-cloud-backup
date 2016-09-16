@@ -10,7 +10,7 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 Release 2.0.7 (16 Sep 2016)
 ---------------------------
 * Improve error reporting #48
-
+* Security: avoid pass passwords in command line
 
     ATTENTION
 
