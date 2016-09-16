@@ -224,7 +224,7 @@ In Postgresql you may use ``.pgpass`` file (similar to MySQL ``.my.cnf``, but mo
 
 More https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html
 
-**So YOU DO NOT NEED TO PROVIDE mysql_password**
+**So YOU DO NOT NEED TO PROVIDE pg_password**
 
 However, providing a password in ``bash-cloud-backup`` configuration files is quite secure, as ``PGPASSWORD`` ENVIRONMENTAL VARIABLE is used.
 
