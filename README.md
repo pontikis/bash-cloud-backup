@@ -192,7 +192,14 @@ In most cases the following commands are enough:
 Create ``.my.cnf`` file in home folder and add
 
     [client]
-    password=bkpadm_password_here
+    password="bkpadm_password_here"
+
+or
+
+    [mysqldump]
+    password="bkpadm_password_here"
+
+(double quotes are permitted and in some cases of special characters in password are necessary)
 
 then
 
