@@ -169,7 +169,7 @@ function zip_file {
         then
             createlog "File compression completed successfully."
         else
-            report_error "ERROR: $file_to_zip 7z compression failed..."
+            report_error "ERROR: Section [$section]. $file_to_zip 7z compression failed..."
         fi
         $RM -f $file_to_zip
         get_filesize "$file_to_zip.$filetype_7z"
@@ -180,7 +180,7 @@ function zip_file {
         then
             createlog "File compression completed successfully."
         else
-            report_error "ERROR: $file_to_zip gzip compression failed..."
+            report_error "ERROR: Section [$section]. $file_to_zip gzip compression failed..."
         fi
         get_filesize "$file_to_zip.gz"
     else
@@ -237,7 +237,7 @@ function rotate_delete {
             then
                 createlog "Rotating delete completed successfully."
             else
-                report_error "ERROR: rotating delete failed..."
+                report_error "ERROR: Section [$section]. Rotating delete failed..."
             fi
         else
             createlog "No backups will ne deleted."
@@ -338,7 +338,7 @@ do
         if [ $? -eq 0 ]; then
             createlog "mysqldump completed successfully."
         else
-            report_error "ERROR: $bkpfile mysqldump failed..."
+            report_error "ERROR: Section [$section]. $bkpfile mysqldump failed..."
         fi
         get_filesize $bkpfile
 
@@ -365,11 +365,11 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "pg_dump $bkpfile..."
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
-        $PG_DUMP -U $pg_user $pg_dump_options $database > $bkpfile
-        if [ $? -eq 0 ]; then
+        $PG_DUMP -U $pg_user $pg_dump_options $database --file=$bkpfile 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "pg_dump completed successfully."
         else
-            report_error "ERROR: $bkpfile pg_dump failed..."
+            report_error "ERROR: Section [$section]. $bkpfile pg_dump failed..."
         fi
         if [ -n "$pg_password" ]; then unset PGPASSWORD; fi
         get_filesize $bkpfile
@@ -382,7 +382,7 @@ do
 
     else
         $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
-        report_error "ERROR: Unknown backup type <$type>. Section $section is ingored..."
+        report_error "ERROR: Section [$section]. Unknown backup type <$type>. Section is ingored..."
     fi
 
     createlog "$finish_message"
