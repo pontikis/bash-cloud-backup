@@ -177,7 +177,34 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
     nano custom3.sh
 
 
-### SECURITY NOTE
+### SECURITY NOTICE
+
+#### About MySQL password
+
+DO NOT expose ``root`` password to create backups. Create a 'read only' user for backup purposes.
+In most cases the following commands are enough:
+
+    GRANT SELECT,RELOAD,FILE,SUPER,LOCK TABLES,SHOW VIEW ON *.*
+    TO 'bkpadm'@'localhost' IDENTIFIED BY 'bkpadm_password_here'
+    WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+    flush privileges;
+
+Create ``.my.cnf`` file in home folder and add
+
+    [client]
+    password=bkpadm_password_here
+
+then
+
+    chmod 600 .my.cnf
+
+**So YOU DO NOT NEED TO PROVIDE mysql_password**
+
+More at http://dev.mysql.com/doc/refman/5.7/en/password-security-user.html
+
+
+
+#### Secure files permissions
 
 It is recommended that all executable (*.sh) are mod 700 and text files 600:
 
