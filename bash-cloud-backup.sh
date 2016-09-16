@@ -336,11 +336,11 @@ do
         createlog "mysqldump $bkpfile..."
         if [ -n "$mysql_password" ]
         then
-            $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
+            $MYSQLDUMP -u$mysql_user -p$mysql_password --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
         else
-            $MYSQLDUMP -u$mysql_user $mysqldump_options $database > $bkpfile
+            $MYSQLDUMP -u$mysql_user --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
         fi
-        if [ $? -eq 0 ]; then
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "mysqldump completed successfully."
         else
             report_error "ERROR: Section [$section]. $bkpfile mysqldump failed..."
