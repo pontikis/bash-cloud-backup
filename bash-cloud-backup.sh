@@ -334,7 +334,7 @@ do
         dt=`$DATE +%Y%m%d.%H%M%S`
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "mysqldump $bkpfile..."
-        if [ -n "mysql_password" ]
+        if [ -n "$mysql_password" ]
         then
             $MYSQLDUMP -u$mysql_user -p$mysql_password $mysqldump_options $database > $bkpfile
         else
