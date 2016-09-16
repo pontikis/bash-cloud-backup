@@ -12,6 +12,7 @@ Release 2.0.7 (17 Sep 2016)
 * Improve error reporting #48
 * Security: avoid passing (MySQL, Postgresql) passwords in command line
 
+
     ATTENTION
 
 Version 2.* is not compatible with previous (deprecated) version 1.*
