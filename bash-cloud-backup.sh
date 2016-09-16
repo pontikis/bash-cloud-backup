@@ -370,7 +370,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "pg_dump $bkpfile..."
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
-        $PG_DUMP -U $pg_user $pg_dump_options $database --file=$bkpfile 2>&1 | $TEE -a $logfile_tmp
+        $PG_DUMP --username=$pg_user --file=$bkpfile $pg_dump_options $database 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "pg_dump completed successfully."
         else
