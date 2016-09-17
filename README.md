@@ -47,17 +47,20 @@ Scripts
 
 * ``bash-cloud-backup.sh``: the main script
 
-You may create and use 
+You may create and use custom scripts (see below - Configuration)
 
-* ``custom1.sh`` - after backup finished and before Amazon S3 sync
-* ``custom2.sh`` - after Amazon S3 sync
-* ``custom3.sh`` - after logfile created and main script finished
-
-(these scripts are git ignored)
 
 Logs
 ----
 bash-cloud-backup is keeping logs (define log directory in ``global.conf``).
+
+    logfilepath=/root/backup/log
+    logfilename=backup.log
+    logfilename_tmp=backup.tmp.log
+
+The main log file is ``logfilepath/logfilename`` 
+
+The temporary log file (of current session) is ``logfilepath/logfilename_tmp``. This will be sent to you by email if you set value to ``mail_to`` parameter.  
 
 You should take care for logfile rotation.
 
@@ -77,9 +80,33 @@ Add something like
 External software
 -----------------
 
-* crudini: (**REQUIRED**) https://github.com/pixelb/crudini (for Debian: ``apt-get install crudini``). See also http://www.pixelbeat.org/programs/crudini/
-* p7zip: (OPTIONAL but highly recommended) http://p7zip.sourceforge.net (for Debian: ``apt-get install p7zip-full``) a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
-* s3tools: (OPTIONAL) http://s3tools.org/ (for Debian: ``apt-get install s3cmd``) Start with ``s3cmd --configure``  http://s3tools.org/s3cmd-howto
+* crudini: (**REQUIRED**) https://github.com/pixelb/crudini 
+  
+  Installation (for Debian):
+   
+    apt-get install crudini
+
+  See also http://www.pixelbeat.org/programs/crudini/
+
+* p7zip: (OPTIONAL but highly recommended) http://p7zip.sourceforge.net
+
+   Installation (for Debian):
+
+    apt-get install p7zip-full
+  
+  It is a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
+
+* s3tools: (OPTIONAL) http://s3tools.org/ 
+
+   Installation (for Debian):
+
+    apt-get install s3cmd 
+
+   Configure with
+ 
+    s3cmd --configure  
+
+   More at http://s3tools.org/s3cmd-howto
 
 
 Amazon S3 account
@@ -128,6 +155,7 @@ If you are interested on (deprecated) version 1
 
 https://github.com/pontikis/bash-cloud-backup/archive/version1.zip
 
+
 Configuration
 -------------
 
@@ -174,14 +202,19 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
 
 ### You may add custom commands (optional)
 
-    nano custom1.sh
-    nano custom2.sh
-    nano custom3.sh
+You may create and use 
+
+* ``custom1.sh`` - after backup finished and before Amazon S3 sync
+* ``custom2.sh`` - after Amazon S3 sync
+* ``custom3.sh`` - after logfile created and main script finished
+
+(these scripts are git ignored)
 
 
-### SECURITY NOTICE
+Security
+--------
 
-#### About MySQL password
+### About MySQL password
 
 DO NOT expose ``root`` password to create backups. Create a 'read only' user for backup purposes.
 In most cases the following commands are enough:
@@ -201,7 +234,7 @@ or
     [mysqldump]
     password="bkpadm_password_here"
 
-(double quotes are permitted and in some cases of special characters in password are necessary)
+(double quotes are permitted in this file and in some cases of special characters in password are necessary)
 
 then
 
@@ -212,7 +245,7 @@ then
 More at http://dev.mysql.com/doc/refman/5.7/en/password-security-user.html
 
 
-#### About Postgresql password
+### About Postgresql password
 
 DO NOT expose ``postgres`` password to create backups. Create a 'read only' user for backup purposes.
 In most cases the following commands are enough:
@@ -229,9 +262,9 @@ More https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html
 However, providing a password in ``bash-cloud-backup`` configuration files is quite secure, as ``PGPASSWORD`` ENVIRONMENTAL VARIABLE is used.
 
 
-#### Secure files permissions
+### Secure files permissions
 
-It is recommended that all executable (*.sh) are mod 700 and text files 600:
+It is recommended all executable (*.sh) to be mod 700 and text files 600:
 
     chown root:root bash-cloud-backup.sh
     chmod 700 bash-cloud-backup.sh
