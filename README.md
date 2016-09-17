@@ -86,7 +86,7 @@ External software
   
   Installation (for Debian):
    
-    apt-get install crudini
+        apt-get install crudini
 
   See also http://www.pixelbeat.org/programs/crudini/
 
@@ -94,7 +94,7 @@ External software
 
    Installation (for Debian):
 
-    apt-get install p7zip-full
+        apt-get install p7zip-full
   
   It is a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
 
@@ -104,11 +104,11 @@ External software
 
    Installation (for Debian):
 
-    apt-get install s3cmd 
+        apt-get install s3cmd 
 
    Configure with
  
-    s3cmd --configure  
+        s3cmd --configure  
 
    More at http://s3tools.org/s3cmd-howto
 
