@@ -31,6 +31,7 @@ Release 2.0.5 (15 Sep 2016)
 ---------------------------
 * Postgresql support #12
 * Custom scripts #47
+
     You may create and use 
     
     * ``custom1.sh`` - after backup finished and before Amazon S3 sync
