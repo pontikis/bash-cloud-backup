@@ -28,6 +28,8 @@ Features
 * detailed logs, error reporting, email report
 * advanced customization using configuration files
 
+(NOTE: ``7-zip`` does not store the owner/group of the file. On Linux/Unix, in order to backup directories keeping permissions you must use ``tar``.)
+
 Copyright
 ---------
 Christos Pontikis (http://www.pontikis.gr)
@@ -95,6 +97,8 @@ External software
     apt-get install p7zip-full
   
   It is a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
+
+  7z man page http://linux.die.net/man/1/7z
 
 * s3tools: (OPTIONAL) http://s3tools.org/ 
 
