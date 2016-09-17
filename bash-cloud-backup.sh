@@ -443,7 +443,7 @@ else
     done
 fi
 
-# report tome elapsed
+# report time elapsed
 $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
 END=$($DATE +"%s")
 DIFF=$(($END-$START))
