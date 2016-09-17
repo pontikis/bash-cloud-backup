@@ -298,17 +298,29 @@ do
             $FIND $element -type f >> $tmpdir/backup_list
         done
 
-        # tar files
+        # tar backup list
         dt=`$DATE +%Y%m%d.%H%M%S`
         listfile=$currentdir/$prefix-$dt-list.tar
         bkpfile=$currentdir/$prefix-$dt.tar
-        createlog "tar options: $tar_options_backup_list"
         createlog "Creating tar $listfile..."
-        $TAR $tar_options_backup_list $listfile $tmpdir/backup_list > /dev/null
+        createlog "tar options: $tar_options_backup_list"
+        $TAR $tar_options_backup_list $listfile $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
+            createlog "tar of backup list completed successfully."
+        else
+            report_error "ERROR: Section [$section]. $listfile tar failed..."
+        fi
         get_filesize $listfile
-        createlog "tar options: $tar_options_backup_file"
+
+        # tar backup file using backup list
         createlog "Creating tar $bkpfile..."
-        $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list > /dev/null
+        createlog "tar options: $tar_options_backup_file"
+        $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
+            createlog "tar of backup file completed successfully."
+        else
+            report_error "ERROR: Section [$section]. $bkpfile tar failed..."
+        fi
         get_filesize $bkpfile
 
         # compress (and encrypt) files

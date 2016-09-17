@@ -7,10 +7,10 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
-Release 2.0.7 (17 Sep 2016)
+Release 2.0.8 (17 Sep 2016)
 ---------------------------
-* Improve error reporting #48
-* Security: avoid passing (MySQL, Postgresql) passwords in command line
+* Log tar errors (without v option) #52
+
 
 
     ATTENTION
@@ -20,6 +20,13 @@ Version 2.* is not compatible with previous (deprecated) version 1.*
 Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
+
+
+Release 2.0.7 (17 Sep 2016)
+---------------------------
+* Improve error reporting #48
+* Security: avoid passing (MySQL, Postgresql) passwords in command line
 
 
 Release 2.0.6 (15 Sep 2016)
