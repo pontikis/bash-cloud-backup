@@ -436,7 +436,7 @@ if [ $s3_sync -eq 1 ]; then
 
 fi
 
-# Custom script 3 --------------------------------------------------------------
+# Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
