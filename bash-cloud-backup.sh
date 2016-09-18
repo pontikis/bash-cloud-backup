@@ -247,12 +247,12 @@ function rotate_delete {
 
 }
 
-# Custom script 1 --------------------------------------------------------------
-custom_script=${scriptpath}custom1.sh
-if [ -f "$custom_script" ]; then source $custom_script; fi
-
 # perform backup ---------------------------------------------------------------
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
+
+# Custom script ----------------------------------------------------------------
+custom_script=${scriptpath}on_backup_started.sh
+if [ -f "$custom_script" ]; then source $custom_script; fi
 
 for (( i=0; i<${#sections[@]}; i++ ));
 
@@ -409,8 +409,8 @@ do
     createlog "$finish_message"
 done
 
-# Custom script 2 --------------------------------------------------------------
-custom_script=${scriptpath}custom2.sh
+# Custom script ----------------------------------------------------------------
+custom_script=${scriptpath}on_backup_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Amazon S3 sync ---------------------------------------------------------------
@@ -437,7 +437,7 @@ if [ $s3_sync -eq 1 ]; then
 fi
 
 # Custom script 3 --------------------------------------------------------------
-custom_script=${scriptpath}custom3.sh
+custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
@@ -474,6 +474,6 @@ $CAT $logfile_tmp >> $logfile
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then $MAIL -s "bash-cloud-backup$onhost" $mail_to  < $logfile_tmp; fi
 
-# Custom script 4 --------------------------------------------------------------
-custom_script=${scriptpath}custom4.sh
+# Custom script ----------------------------------------------------------------
+custom_script=${scriptpath}on_logfile_created.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi

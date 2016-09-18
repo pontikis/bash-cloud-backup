@@ -208,10 +208,10 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
 
 You may create and use 
 
-* ``custom1.sh`` - before backup started
-* ``custom2.sh`` - after backup finished and before Amazon S3 sync
-* ``custom3.sh`` - after Amazon S3 sync
-* ``custom4.sh`` - after logfile created and main script finished
+* ``on_backup_started.sh`` - before backup started
+* ``on_backup_finished.sh`` - after backup finished (and before Amazon S3 sync)
+* ``on_s3_sync_finished.sh`` - after Amazon S3 sync
+* ``on_logfile_created.sh`` - after logfile created and main script finished
 
 (these scripts are git ignored)
 
@@ -290,7 +290,7 @@ To find with which options ``/proc`` has been mounted in your system, use
 
 With ``bash-cloud-backup`` you may use custom scripts
 
-    nano custom1.sh
+    nano on_backup_started.sh
 
 Set ``hidepid=2`` option
 
@@ -298,7 +298,7 @@ Set ``hidepid=2`` option
 
 After script finished return to previous status
 
-    nano custom4.sh
+    nano on_s3_sync_finished.sh
 
 Set ``hidepid=0`` option
 

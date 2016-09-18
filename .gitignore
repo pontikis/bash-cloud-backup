@@ -3,7 +3,7 @@
 
 /conf/
 
-/custom1.sh
-/custom2.sh
-/custom3.sh
-/custom4.sh
+/on_backup_started.sh
+/on_backup_finished.sh
+/on_s3_sync_finished.sh
+/on_logfile_created.sh

@@ -16,10 +16,10 @@ Release 2.0.9 (18 Sep 2016)
 
     You may create and use 
     
-    * ``custom1.sh`` - before backup started
-    * ``custom2.sh`` - after backup finished and before Amazon S3 sync
-    * ``custom3.sh`` - after Amazon S3 sync
-    * ``custom4.sh`` - after logfile created and main script finished
+    * ``on_backup_started.sh`` - before backup started
+    * ``on_backup_finished.sh`` - after backup finished (and before Amazon S3 sync)
+    * ``on_s3_sync_finished.sh`` - after Amazon S3 sync
+    * ``on_logfile_created.sh`` - after logfile created and main script finished
     
     (these scripts are git ignored)
 
