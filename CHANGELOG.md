@@ -7,10 +7,21 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
-Release 2.0.8 (17 Sep 2016)
----------------------------
-* Log tar errors (without v option) #52
 
+Release 2.0.9 (18 Sep 2016)
+---------------------------
+
+* Hide root processes (protect passwords to be exposed in command line) #53
+* Custom scripts (became four) #47
+
+    You may create and use 
+    
+    * ``custom1.sh`` - before backup started
+    * ``custom2.sh`` - after backup finished and before Amazon S3 sync
+    * ``custom3.sh`` - after Amazon S3 sync
+    * ``custom4.sh`` - after logfile created and main script finished
+    
+    (these scripts are git ignored)
 
 
     ATTENTION
@@ -21,6 +32,10 @@ Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
+
+Release 2.0.8 (17 Sep 2016)
+---------------------------
+* Log tar errors (without v option) #52
 
 
 Release 2.0.7 (17 Sep 2016)

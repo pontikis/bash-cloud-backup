@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.0.8 (17 Sep 2016)
+RELEASE 2.0.9 (18 Sep 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -208,9 +208,10 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
 
 You may create and use 
 
-* ``custom1.sh`` - after backup finished and before Amazon S3 sync
-* ``custom2.sh`` - after Amazon S3 sync
-* ``custom3.sh`` - after logfile created and main script finished
+* ``custom1.sh`` - before backup started
+* ``custom2.sh`` - after backup finished and before Amazon S3 sync
+* ``custom3.sh`` - after Amazon S3 sync
+* ``custom4.sh`` - after logfile created and main script finished
 
 (these scripts are git ignored)
 
@@ -264,6 +265,59 @@ More https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html
 **So YOU DO NOT NEED TO PROVIDE pg_password**
 
 However, providing a password in ``bash-cloud-backup`` configuration files is quite secure, as ``PGPASSWORD`` ENVIRONMENTAL VARIABLE is used.
+
+
+### About 7z password
+
+It would be nice if ``7z`` could use enviromental variables or text fies for password retrieving. Not an easy way to do it. Alternatively, use ``hidepid`` to hide root processes to other users - see below.
+
+
+### How to protect passwords to be exposed in command line
+
+When a 7z (or any other) process is running, all command line arguments (including password) can be exposed to other users using programs like ``ps``, ``top``,  ``htop`` etc. You may prevent this remounting ``/proc`` with ``hideid=2`` option.
+
+**Linux kernel version 3.2+ is required.** 
+ 
+See here https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=0499680a42141d86417a8fbaa8c8db806bea1201
+
+You may set this option permanently (using ``/etc/fstab``)
+
+To find with which options ``/proc`` has been mounted in your system, use 
+
+    cat /proc/mounts
+
+(in this example ``/proc`` had been mounted with options ``rw,nosuid,nodev,noexec,relatime``)
+
+With ``bash-cloud-backup`` you may use custom scripts
+
+    nano custom1.sh
+
+Set ``hidepid=2`` option
+
+    /bin/mount -o remount,rw,nosuid,nodev,noexec,relatime,hidepid=2 /proc
+
+After script finished return to previous status
+
+    nano custom4.sh
+
+Set ``hidepid=0`` option
+
+    /bin/mount -o remount,rw,nosuid,nodev,noexec,relatime,hidepid=0 /proc
+
+**So, while ``bash-cloud-backup`` is running, nobody can see running procesess (eg mysql, postgres, 7z etc) except their owner of course, usually ``root``**
+
+
+A WORKAROUND FOR OLDER SYSTEMS
+
+In older systems (Linux kernel version < 3.2) you may change mod of ``ps``, ``top``, ``htop`` etc
+
+at the beginning of the script
+
+    chmod 700 /bin/ps
+      
+return to original status at the end of the script.
+
+    chmod 755 /bin/ps
 
 
 ### Secure files permissions
