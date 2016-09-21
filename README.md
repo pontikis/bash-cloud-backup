@@ -348,6 +348,6 @@ Cron automation
 
     su -l root
     crontab -e
-    0 1 * * * /usr/bin/nice -n19 /root/scripts/bash-cloud-backup.sh | mail -s "Daily backup" admin@yourdomain.com #Daily Backup
+    0 1 * * * /root/scripts/bash-cloud-backup.sh #Daily Backup
 
 (in this example, every night at 01:00)
