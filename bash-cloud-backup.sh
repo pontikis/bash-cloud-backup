@@ -274,6 +274,7 @@ do
         if [ $backups -ge $skip_after ]; then
             skip_message=$(crudini --get "$backup_conf" "$section" skip_message)
             $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+            createlog "$backups total backups."
             createlog "$skip_message"
             continue
         fi
