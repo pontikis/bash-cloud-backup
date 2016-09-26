@@ -8,6 +8,12 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
+Release 2.1.0 (???????????)
+---------------------------
+
+* skip-after option (do not backup ceaselessly inactive projects) #57
+
+
 Release 2.0.9 (18 Sep 2016)
 ---------------------------
 

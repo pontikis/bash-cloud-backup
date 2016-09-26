@@ -260,9 +260,27 @@ do
 
     section=${sections[i]}
 
+    # get section path
+    path=$(crudini --get "$backup_conf" "$section" path)
+    currentdir="$backuproot/$path"
+    if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
+
+    # check if section has to be skipped
+    skip_after=$(crudini --get "$backup_conf" "$section" skip_after)
+    if [ -n "$skip_after" ]; then
+        number_of_files_per_backup=$(crudini --get "$backup_conf" "$section" number_of_files_per_backup)
+        backups=`$FIND $currentdir -maxdepth 1 -type f | $WC -l`
+        backups=$(( $backups/$number_of_files_per_backup ))
+        if [ $backups -ge $skip_after ]; then
+            skip_message=$(crudini --get "$backup_conf" "$section" skip_message)
+            $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+            createlog "$skip_message"
+            continue
+        fi
+    fi
+
     # get backup section properties (common for all types)
     type=$(crudini --get "$backup_conf" "$section" type)
-    path=$(crudini --get "$backup_conf" "$section" path)
     prefix=$(crudini --get "$backup_conf" "$section" prefix)
     starting_message=$(crudini --get "$backup_conf" "$section" starting_message)
     finish_message=$(crudini --get "$backup_conf" "$section" finish_message)
@@ -273,9 +291,6 @@ do
 
     $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "$starting_message"
-
-    currentdir="$backuproot/$path"
-    if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
 
     if [ "$type" == 'files' ]; then
 
