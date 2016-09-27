@@ -298,8 +298,8 @@ do
         if [ $backups -ge $skip_after ]; then
             skip_message=$($CRUDINI --get "$backup_conf" "$section" skip_message)
             createlog "\n$log_separator" 0
-            createlog "$backups total backups."
             createlog "$skip_message"
+            createlog "$backups total backups."
             continue
         fi
     fi
