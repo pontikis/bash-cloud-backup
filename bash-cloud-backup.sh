@@ -136,14 +136,10 @@ if [ -z "$nice_params" ]; then NICE=''; else NICE="$(which nice) $nice_params"; 
 if [ -z "$ionice_params" ]; then IONICE=''; else IONICE="$(which ionice) $ionice_params"; fi
 if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $trickle_params"; fi
 
-# create log directory in case it does not exist
-if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
 # define log files
 logfile="$logfilepath/$logfilename"
 logfile_tmp="$logfilepath/$logfilename_tmp"
 
-# initialize tmp backup log
-$CAT /dev/null > $logfile_tmp
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
@@ -160,6 +156,18 @@ function report_error {
     ((errors++))
     err[$errors]=$1
     createlog "$1"
+}
+
+function create_directory {
+    if [ ! -d "$1" ]; then
+        $MKDIR -p $1 2>&1 | $TEE -a $logfile_tmp
+        if [ ${PIPESTATUS[0]} -eq 0 ]
+        then
+            createlog "Directory $1 created successfully."
+        else
+            report_error "ERROR: Directory $1 creation failed..."
+        fi
+    fi
 }
 
 function get_filesize {
@@ -260,6 +268,13 @@ function rotate_delete {
 
 }
 
+
+# create log directory in case it does not exist
+create_directory "$logfilepath"
+
+# initialize tmp backup log
+$CAT /dev/null > $logfile_tmp
+
 # perform backup ---------------------------------------------------------------
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
@@ -284,7 +299,7 @@ do
     # get section path
     path=$($CRUDINI --get "$backup_conf" "$section" path)
     currentdir="$backuproot/$path"
-    if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
+    create_directory "$currentdir"
 
     # get section number_of_files_per_backup
     number_of_files_per_backup=$($CRUDINI --get "$backup_conf" "$section" number_of_files_per_backup)
