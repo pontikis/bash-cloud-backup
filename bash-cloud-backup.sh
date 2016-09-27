@@ -32,6 +32,7 @@ MYSQLDUMP="$(which mysqldump)"
 PG_DUMP="$(which pg_dump)"
 CMD7Z="$(which 7z)"
 S3CMD="$(which s3cmd)"
+CRUDINI="$(which crudini)"
 
 # Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
@@ -81,24 +82,24 @@ version=`$CAT ${scriptpath}VERSION`
 sections=( $($SED 's/^[ ]*//g' $backup_conf  | $GREP '^\[.*.\]$' |$TR  -d '^[]$') )
 
 # get global configuration -----------------------------------------------------
-backuproot=$(crudini --get "$global_conf" '' backuproot)
+backuproot=$($CRUDINI --get "$global_conf" '' backuproot)
 
-hostname=$(crudini --get "$global_conf" '' hostname)
+hostname=$($CRUDINI --get "$global_conf" '' hostname)
 if [ -z "$hostname" ]; then onhost=''; else onhost=" on $hostname"; fi
 
-logfilepath=$(crudini --get "$global_conf" '' logfilepath)
-logfilename=$(crudini --get "$global_conf" '' logfilename)
-logfilename_tmp=$(crudini --get "$global_conf" '' logfilename_tmp)
-log_separator=$(crudini --get "$global_conf" '' log_separator)
-log_top_separator=$(crudini --get "$global_conf" '' log_top_separator)
+logfilepath=$($CRUDINI --get "$global_conf" '' logfilepath)
+logfilename=$($CRUDINI --get "$global_conf" '' logfilename)
+logfilename_tmp=$($CRUDINI --get "$global_conf" '' logfilename_tmp)
+log_separator=$($CRUDINI --get "$global_conf" '' log_separator)
+log_top_separator=$($CRUDINI --get "$global_conf" '' log_top_separator)
 
-log_filesize=$(crudini --get "$global_conf" '' log_filesize)
+log_filesize=$($CRUDINI --get "$global_conf" '' log_filesize)
 
-use_compression=$(crudini --get "$global_conf" '' use_compression)
+use_compression=$($CRUDINI --get "$global_conf" '' use_compression)
 if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 if [ $use_compression == '7z' ]; then
-    passwd_7z=$(crudini --get "$global_conf" '' passwd_7z)
-    filetype_7z=$(crudini --get "$global_conf" '' filetype_7z)
+    passwd_7z=$($CRUDINI --get "$global_conf" '' passwd_7z)
+    filetype_7z=$($CRUDINI --get "$global_conf" '' filetype_7z)
     if [ "$filetype_7z" == '7z' ]; then
         if [ -z "$passwd_7z" ]
         then
@@ -118,14 +119,14 @@ if [ $use_compression == '7z' ]; then
     fi
 fi
 
-days_rotation=$(crudini --get "$global_conf" '' days_rotation)
-min_backups_in_rotation_period=$(crudini --get "$global_conf" '' min_backups_in_rotation_period)
+days_rotation=$($CRUDINI --get "$global_conf" '' days_rotation)
+min_backups_in_rotation_period=$($CRUDINI --get "$global_conf" '' min_backups_in_rotation_period)
 
-s3_sync=$(crudini --get "$global_conf" '' s3_sync)
-s3_path=$(crudini --get "$global_conf" '' s3_path)
-s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
+s3_sync=$($CRUDINI --get "$global_conf" '' s3_sync)
+s3_path=$($CRUDINI --get "$global_conf" '' s3_path)
+s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
 
-mail_to=$(crudini --get "$global_conf" '' mail_to)
+mail_to=$($CRUDINI --get "$global_conf" '' mail_to)
 
 # create log directory in case it does not exist
 if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
@@ -261,18 +262,18 @@ do
     section=${sections[i]}
 
     # get section path
-    path=$(crudini --get "$backup_conf" "$section" path)
+    path=$($CRUDINI --get "$backup_conf" "$section" path)
     currentdir="$backuproot/$path"
     if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
 
     # check if section has to be skipped
-    skip_after=$(crudini --get "$backup_conf" "$section" skip_after)
+    skip_after=$($CRUDINI --get "$backup_conf" "$section" skip_after)
     if [ -n "$skip_after" ]; then
-        number_of_files_per_backup=$(crudini --get "$backup_conf" "$section" number_of_files_per_backup)
+        number_of_files_per_backup=$($CRUDINI --get "$backup_conf" "$section" number_of_files_per_backup)
         backups=`$FIND $currentdir -maxdepth 1 -type f | $WC -l`
         backups=$(( $backups/$number_of_files_per_backup ))
         if [ $backups -ge $skip_after ]; then
-            skip_message=$(crudini --get "$backup_conf" "$section" skip_message)
+            skip_message=$($CRUDINI --get "$backup_conf" "$section" skip_message)
             $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
             createlog "$backups total backups."
             createlog "$skip_message"
@@ -281,13 +282,13 @@ do
     fi
 
     # get backup section properties (common for all types)
-    type=$(crudini --get "$backup_conf" "$section" type)
-    prefix=$(crudini --get "$backup_conf" "$section" prefix)
-    starting_message=$(crudini --get "$backup_conf" "$section" starting_message)
-    finish_message=$(crudini --get "$backup_conf" "$section" finish_message)
+    type=$($CRUDINI --get "$backup_conf" "$section" type)
+    prefix=$($CRUDINI --get "$backup_conf" "$section" prefix)
+    starting_message=$($CRUDINI --get "$backup_conf" "$section" starting_message)
+    finish_message=$($CRUDINI --get "$backup_conf" "$section" finish_message)
 
-    use_compression=$(crudini --get "$backup_conf" "$section" use_compression)
-    if [ -z "$use_compression" ]; then use_compression=$(crudini --get "$global_conf" '' use_compression); fi
+    use_compression=$($CRUDINI --get "$backup_conf" "$section" use_compression)
+    if [ -z "$use_compression" ]; then use_compression=$($CRUDINI --get "$global_conf" '' use_compression); fi
     if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 
     $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
@@ -296,14 +297,14 @@ do
     if [ "$type" == 'files' ]; then
 
         # get specific properties of section with type = 'files'
-        fileset=$(crudini --get "$backup_conf" "$section" fileset)
-        delimiter=$(crudini --get "$backup_conf" "$section" delimiter)
+        fileset=$($CRUDINI --get "$backup_conf" "$section" fileset)
+        delimiter=$($CRUDINI --get "$backup_conf" "$section" delimiter)
 
-        tar_options_backup_list=$(crudini --get "$backup_conf" "$section" tar_options_backup_list)
-        if [ -z "$tar_options_backup_list" ]; then tar_options_backup_list=$(crudini --get "$global_conf" '' tar_options_backup_list); fi
+        tar_options_backup_list=$($CRUDINI --get "$backup_conf" "$section" tar_options_backup_list)
+        if [ -z "$tar_options_backup_list" ]; then tar_options_backup_list=$($CRUDINI --get "$global_conf" '' tar_options_backup_list); fi
 
-        tar_options_backup_file=$(crudini --get "$backup_conf" "$section" tar_options_backup_file)
-        if [ -z "$tar_options_backup_file" ]; then tar_options_backup_file=$(crudini --get "$global_conf" '' tar_options_backup_file); fi
+        tar_options_backup_file=$($CRUDINI --get "$backup_conf" "$section" tar_options_backup_file)
+        if [ -z "$tar_options_backup_file" ]; then tar_options_backup_file=$($CRUDINI --get "$global_conf" '' tar_options_backup_file); fi
 
         # create temp dir to store backup_list
         tmpdir=$currentdir/tmp
@@ -353,14 +354,14 @@ do
     elif [ "$type" == 'mysql' ]; then
 
         # get specific properties of section with type = 'mysql'
-        database=$(crudini --get "$backup_conf" "$section" database)
-        mysqldump_options=$(crudini --get "$backup_conf" "$section" mysqldump_options)
+        database=$($CRUDINI --get "$backup_conf" "$section" database)
+        mysqldump_options=$($CRUDINI --get "$backup_conf" "$section" mysqldump_options)
 
-        mysql_user=$(crudini --get "$backup_conf" "$section" mysql_user)
-        if [ -z "$mysql_user" ]; then mysql_user=$(crudini --get "$global_conf" '' mysql_user); fi
+        mysql_user=$($CRUDINI --get "$backup_conf" "$section" mysql_user)
+        if [ -z "$mysql_user" ]; then mysql_user=$($CRUDINI --get "$global_conf" '' mysql_user); fi
 
-        mysql_password=$(crudini --get "$backup_conf" "$section" mysql_password)
-        if [ -z "$mysql_password" ]; then mysql_password=$(crudini --get "$global_conf" '' mysql_password); fi
+        mysql_password=$($CRUDINI --get "$backup_conf" "$section" mysql_password)
+        if [ -z "$mysql_password" ]; then mysql_password=$($CRUDINI --get "$global_conf" '' mysql_password); fi
 
         # export mysql object(s) using mysqldump
         dt=`$DATE +%Y%m%d.%H%M%S`
@@ -388,14 +389,14 @@ do
     elif [ "$type" == 'postgresql' ]; then
 
         # get specific properties of section with type = 'postgresql'
-        database=$(crudini --get "$backup_conf" "$section" database)
-        pg_dump_options=$(crudini --get "$backup_conf" "$section" pg_dump_options)
+        database=$($CRUDINI --get "$backup_conf" "$section" database)
+        pg_dump_options=$($CRUDINI --get "$backup_conf" "$section" pg_dump_options)
 
-        pg_user=$(crudini --get "$backup_conf" "$section" pg_user)
-        if [ -z "$pg_user" ]; then $pg_user=$(crudini --get "$global_conf" '' pg_user); fi
+        pg_user=$($CRUDINI --get "$backup_conf" "$section" pg_user)
+        if [ -z "$pg_user" ]; then $pg_user=$($CRUDINI --get "$global_conf" '' pg_user); fi
 
-        pg_password=$(crudini --get "$backup_conf" "$section" pg_password)
-        if [ -z "$pg_password" ]; then pg_password=$(crudini --get "$global_conf" '' pg_password); fi
+        pg_password=$($CRUDINI --get "$backup_conf" "$section" pg_password)
+        if [ -z "$pg_password" ]; then pg_password=$($CRUDINI --get "$global_conf" '' pg_password); fi
 
         # export postgresql object(s) using pg_dump
         dt=`$DATE +%Y%m%d.%H%M%S`
@@ -432,8 +433,8 @@ if [ -f "$custom_script" ]; then source $custom_script; fi
 # Amazon S3 sync ---------------------------------------------------------------
 if [ $s3_sync -eq 1 ]; then
 
-    s3_path=$(crudini --get "$global_conf" '' s3_path)
-    s3cmd_sync_params=$(crudini --get "$global_conf" '' s3cmd_sync_params)
+    s3_path=$($CRUDINI --get "$global_conf" '' s3_path)
+    s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
 
     $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
     createlog "Amazon S3 sync is starting..."
