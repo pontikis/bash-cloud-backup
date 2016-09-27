@@ -11,8 +11,19 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 Release 2.1.0 (???????????)
 ---------------------------
 
+* Support ionice nice with commands tar, 7z, gzip, mysqldump, pg_dump, aws, s3cmd #60
+* Support trickle bandwith shaper (on S3 uploads) #64
 * Support of AWS Command Line Interface (AWS cli) #65
 * skip-after option (do not backup ceaselessly inactive projects) #57
+
+
+    ATTENTION
+
+Version 2.* is not compatible with previous (deprecated) version 1.*
+
+Version 1 has its own branch (version1).
+
+More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
 
 Release 2.0.9 (18 Sep 2016)
@@ -29,15 +40,6 @@ Release 2.0.9 (18 Sep 2016)
     * ``on_logfile_created.sh`` - after logfile created and main script finished
     
     (these scripts are git ignored)
-
-
-    ATTENTION
-
-Version 2.* is not compatible with previous (deprecated) version 1.*
-
-Version 1 has its own branch (version1).
-
-More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
 
 Release 2.0.8 (17 Sep 2016)

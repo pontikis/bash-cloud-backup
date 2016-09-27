@@ -26,6 +26,8 @@ Features
 * backup files are stored in specified directories and (optionally) deleted with rotation (14 days default).
 * Amazon S3 sync: After local backup has been completed, the backup directory can be synchronized with Amazon S3, using ``aws s3 sync`` or ``s3cmd sync`` (optional but recommended).
 * detailed logs, error reporting, email report
+* option to use ``nice`` and ``ionice``
+* option to use``trickle`` bandwidth shaper
 * advanced customization using configuration files
 
 (NOTE: ``7-zip`` does not store the owner/group of the file. On Linux/Unix, in order to backup directories keeping permissions you must use ``tar``.)
@@ -90,6 +92,7 @@ External software
 
   See also http://www.pixelbeat.org/programs/crudini/
 
+
 * p7zip: (OPTIONAL but highly recommended) http://p7zip.sourceforge.net
 
    Installation (for Debian):
@@ -100,6 +103,14 @@ External software
 
   7z man page http://linux.die.net/man/1/7z
 
+
+* trickle bandwidth shaper: (OPTIONAL) https://linux.die.net/man/1/trickle
+
+   Installation (for Debian):
+
+        apt-get install trickle
+
+
 * AWS Command Line Interface: (OPTIONAL) https://aws.amazon.com/cli/ 
 
    Installation (for Debian):
@@ -109,6 +120,7 @@ External software
    Configure with
  
         aws configure  
+
 
 * s3tools: (OPTIONAL) http://s3tools.org/ 
 
@@ -130,6 +142,7 @@ Amazon S3 account
 -----------------
 
 For cloud backup, an Amazon S3 account is needed (http://aws.amazon.com/s3/)
+
 
 Setup using git (recommended)
 -----------------------------

@@ -11,6 +11,7 @@
 
 # Linux commands ---------------------------------------------------------------
 ECHO="$(which echo)"
+CRUDINI="$(which crudini)"
 FIND="$(which find)"
 TAR="$(which tar)"
 GZIP="$(which gzip)"
@@ -33,7 +34,6 @@ PG_DUMP="$(which pg_dump)"
 CMD7Z="$(which 7z)"
 AWS="$(which aws)"
 S3CMD="$(which s3cmd)"
-CRUDINI="$(which crudini)"
 
 # Get start time ---------------------------------------------------------------
 START=$($DATE +"%s")
@@ -124,10 +124,17 @@ days_rotation=$($CRUDINI --get "$global_conf" '' days_rotation)
 min_backups_in_rotation_period=$($CRUDINI --get "$global_conf" '' min_backups_in_rotation_period)
 
 s3_sync=$($CRUDINI --get "$global_conf" '' s3_sync)
-s3_path=$($CRUDINI --get "$global_conf" '' s3_path)
-s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
 
 mail_to=$($CRUDINI --get "$global_conf" '' mail_to)
+
+# define nice ionice trickle
+nice_params=$($CRUDINI --get "$global_conf" '' nice_params)
+ionice_params=$($CRUDINI --get "$global_conf" '' ionice_params)
+trickle_params=$($CRUDINI --get "$global_conf" '' trickle_params)
+
+if [ -z "$nice_params" ]; then NICE=''; else NICE="$(which nice) $nice_params"; fi
+if [ -z "$ionice_params" ]; then IONICE=''; else IONICE="$(which ionice) $ionice_params"; fi
+if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $trickle_params"; fi
 
 # create log directory in case it does not exist
 if [ ! -d "$logfilepath" ]; then $MKDIR -p $logfilepath; fi
@@ -170,7 +177,7 @@ function zip_file {
     if [ $use_compression == '7z' ]; then
         if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
         createlog "7zip$aes $file_to_zip..."
-        $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]
         then
             createlog "File compression completed successfully."
@@ -181,7 +188,7 @@ function zip_file {
         get_filesize "$file_to_zip.$filetype_7z"
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
-        $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]
         then
             createlog "File compression completed successfully."
@@ -348,7 +355,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.tar
         createlog "Creating tar $listfile..."
         createlog "tar options: $tar_options_backup_list"
-        $TAR $tar_options_backup_list $listfile $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $TAR $tar_options_backup_list $listfile $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "tar of backup list completed successfully."
         else
@@ -359,7 +366,7 @@ do
         # tar backup file using backup list
         createlog "Creating tar $bkpfile..."
         createlog "tar options: $tar_options_backup_file"
-        $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "tar of backup file completed successfully."
         else
@@ -392,9 +399,9 @@ do
         createlog "mysqldump $bkpfile..."
         if [ -n "$mysql_password" ]
         then
-            $MYSQLDUMP -u$mysql_user -p$mysql_password --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
+            $NICE $IONICE $MYSQLDUMP -u$mysql_user -p$mysql_password --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
         else
-            $MYSQLDUMP -u$mysql_user --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
+            $NICE $IONICE $MYSQLDUMP -u$mysql_user --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
         fi
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "mysqldump completed successfully."
@@ -426,7 +433,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "pg_dump $bkpfile..."
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
-        $PG_DUMP --username=$pg_user --file=$bkpfile $pg_dump_options $database 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $PG_DUMP --username=$pg_user --file=$bkpfile $pg_dump_options $database 2>&1 | $TEE -a $logfile_tmp
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "pg_dump completed successfully."
         else
@@ -463,10 +470,12 @@ if [ $s3_sync -eq 1 ]; then
 
     if [ "$amazon_front_end" == "awscli" ]; then
         awscli_params=$($CRUDINI --get "$global_conf" '' awscli_params)
+        $NICE $IONICE $TRICKLE \
         $AWS s3 sync $awscli_params \
         $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
     elif [ "$amazon_front_end" == "s3cmd" ]; then
         s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
+        $NICE $IONICE $TRICKLE \
         $S3CMD sync $s3cmd_sync_params \
         $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
     fi
