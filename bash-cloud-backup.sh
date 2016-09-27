@@ -139,9 +139,13 @@ $CAT /dev/null > $logfile_tmp
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
-      dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
-      logline="$dt | $1"
-      $ECHO -e $logline 2>&1 | $TEE -a $logfile_tmp
+    if [ -z "$2" ]; then
+        dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
+        logline="$dt | $1"
+    else
+        if [ $2 -eq 0 ]; then logline="$1"; fi
+    fi
+    $ECHO -e $logline 2>&1 | $TEE -a $logfile_tmp
 }
 
 function report_error {
@@ -154,7 +158,7 @@ function get_filesize {
     if [ $log_filesize -eq 1 ]
     then
         filesize=$($DU -h "$1" | $AWK '{print $1}')
-        $ECHO -e "\nFilesize: $filesize\n" 2>&1 | $TEE -a $logfile_tmp
+        createlog "\nFilesize: $filesize\n" 0
     fi
 }
 
@@ -274,7 +278,7 @@ do
         backups=$(( $backups/$number_of_files_per_backup ))
         if [ $backups -ge $skip_after ]; then
             skip_message=$($CRUDINI --get "$backup_conf" "$section" skip_message)
-            $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+            createlog "\n$log_separator" 0
             createlog "$backups total backups."
             createlog "$skip_message"
             continue
@@ -291,7 +295,7 @@ do
     if [ -z "$use_compression" ]; then use_compression=$($CRUDINI --get "$global_conf" '' use_compression); fi
     if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_compression != 'none' ]; then use_compression='none'; fi
 
-    $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+    createlog "\n$log_separator" 0
     createlog "$starting_message"
 
     if [ "$type" == 'files' ]; then
@@ -419,7 +423,7 @@ do
         rotate_delete $currentdir 1
 
     else
-        $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+        createlog "\n$log_separator" 0
         report_error "ERROR: Section [$section]. Unknown backup type <$type>. Section is ingored..."
     fi
 
@@ -436,7 +440,7 @@ if [ $s3_sync -eq 1 ]; then
     s3_path=$($CRUDINI --get "$global_conf" '' s3_path)
     s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
 
-    $ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+    createlog "\n$log_separator" 0
     createlog "Amazon S3 sync is starting..."
 
     # attention: / is important to copy only the contents of $backuproot
@@ -458,32 +462,32 @@ custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
-$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+createlog "\n$log_separator" 0
 createlog "bash-cloud-backup (version $version) completed."
 
 # report errors
-$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+createlog "\n$log_separator" 0
 if [ $errors -eq -1 ]; then
-    $ECHO -e "No errors encountered." 2>&1 | $TEE -a $logfile_tmp
+    createlog "No errors encountered." 0
 else
-    $ECHO -e "${#err[@]} ERRORS encountered..." 2>&1 | $TEE -a $logfile_tmp
+    createlog "${#err[@]} ERRORS encountered..." 0
     counter=1
     for (( i=0; i<${#err[@]}; i++ ));
     do
         err_msg=${err[i]}
-        $ECHO -e "$counter) $err_msg" 2>&1 | $TEE -a $logfile_tmp
+        createlog "$counter) $err_msg" 0
         ((counter++))
     done
 fi
 
 # report time elapsed
-$ECHO -e "\n$log_separator" 2>&1 | $TEE -a $logfile_tmp
+createlog "\n$log_separator" 0
 END=$($DATE +"%s")
 DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
-$ECHO "$ELAPSED"  2>&1 | $TEE -a $logfile_tmp
+createlog "$ELAPSED" 0
 
-$ECHO -e "\n$log_top_separator\n" 2>&1 | $TEE -a $logfile_tmp
+createlog "\n$log_top_separator\n" 0
 
 # update main logfile
 $CAT $logfile_tmp >> $logfile
