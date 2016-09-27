@@ -299,7 +299,7 @@ do
             skip_message=$($CRUDINI --get "$backup_conf" "$section" skip_message)
             createlog "\n$log_separator" 0
             createlog "$skip_message"
-            createlog "$backups total backups."
+            createlog "$backups total backups found."
             continue
         fi
     fi
