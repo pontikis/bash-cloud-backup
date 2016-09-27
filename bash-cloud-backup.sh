@@ -265,15 +265,34 @@ do
 
     section=${sections[i]}
 
+    # get section type
+    type=$($CRUDINI --get "$backup_conf" "$section" type)
+    if [ "$type" != "files" ] && [ "$type" != "mysql" ] && [ "$type" != "postgresql" ]; then
+        createlog "\n$log_separator" 0
+        report_error "ERROR: Section [$section]. Unknown backup type <$type>. Section is ingored..."
+        continue
+    fi
+
     # get section path
     path=$($CRUDINI --get "$backup_conf" "$section" path)
     currentdir="$backuproot/$path"
     if [ ! -d $currentdir ]; then $MKDIR -p $currentdir; fi
 
+    # get section number_of_files_per_backup
+    number_of_files_per_backup=$($CRUDINI --get "$backup_conf" "$section" number_of_files_per_backup)
+    if [ -z "$number_of_files_per_backup" ]; then
+        if [ "$type" == 'files' ]; then
+            number_of_files_per_backup=2
+        elif [ "$type" == 'mysql' ]; then
+            number_of_files_per_backup=1
+        elif [ "$type" == 'postgresql' ]; then
+            number_of_files_per_backup=1
+        fi
+    fi
+
     # check if section has to be skipped
     skip_after=$($CRUDINI --get "$backup_conf" "$section" skip_after)
     if [ -n "$skip_after" ]; then
-        number_of_files_per_backup=$($CRUDINI --get "$backup_conf" "$section" number_of_files_per_backup)
         backups=`$FIND $currentdir -maxdepth 1 -type f | $WC -l`
         backups=$(( $backups/$number_of_files_per_backup ))
         if [ $backups -ge $skip_after ]; then
@@ -286,7 +305,6 @@ do
     fi
 
     # get backup section properties (common for all types)
-    type=$($CRUDINI --get "$backup_conf" "$section" type)
     prefix=$($CRUDINI --get "$backup_conf" "$section" prefix)
     starting_message=$($CRUDINI --get "$backup_conf" "$section" starting_message)
     finish_message=$($CRUDINI --get "$backup_conf" "$section" finish_message)
@@ -353,7 +371,7 @@ do
         zip_file $bkpfile
 
         # rotating delete
-        rotate_delete $currentdir 2
+        rotate_delete $currentdir $number_of_files_per_backup
 
     elif [ "$type" == 'mysql' ]; then
 
@@ -388,7 +406,7 @@ do
         zip_file $bkpfile
 
         # rotating delete
-        rotate_delete $currentdir 1
+        rotate_delete $currentdir $number_of_files_per_backup
 
     elif [ "$type" == 'postgresql' ]; then
 
@@ -420,11 +438,8 @@ do
         zip_file $bkpfile
 
         # rotating delete
-        rotate_delete $currentdir 1
+        rotate_delete $currentdir $number_of_files_per_backup
 
-    else
-        createlog "\n$log_separator" 0
-        report_error "ERROR: Section [$section]. Unknown backup type <$type>. Section is ingored..."
     fi
 
     createlog "$finish_message"
