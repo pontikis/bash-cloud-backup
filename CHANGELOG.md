@@ -8,11 +8,11 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
-Release 2.1.0 (???????????)
+Release 2.1.0 (27 Sep 2016)
 ---------------------------
 
-* Support ionice nice with commands tar, 7z, gzip, mysqldump, pg_dump, aws, s3cmd #60
-* Support trickle bandwith shaper (on S3 uploads) #64
+* Support ``ionice`` and ``nice`` with commands ``tar``, ``7z``, ``gzip``, ``mysqldump``, ``pg_dump``, ``aws``, ``s3cmd`` #60
+* Support ``trickle`` bandwith shaper (on S3 uploads) #64
 * Support of AWS Command Line Interface (AWS cli) #65
 * skip-after option (do not backup ceaselessly inactive projects) #57
 
