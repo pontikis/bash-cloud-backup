@@ -31,6 +31,7 @@ AWK="$(which awk)"
 MYSQLDUMP="$(which mysqldump)"
 PG_DUMP="$(which pg_dump)"
 CMD7Z="$(which 7z)"
+AWS="$(which aws)"
 S3CMD="$(which s3cmd)"
 CRUDINI="$(which crudini)"
 
@@ -452,17 +453,24 @@ if [ -f "$custom_script" ]; then source $custom_script; fi
 # Amazon S3 sync ---------------------------------------------------------------
 if [ $s3_sync -eq 1 ]; then
 
-    s3_path=$($CRUDINI --get "$global_conf" '' s3_path)
-    s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
-
     createlog "\n$log_separator" 0
     createlog "Amazon S3 sync is starting..."
 
     # attention: / is important to copy only the contents of $backuproot
     S3_SOURCE="$backuproot/"
-    S3_DEST=$s3_path
+    S3_DEST=$($CRUDINI --get "$global_conf" '' s3_path)
+    amazon_front_end=$($CRUDINI --get "$global_conf" '' amazon_front_end)
 
-    $S3CMD sync $s3cmd_sync_params $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+    if [ "$amazon_front_end" == "awscli" ]; then
+        awscli_params=$($CRUDINI --get "$global_conf" '' awscli_params)
+        $AWS s3 sync $awscli_params \
+        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+    elif [ "$amazon_front_end" == "s3cmd" ]; then
+        s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
+        $S3CMD sync $s3cmd_sync_params \
+        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+    fi
+
     if [ ${PIPESTATUS[0]} -eq 0 ]
     then
         createlog "Amazon S3 sync completed."

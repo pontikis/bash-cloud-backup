@@ -11,6 +11,7 @@ License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 Release 2.1.0 (???????????)
 ---------------------------
 
+* Support of AWS Command Line Interface (AWS cli) #65
 * skip-after option (do not backup ceaselessly inactive projects) #57
 
 

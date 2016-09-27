@@ -22,9 +22,9 @@ Features
 * supported databases 
     * MySQL (using ``mysqldump``) - http://linuxcommand.org/man_pages/mysqldump1.html
     * Postgresql (using ``pg_dump``) - https://www.postgresql.org/docs/current/static/app-pgdump.html
-* it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and encryption - RECOMMENDED).
+* it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and AES256 encryption - RECOMMENDED).
 * backup files are stored in specified directories and (optionally) deleted with rotation (14 days default).
-* Amazon S3 sync: After local filesystem backup has been completed, the backup directory can be synchronized with Amazon S3, using ``s3cmd sync`` (optional but recommended).
+* Amazon S3 sync: After local backup has been completed, the backup directory can be synchronized with Amazon S3, using ``aws s3 sync`` or ``s3cmd sync`` (optional but recommended).
 * detailed logs, error reporting, email report
 * advanced customization using configuration files
 
@@ -100,6 +100,16 @@ External software
 
   7z man page http://linux.die.net/man/1/7z
 
+* AWS Command Line Interface: (OPTIONAL) https://aws.amazon.com/cli/ 
+
+   Installation (for Debian):
+
+        apt-get install awscli
+
+   Configure with
+ 
+        aws configure  
+
 * s3tools: (OPTIONAL) http://s3tools.org/ 
 
    Installation (for Debian):
@@ -111,6 +121,9 @@ External software
         s3cmd --configure  
 
    More at http://s3tools.org/s3cmd-howto
+
+
+**NOTE**: to select which AWS front-end you will use, set value to parameter ``amazon_front_end`` in ``global.conf``.
 
 
 Amazon S3 account
