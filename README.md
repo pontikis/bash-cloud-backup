@@ -374,6 +374,6 @@ Cron automation
 
     su -l root
     crontab -e
-    0 1 * * * /root/scripts/bash-cloud-backup.sh #Daily Backup
+    0 1 * * * /root/scripts/bash-cloud-backup/bash-cloud-backup.sh #Daily Backup
 
 (in this example, every night at 01:00)
