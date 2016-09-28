@@ -490,7 +490,7 @@ if [ $s3_sync -eq 1 ]; then
         $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
     elif [ "$amazon_front_end" == "s3cmd" ]; then
         s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
-        debug="debug test $NICE $IONICE $TRICKLE $AWS s3 sync $awscli_params $S3_SOURCE $S3_DEST"
+        debug="debug test1 $NICE $IONICE $TRICKLE $AWS s3 sync $awscli_params $S3_SOURCE $S3_DEST"
         echo $debug
         $NICE $IONICE $TRICKLE \
         $S3CMD sync $s3cmd_sync_params \
