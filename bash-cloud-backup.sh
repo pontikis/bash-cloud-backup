@@ -513,16 +513,22 @@ createlog "\n$log_separator" 0
 createlog "bash-cloud-backup (version $version) completed."
 
 # report errors
+report_errors=$($CRUDINI --get "$global_conf" '' report_errors)
+export_errors_to=$($CRUDINI --get "$global_conf" '' export_errors_to)
+if [ -z "$report_errors" ]; then report_errors=1; fi
+if [ -n "$export_errors_to" ]; then $CAT /dev/null > $export_errors_to; fi
+
 createlog "\n$log_separator" 0
 if [ $errors -eq -1 ]; then
-    createlog "No errors encountered." 0
+    if [ $report_errors -eq 1 ]; then createlog "No errors encountered." 0; fi
 else
-    createlog "${#err[@]} ERRORS encountered..." 0
+    if [ $report_errors -eq 1 ]; then createlog "${#err[@]} ERRORS encountered..." 0; fi
     counter=1
     for (( i=0; i<${#err[@]}; i++ ));
     do
         err_msg=${err[i]}
-        createlog "$counter) $err_msg" 0
+        if [ $report_errors -eq 1 ]; then createlog "$counter) $err_msg" 0; fi
+        if [ -n "$export_errors_to" ]; then $ECHO -e "$err_msg" >> $export_errors_to; fi
         ((counter++))
     done
 fi
