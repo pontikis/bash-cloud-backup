@@ -546,7 +546,7 @@ createlog "\n$log_top_separator\n" 0
 $CAT $logfile_tmp >> $logfile
 
 # send mail report -------------------------------------------------------------
-if [ -n "$mail_to" ]; then $MAIL -s "bash-cloud-backup$onhost" $mail_to  < $logfile_tmp; fi
+if [ -n "$mail_to" ]; then $CAT $logfile_tmp | $MAIL -s "bash-cloud-backup$onhost" $mail_to; fi
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_logfile_created.sh
