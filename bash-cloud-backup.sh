@@ -546,7 +546,10 @@ createlog "\n$log_top_separator\n" 0
 $CAT $logfile_tmp >> $logfile
 
 # send mail report -------------------------------------------------------------
-if [ -n "$mail_to" ]; then $CAT $logfile_tmp | $MAIL -s "bash-cloud-backup$onhost" $mail_to; fi
+if [ -n "$mail_to" ]; then
+    cat_params_in_mail_command=$($CRUDINI --get "$global_conf" '' cat_params_in_mail_command)
+    $CAT $cat_params_in_mail_command $logfile_tmp | $MAIL -s "bash-cloud-backup$onhost" $mail_to
+fi
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_logfile_created.sh
