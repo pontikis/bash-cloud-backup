@@ -156,7 +156,17 @@ function createlog {
         if [ $2 -eq 0 ]; then logline="$1"; else logline="$dt | $1"; fi
     fi
     if [ -z "$3" ]; then logfile_to_write=$logfile_tmp_main; else logfile_to_write=$3; fi
-    $ECHO -e $logline 2>&1 | $TEE -a $logfile_to_write
+    if [ -z "$4" ]; then
+        $ECHO -e $logline 2>&1 | $TEE -a $logfile_to_write
+    else
+        if [ $4 -eq 0 ]; then
+            $ECHO -e $logline 2>&1
+        elif [ $4 -eq 1 ]; then
+            $ECHO -e $logline >> $logfile_to_write
+        else
+            $ECHO -e $logline 2>&1 | $TEE -a $logfile_to_write
+        fi
+    fi
 }
 
 function report_error {
@@ -289,10 +299,12 @@ $CAT /dev/null > $logfile_tmp_errors
 $CAT /dev/null > $logfile_tmp_time_elapsed
 $CAT /dev/null > $logfile_tmp_whole_session
 
-createlog "AT A GLANCE" 0 $logfile_tmp_header
-createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header
+createlog "AT A GLANCE" 0 $logfile_tmp_header 1
+createlog "$log_separator" 0 $logfile_tmp_header 1
+createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header 1
 
-createlog "IN DETAILS" 0
+createlog "IN DETAILS" 0 $logfile_tmp_main 1
+createlog "$log_separator" 0 $logfile_tmp_main 1
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
 # Custom script ----------------------------------------------------------------
@@ -526,7 +538,8 @@ custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
-createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header
+createlog "\n$log_separator" 1 $logfile_tmp_header 1
+createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header 1
 
 createlog "\n$log_separator" 0
 createlog "bash-cloud-backup (version $version) completed."
