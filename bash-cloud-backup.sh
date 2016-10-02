@@ -276,12 +276,6 @@ function rotate_delete {
 }
 
 # Start ------------------------------------------------------------------------
-createlog "AT A GLANCE" 0 $logfile_tmp_header
-createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header
-
-createlog "IN DETAILS" 0
-createlog "bash-cloud-backup (version $version)$onhost is starting..."
-
 # create log directory in case it does not exist
 create_directory "$logfilepath"
 
@@ -294,6 +288,12 @@ $CAT /dev/null > $logfile_tmp_main
 $CAT /dev/null > $logfile_tmp_errors
 $CAT /dev/null > $logfile_tmp_time_elapsed
 $CAT /dev/null > $logfile_tmp_whole_session
+
+createlog "AT A GLANCE" 0 $logfile_tmp_header
+createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header
+
+createlog "IN DETAILS" 0
+createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_backup_started.sh
