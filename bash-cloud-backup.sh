@@ -144,7 +144,10 @@ if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $tr
 # define log files
 logfile="$logfilepath/$logfilename"
 logfile_tmp="$tmp_path/$logfilename_tmp"
-
+logfile_tmp_header="$tmp_path/header.log"
+logfile_tmp_errors="$tmp_path/errors.log"
+logfile_tmp_time_elapsed="$tmp_path/time_elapsed.log"
+logfile_tmp_whole_session="$tmp_path/whole_session.log"
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
@@ -282,10 +285,13 @@ create_directory "$logfilepath"
 create_directory "$tmp_path"
 
 # initialize tmp backup log
+$CAT /dev/null > $logfile_tmp_header
 $CAT /dev/null > $logfile_tmp
+$CAT /dev/null > $logfile_tmp_errors
+$CAT /dev/null > $logfile_tmp_time_elapsed
 
 # perform backup ---------------------------------------------------------------
-createlog "bash-cloud-backup (version $version)$onhost is starting..."
+createlog "bash-cloud-backup (version $version)$onhost is starting..." 1 $logfile_tmp_header
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_backup_started.sh
@@ -529,35 +535,40 @@ if [ -n "$export_errors_to" ]; then $CAT /dev/null > $export_errors_to; fi
 
 createlog "\n$log_separator" 0
 if [ $errors -eq -1 ]; then
-    if [ $report_errors -eq 1 ]; then createlog "No errors encountered." 0; fi
+    if [ $report_errors -eq 1 ]; then createlog "No errors encountered." 0 $logfile_tmp_errors; fi
 else
-    if [ $report_errors -eq 1 ]; then createlog "${#err[@]} ERRORS encountered..." 0; fi
+    if [ $report_errors -eq 1 ]; then createlog "${#err[@]} ERRORS encountered..." 0 $logfile_tmp_errors; fi
     counter=1
     for (( i=0; i<${#err[@]}; i++ ));
     do
         err_msg=${err[i]}
-        if [ $report_errors -eq 1 ]; then createlog "$counter) $err_msg" 0; fi
+        if [ $report_errors -eq 1 ]; then createlog "$counter) $err_msg" 0 $logfile_tmp_errors; fi
         if [ -n "$export_errors_to" ]; then $ECHO -e "$err_msg" >> $export_errors_to; fi
         ((counter++))
     done
 fi
 
 # report time elapsed
-createlog "\n$log_separator" 0
+createlog "\n$log_separator" 0 $logfile_tmp_time_elapsed
 END=$($DATE +"%s")
 DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
-createlog "$ELAPSED" 0
-
-createlog "\n$log_top_separator\n" 0
+createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 
 # update main logfile
-$CAT $logfile_tmp >> $logfile
+if [ $report_errors -eq 1 ]
+then
+    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp $logfile_tmp_errors $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+else
+    $CAT $logfile_tmp_header $logfile_tmp $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+fi
+$CAT $logfile_tmp_whole_session >> $logfile
+$ECHO - e "\n$log_top_separator\n" >> $logfile
 
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then
     cat_params_in_mail_command=$($CRUDINI --get "$global_conf" '' cat_params_in_mail_command)
-    $CAT $cat_params_in_mail_command $logfile_tmp | $MAIL -s "bash-cloud-backup$onhost" $mail_to
+    $CAT $cat_params_in_mail_command $logfile_tmp_whole_session | $MAIL -s "bash-cloud-backup$onhost" $mail_to
 fi
 
 # DELETE temp directory (and its contents)
