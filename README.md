@@ -63,11 +63,8 @@ bash-cloud-backup is keeping logs (define log directory in ``global.conf``).
 
     logfilepath=/root/backup/log
     logfilename=backup.log
-    logfilename_tmp=backup.tmp.log
 
 The main log file is ``logfilepath/logfilename`` 
-
-The temporary log file (of current session) is ``logfilepath/logfilename_tmp``. This will be sent to you by email if you set value to ``mail_to`` parameter.  
 
 You should take care for logfile rotation.
 
@@ -82,6 +79,9 @@ Add something like
         notifempty
         create
     }
+
+Inside ``tmp_path`` bash-cloud-backup is keeping temporary log files, in order to create current session log file. This will be sent by email if you set value to ``mail_to`` parameter.  
+After current session finished, both the temporary path and its contents are deleted.
 
 
 External software
