@@ -303,7 +303,7 @@ createlog "AT A GLANCE" 0 $logfile_tmp_header 1
 createlog "$log_separator" 0 $logfile_tmp_header 1
 createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header 1
 
-createlog "IN DETAILS" 0 $logfile_tmp_main 1
+createlog "\nIN DETAILS" 0 $logfile_tmp_main 1
 createlog "$log_separator" 0 $logfile_tmp_main 1
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
@@ -538,7 +538,7 @@ custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
-createlog "\n$log_separator" 1 $logfile_tmp_header 1
+createlog "\n$log_separator" 0 $logfile_tmp_header 1
 createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header 1
 
 createlog "\n$log_separator" 0
@@ -550,7 +550,7 @@ export_errors_to=$($CRUDINI --get "$global_conf" '' export_errors_to)
 if [ -z "$report_errors" ]; then report_errors=1; fi
 if [ -n "$export_errors_to" ]; then $CAT /dev/null > $export_errors_to; fi
 
-createlog "\n$log_separator" 0
+createlog "\n$log_separator" 0 $logfile_tmp_errors
 if [ $errors -eq -1 ]; then
     if [ $report_errors -eq 1 ]; then createlog "No errors encountered." 0 $logfile_tmp_errors; fi
 else
