@@ -591,7 +591,7 @@ if [ -n "$mail_to" ]; then
 fi
 
 # DELETE temp directory (and its contents)
-#$RM -rf "$tmp_path"
+$RM -rf "$tmp_path"
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_logfile_created.sh
