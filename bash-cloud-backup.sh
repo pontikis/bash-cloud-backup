@@ -93,8 +93,6 @@ logfilename=$($CRUDINI --get "$global_conf" '' logfilename)
 
 tmp_path=$($CRUDINI --get "$global_conf" '' tmp_path)
 if [ -z "$tmp_path" ]; then tmp_path=/tmp/bash-cloud-backup; fi
-logfilename_tmp=$($CRUDINI --get "$global_conf" '' logfilename_tmp)
-if [ -z "$logfilename_tmp" ]; then logfilename_tmp=bash-cloud-backup.tmp.log; fi
 
 log_separator=$($CRUDINI --get "$global_conf" '' log_separator)
 log_top_separator=$($CRUDINI --get "$global_conf" '' log_top_separator)
@@ -143,21 +141,21 @@ if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $tr
 
 # define log files
 logfile="$logfilepath/$logfilename"
-logfile_tmp="$tmp_path/$logfilename_tmp"
 logfile_tmp_header="$tmp_path/header.log"
+logfile_tmp_main="$tmp_path/main.log"
 logfile_tmp_errors="$tmp_path/errors.log"
 logfile_tmp_time_elapsed="$tmp_path/time_elapsed.log"
 logfile_tmp_whole_session="$tmp_path/whole_session.log"
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
+    dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
     if [ -z "$2" ]; then
-        dt=`$DATE "+%Y-%m-%d %H:%M:%S"`
         logline="$dt | $1"
     else
-        if [ $2 -eq 0 ]; then logline="$1"; fi
+        if [ $2 -eq 0 ]; then logline="$1"; else logline="$dt | $1"; fi
     fi
-    if [ -z "$3" ]; then logfile_to_write=$logfile_tmp; else logfile_to_write=$3; fi
+    if [ -z "$3" ]; then logfile_to_write=$logfile_tmp_main; else logfile_to_write=$3; fi
     $ECHO -e $logline 2>&1 | $TEE -a $logfile_to_write
 }
 
@@ -169,7 +167,7 @@ function report_error {
 
 function create_directory {
     if [ ! -d "$1" ]; then
-        $MKDIR -p $1 2>&1 | $TEE -a $logfile_tmp
+        $MKDIR -p $1 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]
         then
             createlog "Directory $1 created successfully."
@@ -194,7 +192,7 @@ function zip_file {
     if [ $use_compression == '7z' ]; then
         if [ -z "$passwd_7z" ]; then aes=''; else aes=" (using AES encryption)"; fi
         createlog "7zip$aes $file_to_zip..."
-        $NICE $IONICE $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $cmd_7z "$file_to_zip.$filetype_7z" $file_to_zip 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]
         then
             createlog "File compression completed successfully."
@@ -205,7 +203,7 @@ function zip_file {
         get_filesize "$file_to_zip.$filetype_7z"
     elif [ $use_compression == 'gzip' ]; then
         createlog "gzip $file_to_zip..."
-        $NICE $IONICE $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $GZIP -9 -f $file_to_zip 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]
         then
             createlog "File compression completed successfully."
@@ -259,7 +257,7 @@ function rotate_delete {
 
         if [ $backups_to_delete -gt 0 ]; then
             createlog "$backups_to_delete backups will ne deleted:"
-            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile_tmp
+            $FIND $dir_to_find -mtime +$days_rotation | $SORT 2>&1 | $TEE -a $logfile_tmp_main
 
             # proceed to deletion
             $FIND $dir_to_find -mtime +$days_rotation -exec $RM {} -f \;
@@ -277,6 +275,12 @@ function rotate_delete {
 
 }
 
+# Start ------------------------------------------------------------------------
+createlog "AT A GLANCE" 0 $logfile_tmp_header
+createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header
+
+createlog "IN DETAILS" 0
+createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
 # create log directory in case it does not exist
 create_directory "$logfilepath"
@@ -286,12 +290,10 @@ create_directory "$tmp_path"
 
 # initialize tmp backup log
 $CAT /dev/null > $logfile_tmp_header
-$CAT /dev/null > $logfile_tmp
+$CAT /dev/null > $logfile_tmp_main
 $CAT /dev/null > $logfile_tmp_errors
 $CAT /dev/null > $logfile_tmp_time_elapsed
-
-# perform backup ---------------------------------------------------------------
-createlog "bash-cloud-backup (version $version)$onhost is starting..." 1 $logfile_tmp_header
+$CAT /dev/null > $logfile_tmp_whole_session
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_backup_started.sh
@@ -385,7 +387,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.tar
         createlog "Creating tar $listfile..."
         createlog "tar options: $tar_options_backup_list"
-        $NICE $IONICE $TAR $tar_options_backup_list $listfile $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $TAR $tar_options_backup_list $listfile $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "tar of backup list completed successfully."
         else
@@ -396,7 +398,7 @@ do
         # tar backup file using backup list
         createlog "Creating tar $bkpfile..."
         createlog "tar options: $tar_options_backup_file"
-        $NICE $IONICE $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "tar of backup file completed successfully."
         else
@@ -429,9 +431,9 @@ do
         createlog "mysqldump $bkpfile..."
         if [ -n "$mysql_password" ]
         then
-            $NICE $IONICE $MYSQLDUMP -u$mysql_user -p$mysql_password --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
+            $NICE $IONICE $MYSQLDUMP -u$mysql_user -p$mysql_password --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp_main
         else
-            $NICE $IONICE $MYSQLDUMP -u$mysql_user --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp
+            $NICE $IONICE $MYSQLDUMP -u$mysql_user --result-file=$bkpfile $mysqldump_options $database 2>&1 | $TEE -a $logfile_tmp_main
         fi
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "mysqldump completed successfully."
@@ -463,7 +465,7 @@ do
         bkpfile=$currentdir/$prefix-$dt.sql
         createlog "pg_dump $bkpfile..."
         if [ -n "$pg_password" ]; then export PGPASSWORD=$pg_password; fi
-        $NICE $IONICE $PG_DUMP --username=$pg_user --file=$bkpfile $pg_dump_options $database 2>&1 | $TEE -a $logfile_tmp
+        $NICE $IONICE $PG_DUMP --username=$pg_user --file=$bkpfile $pg_dump_options $database 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "pg_dump completed successfully."
         else
@@ -502,12 +504,12 @@ if [ $s3_sync -eq 1 ]; then
         awscli_params=$($CRUDINI --get "$global_conf" '' awscli_params)
         $NICE $IONICE $TRICKLE \
         $AWS s3 sync $awscli_params \
-        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp_main
     elif [ "$amazon_front_end" == "s3cmd" ]; then
         s3cmd_sync_params=$($CRUDINI --get "$global_conf" '' s3cmd_sync_params)
         $NICE $IONICE $TRICKLE \
         $S3CMD sync $s3cmd_sync_params \
-        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp
+        $S3_SOURCE $S3_DEST 2>&1 | $TEE -a $logfile_tmp_main
     fi
 
     if [ ${PIPESTATUS[0]} -eq 0 ]
@@ -524,6 +526,8 @@ custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
+createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header
+
 createlog "\n$log_separator" 0
 createlog "bash-cloud-backup (version $version) completed."
 
@@ -558,9 +562,9 @@ createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 # create whole session logs from parts
 if [ $report_errors -eq 1 ]
 then
-    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp $logfile_tmp_errors $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
 else
-    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
 fi
 
 # update main logfile
@@ -574,7 +578,7 @@ if [ -n "$mail_to" ]; then
 fi
 
 # DELETE temp directory (and its contents)
-$RM -rf "$tmp_path"
+#$RM -rf "$tmp_path"
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_logfile_created.sh
