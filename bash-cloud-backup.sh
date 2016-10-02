@@ -154,7 +154,8 @@ function createlog {
     else
         if [ $2 -eq 0 ]; then logline="$1"; fi
     fi
-    $ECHO -e $logline 2>&1 | $TEE -a $logfile_tmp
+    if [ -z "$3" ]; then logfile_to_write=$logfile_tmp; else logfile_to_write=$3; fi
+    $ECHO -e $logline 2>&1 | $TEE -a $logfile_to_write
 }
 
 function report_error {
