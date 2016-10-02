@@ -555,13 +555,15 @@ DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
 createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 
-# update main logfile
+# create whole session logs from parts
 if [ $report_errors -eq 1 ]
 then
     $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp $logfile_tmp_errors $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
 else
-    $CAT $logfile_tmp_header $logfile_tmp $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
 fi
+
+# update main logfile
 $CAT $logfile_tmp_whole_session >> $logfile
 $ECHO - e "\n$log_top_separator\n" >> $logfile
 
