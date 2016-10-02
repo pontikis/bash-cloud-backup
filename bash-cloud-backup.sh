@@ -303,7 +303,7 @@ createlog "AT A GLANCE" 0 $logfile_tmp_header 1
 createlog "$log_separator" 0 $logfile_tmp_header 1
 createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header 1
 
-createlog "\nIN DETAILS" 0 $logfile_tmp_main 1
+createlog "\n\nIN DETAILS" 0 $logfile_tmp_main 1
 createlog "$log_separator" 0 $logfile_tmp_main 1
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
