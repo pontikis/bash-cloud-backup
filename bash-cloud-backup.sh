@@ -90,7 +90,12 @@ if [ -z "$hostname" ]; then onhost=''; else onhost=" on $hostname"; fi
 
 logfilepath=$($CRUDINI --get "$global_conf" '' logfilepath)
 logfilename=$($CRUDINI --get "$global_conf" '' logfilename)
+
+tmp_path=$($CRUDINI --get "$global_conf" '' tmp_path)
+if [ -z "$tmp_path" ]; then tmp_path=/tmp/bash-cloud-backup; fi
 logfilename_tmp=$($CRUDINI --get "$global_conf" '' logfilename_tmp)
+if [ -z "$logfilename_tmp" ]; then logfilename_tmp=bash-cloud-backup.tmp.log; fi
+
 log_separator=$($CRUDINI --get "$global_conf" '' log_separator)
 log_top_separator=$($CRUDINI --get "$global_conf" '' log_top_separator)
 
@@ -138,7 +143,7 @@ if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $tr
 
 # define log files
 logfile="$logfilepath/$logfilename"
-logfile_tmp="$logfilepath/$logfilename_tmp"
+logfile_tmp="$tmp_path/$logfilename_tmp"
 
 
 # Utility Functions ------------------------------------------------------------
@@ -271,6 +276,9 @@ function rotate_delete {
 
 # create log directory in case it does not exist
 create_directory "$logfilepath"
+
+# create temp directory
+create_directory "$tmp_path"
 
 # initialize tmp backup log
 $CAT /dev/null > $logfile_tmp
@@ -550,6 +558,9 @@ if [ -n "$mail_to" ]; then
     cat_params_in_mail_command=$($CRUDINI --get "$global_conf" '' cat_params_in_mail_command)
     $CAT $cat_params_in_mail_command $logfile_tmp | $MAIL -s "bash-cloud-backup$onhost" $mail_to
 fi
+
+# DELETE temp directory (and its contents)
+$RM -rf "$tmp_path"
 
 # Custom script ----------------------------------------------------------------
 custom_script=${scriptpath}on_logfile_created.sh
