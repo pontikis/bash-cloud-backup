@@ -130,6 +130,8 @@ s3_sync=$($CRUDINI --get "$global_conf" '' s3_sync)
 
 mail_to=$($CRUDINI --get "$global_conf" '' mail_to)
 
+export_session_log_to=$($CRUDINI --get "$global_conf" '' export_session_log_to)
+
 # define nice ionice trickle
 nice_params=$($CRUDINI --get "$global_conf" '' nice_params)
 ionice_params=$($CRUDINI --get "$global_conf" '' ionice_params)
@@ -590,6 +592,12 @@ if [ -n "$logfile" ]; then
     $CAT $logfile_tmp_whole_session >> $logfile
     $ECHO - e "\n$log_top_separator\n" >> $logfile
 fi
+
+# export session log
+if [ -n "$export_session_log_to" ]; then
+    $CAT $logfile_tmp_whole_session > $export_session_log_to
+fi
+
 
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then
