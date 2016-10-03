@@ -139,8 +139,13 @@ if [ -z "$nice_params" ]; then NICE=''; else NICE="$(which nice) $nice_params"; 
 if [ -z "$ionice_params" ]; then IONICE=''; else IONICE="$(which ionice) $ionice_params"; fi
 if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $trickle_params"; fi
 
-# define log files
-logfile="$logfilepath/$logfilename"
+# define main log file
+if [ -n "$logfilepath" ] && [ -n "$logfilepath" ]
+then
+    logfile="$logfilepath/$logfilename"
+fi
+
+# define temp log files
 logfile_tmp_header="$tmp_path/header.log"
 logfile_tmp_main="$tmp_path/main.log"
 logfile_tmp_errors="$tmp_path/errors.log"
@@ -581,8 +586,10 @@ else
 fi
 
 # update main logfile
-$CAT $logfile_tmp_whole_session >> $logfile
-$ECHO - e "\n$log_top_separator\n" >> $logfile
+if [ -n "$logfile" ]; then
+    $CAT $logfile_tmp_whole_session >> $logfile
+    $ECHO - e "\n$log_top_separator\n" >> $logfile
+fi
 
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then

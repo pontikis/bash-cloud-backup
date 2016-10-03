@@ -8,11 +8,11 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
-Release 2.1.4 (02 Oct 2016)
+Release 2.1.5 (03 Oct 2016)
 ---------------------------
 
-* modify report to present results at the top of the page (additionally) - problem with scrolling in huge pages in mobile devices (no way to go bottom) #55
-* bash-cloud-backup tmp folder
+* Leave blank both ``logfilepath`` and ``logfilename`` if you DO NOT WANT to keep the main log file
+
 
 
     ATTENTION
@@ -22,6 +22,14 @@ Version 2.* is not compatible with previous (deprecated) version 1.*
 Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
+
+
+
+Release 2.1.4 (02 Oct 2016)
+---------------------------
+
+* modify report to present results at the top of the page (additionally) - problem with scrolling in huge pages in mobile devices (no way to go bottom) #55
+* bash-cloud-backup tmp folder
 
 
 Release 2.1.3 (01 Oct 2016)

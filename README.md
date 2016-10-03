@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.1.4 (02 Oct 2016)
+RELEASE 2.1.5 (03 Oct 2016)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -59,10 +59,13 @@ You may create and use custom scripts (see below - Configuration)
 
 Logs
 ----
-bash-cloud-backup is keeping logs (define log directory in ``global.conf``).
+
+### main log file
+
+bash-cloud-backup is keeping logs (as defined in ``global.conf``).
 
     logfilepath=/root/backup/log
-    logfilename=backup.log
+    logfilename=bash-cloud-backup.log
 
 The main log file is ``logfilepath/logfilename`` 
 
@@ -80,8 +83,25 @@ Add something like
         create
     }
 
+Leave blank **both** ``logfilepath`` and ``logfilename`` if you DO NOT WANT to keep the main log file.
+
+
+### temporary log files
+
 Inside ``tmp_path`` bash-cloud-backup is keeping temporary log files, in order to create current session log file. This will be sent by email if you set value to ``mail_to`` parameter.  
 After current session finished, both the temporary path and its contents are deleted.
+
+* logfile_tmp_header="$tmp_path/header.log"
+* logfile_tmp_main="$tmp_path/main.log"
+* logfile_tmp_errors="$tmp_path/errors.log"
+* logfile_tmp_time_elapsed="$tmp_path/time_elapsed.log"
+* logfile_tmp_whole_session="$tmp_path/whole_session.log"
+
+Keep ``tmp_path`` outside backup root. 
+
+If you do not set a value, the default value is applied:
+
+    tmp_path=/tmp/bash-cloud-backup
 
 
 External software
