@@ -582,9 +582,9 @@ createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 # create whole session logs from parts
 if [ $report_errors -eq 1 ]
 then
-    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
 else
-    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed >> $logfile_tmp_whole_session
+    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
 fi
 
 # update main logfile
