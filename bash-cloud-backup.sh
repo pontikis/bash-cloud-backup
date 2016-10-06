@@ -132,6 +132,9 @@ mail_to=$($CRUDINI --get "$global_conf" '' mail_to)
 
 export_session_log_to=$($CRUDINI --get "$global_conf" '' export_session_log_to)
 
+disable_report_summary=$($CRUDINI --get "$global_conf" '' disable_report_summary)
+if [ -z "$disable_report_summary" ]; then disable_report_summary=0; fi
+
 # define nice ionice trickle
 nice_params=$($CRUDINI --get "$global_conf" '' nice_params)
 ionice_params=$($CRUDINI --get "$global_conf" '' ionice_params)
@@ -306,11 +309,14 @@ $CAT /dev/null > $logfile_tmp_errors
 $CAT /dev/null > $logfile_tmp_time_elapsed
 $CAT /dev/null > $logfile_tmp_whole_session
 
-createlog "AT A GLANCE" 0 $logfile_tmp_header 1
-createlog "$log_separator" 0 $logfile_tmp_header 1
-createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header 1
+if [ $disable_report_summary -eq 0 ]; then
+    createlog "AT A GLANCE" 0 $logfile_tmp_header 1
+    createlog "$log_separator" 0 $logfile_tmp_header 1
+    createlog "bash-cloud-backup (version $version)$onhost started..." 1 $logfile_tmp_header 1
 
-createlog "\n\nIN DETAILS" 0 $logfile_tmp_main 1
+    createlog "\n\nIN DETAILS" 0 $logfile_tmp_main 1
+fi
+
 createlog "$log_separator" 0 $logfile_tmp_main 1
 createlog "bash-cloud-backup (version $version)$onhost is starting..."
 
@@ -545,8 +551,10 @@ custom_script=${scriptpath}on_s3_sync_finished.sh
 if [ -f "$custom_script" ]; then source $custom_script; fi
 
 # Finish -----------------------------------------------------------------------
-createlog "\n$log_separator" 0 $logfile_tmp_header 1
-createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header 1
+if [ $disable_report_summary -eq 0 ]; then
+    createlog "\n$log_separator" 0 $logfile_tmp_header 1
+    createlog "bash-cloud-backup (version $version) completed." 1 $logfile_tmp_header 1
+fi
 
 createlog "\n$log_separator" 0
 createlog "bash-cloud-backup (version $version) completed."
@@ -582,9 +590,17 @@ createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 # create whole session logs from parts
 if [ $report_errors -eq 1 ]
 then
-    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    if [ $disable_report_summary -eq 0 ]; then
+        $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    else
+        $CAT $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    fi
 else
-    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    if [ $disable_report_summary -eq 0 ]; then
+        $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    else
+        $CAT $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+    fi
 fi
 
 # update main logfile

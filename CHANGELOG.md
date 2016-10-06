@@ -8,10 +8,11 @@ Copyright Christos Pontikis http://www.pontikis.gr
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
 
-Release 2.1.6 (06 Oct 2016)
+Release 2.1.7 (06 Oct 2016)
 ---------------------------
 
-* BUG FIX - Do not try to create main log directory if logfile keeping is disabled #76
+* option disable_report_summary #77
+
 
 
     ATTENTION
@@ -22,6 +23,12 @@ Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
+
+
+Release 2.1.6 (06 Oct 2016)
+---------------------------
+
+* BUG FIX - Do not try to create main log directory if logfile keeping is disabled #76
 
 
 Release 2.1.5 (03 Oct 2016)
