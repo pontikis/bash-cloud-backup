@@ -142,7 +142,7 @@ if [ -z "$ionice_params" ]; then IONICE=''; else IONICE="$(which ionice) $ionice
 if [ -z "$trickle_params" ]; then TRICKLE=''; else TRICKLE="$(which trickle) $trickle_params"; fi
 
 # define main log file
-if [ -n "$logfilepath" ] && [ -n "$logfilepath" ]
+if [ -n "$logfilepath" ] && [ -n "$logfilename" ]
 then
     logfile="$logfilepath/$logfilename"
 fi
@@ -293,11 +293,11 @@ function rotate_delete {
 }
 
 # Start ------------------------------------------------------------------------
-# create log directory in case it does not exist
-create_directory "$logfilepath"
-
 # create temp directory
 create_directory "$tmp_path"
+
+# create log directory in case it does not exist
+if [ -n "$logfilepath" ]; then create_directory "$logfilepath"; fi
 
 # initialize tmp backup log
 $CAT /dev/null > $logfile_tmp_header
