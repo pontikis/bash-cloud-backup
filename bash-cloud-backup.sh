@@ -156,6 +156,7 @@ logfile_tmp_main="$tmp_path/main.log"
 logfile_tmp_errors="$tmp_path/errors.log"
 logfile_tmp_time_elapsed="$tmp_path/time_elapsed.log"
 logfile_tmp_whole_session="$tmp_path/whole_session.log"
+logfile_tmp_summary="$tmp_path/summary.log"
 
 # Utility Functions ------------------------------------------------------------
 function createlog {
@@ -308,6 +309,7 @@ $CAT /dev/null > $logfile_tmp_main
 $CAT /dev/null > $logfile_tmp_errors
 $CAT /dev/null > $logfile_tmp_time_elapsed
 $CAT /dev/null > $logfile_tmp_whole_session
+$CAT /dev/null > $logfile_tmp_summary
 
 if [ $disable_report_summary -eq 0 ]; then
     createlog "AT A GLANCE" 0 $logfile_tmp_header 1
@@ -587,17 +589,25 @@ DIFF=$(($END-$START))
 ELAPSED="$(($DIFF / 60)) minutes and $(($DIFF % 60)) seconds elapsed."
 createlog "$ELAPSED" 0 $logfile_tmp_time_elapsed
 
+# create logs summary from parts
+if [ $report_errors -eq 1 ]
+then
+    $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_summary
+else
+    $CAT $logfile_tmp_header $logfile_tmp_time_elapsed > $logfile_tmp_summary
+fi
+
 # create whole session logs from parts
 if [ $report_errors -eq 1 ]
 then
     if [ $disable_report_summary -eq 0 ]; then
-        $CAT $logfile_tmp_header $logfile_tmp_errors $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+        $CAT $logfile_tmp_summary $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
     else
         $CAT $logfile_tmp_main $logfile_tmp_errors $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
     fi
 else
     if [ $disable_report_summary -eq 0 ]; then
-        $CAT $logfile_tmp_header $logfile_tmp_time_elapsed $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
+        $CAT $logfile_tmp_summary $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
     else
         $CAT $logfile_tmp_main $logfile_tmp_time_elapsed > $logfile_tmp_whole_session
     fi
@@ -614,11 +624,16 @@ if [ -n "$export_session_log_to" ]; then
     $CAT $logfile_tmp_whole_session > $export_session_log_to
 fi
 
-
 # send mail report -------------------------------------------------------------
 if [ -n "$mail_to" ]; then
     cat_params_in_mail_command=$($CRUDINI --get "$global_conf" '' cat_params_in_mail_command)
-    $CAT $cat_params_in_mail_command $logfile_tmp_whole_session | $MAIL -s "bash-cloud-backup$onhost" $mail_to
+    mail_only_summary=$($CRUDINI --get "$global_conf" '' mail_only_summary)
+    if [ $mail_only_summary -eq 1 ]
+    then
+        $CAT $cat_params_in_mail_command $logfile_tmp_summary| $MAIL -s "bash-cloud-backup$onhost" $mail_to
+    else
+        $CAT $cat_params_in_mail_command $logfile_tmp_whole_session | $MAIL -s "bash-cloud-backup$onhost" $mail_to
+    fi
 fi
 
 # DELETE temp directory (and its contents)

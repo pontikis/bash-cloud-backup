@@ -7,14 +7,6 @@ Copyright Christos Pontikis http://www.pontikis.gr
 
 License MIT https://raw.github.com/pontikis/bash-cloud-backup/master/MIT_LICENSE
 
-
-Release 2.1.7 (06 Oct 2016)
----------------------------
-
-* option disable_report_summary #77
-
-
-
     ATTENTION
 
 Version 2.* is not compatible with previous (deprecated) version 1.*
@@ -23,6 +15,17 @@ Version 1 has its own branch (version1).
 
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
+
+Release 2.1.8 (25 Nov 2017)
+---------------------------
+
+* option mail_only_summary #78
+
+
+Release 2.1.7 (06 Oct 2016)
+---------------------------
+
+* option disable_report_summary #77
 
 
 Release 2.1.6 (06 Oct 2016)
