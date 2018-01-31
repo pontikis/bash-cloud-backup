@@ -405,7 +405,7 @@ do
         IFS=$delimiter read -r -a afiles <<< "$fileset"
         for element in "${afiles[@]}"
         do
-            $FIND $element -type f >> $tmpdir/backup_list
+            $FIND $element -type f -o -type d >> $tmpdir/backup_list
         done
 
         # tar backup list
