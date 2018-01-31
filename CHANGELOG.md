@@ -19,7 +19,7 @@ More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 Release 2.1.9 (31 Jan 2018)
 ---------------------------
 
-* Preserve directories permissions in tar archive #82
+* Preserve directories permissions and ownership in tar archive #82
 
 
 Release 2.1.8 (25 Nov 2017)
