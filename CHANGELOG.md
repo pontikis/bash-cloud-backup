@@ -16,6 +16,14 @@ Version 1 has its own branch (version1).
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
 
+Release 2.2.0 (3 Feb 2018)
+---------------------------
+
+* Preserve directories permissions and ownership in tar archive #82
+
+The solution given in Release 2.1.9 works but it leads to very large tar files. 
+In current solution a simple tar cpvf result.tar file file2 filen is performed (without use -T backup_list)
+
 Release 2.1.9 (31 Jan 2018)
 ---------------------------
 
