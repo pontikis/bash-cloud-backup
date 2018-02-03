@@ -405,7 +405,7 @@ do
         IFS=$delimiter read -r -a afiles <<< "$fileset"
         for element in "${afiles[@]}"
         do
-            $FIND $element -type f -o -type d >> $tmpdir/backup_list
+            $FIND $element -type f >> $tmpdir/backup_list
         done
 
         # tar backup list
@@ -425,7 +425,8 @@ do
         # tar backup file using backup list
         createlog "Creating tar $bkpfile..."
         createlog "tar options: $tar_options_backup_file"
-        $NICE $IONICE $TAR $tar_options_backup_file $bkpfile -T $tmpdir/backup_list 2>&1 | $TEE -a $logfile_tmp_main
+        files_to_tar="${fileset//$delimiter/ }"
+        $NICE $IONICE $TAR $tar_options_backup_file $bkpfile $files_to_tar 2>&1 | $TEE -a $logfile_tmp_main
         if [ ${PIPESTATUS[0]} -eq 0 ]; then
             createlog "tar of backup file completed successfully."
         else
