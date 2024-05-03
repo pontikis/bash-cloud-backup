@@ -1,4 +1,10 @@
-# IDE files
+# Visual Studio Code workspace -------------------------------------------------
+/.vscode
+
+# Sublime Text workspace -------------------------------------------------------
+bash-cloud-backup.sublime-workspace
+
+# JetBrains PhpStorm IDE files -------------------------------------------------
 /.idea/
 
 /conf/
