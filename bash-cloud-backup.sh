@@ -483,7 +483,7 @@ do
         pg_dump_options=$($CRUDINI --get "$backup_conf" "$section" pg_dump_options)
 
         pg_user=$($CRUDINI --get "$backup_conf" "$section" pg_user)
-        if [ -z "$pg_user" ]; then $pg_user=$($CRUDINI --get "$global_conf" '' pg_user); fi
+        if [ -z "$pg_user" ]; then pg_user=$($CRUDINI --get "$global_conf" '' pg_user); fi
 
         pg_password=$($CRUDINI --get "$backup_conf" "$section" pg_password)
         if [ -z "$pg_password" ]; then pg_password=$($CRUDINI --get "$global_conf" '' pg_password); fi
