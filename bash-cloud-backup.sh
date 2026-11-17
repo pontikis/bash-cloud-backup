@@ -104,19 +104,22 @@ if [ $use_compression != '7z' ] && [ $use_compression != 'gzip' ] && [ $use_comp
 if [ $use_compression == '7z' ]; then
     passwd_7z=$($CRUDINI --get "$global_conf" '' passwd_7z)
     filetype_7z=$($CRUDINI --get "$global_conf" '' filetype_7z)
+    # optional 7z options (e.g. "-mx=5 -mmt=1 -md=16m" for low memory servers), default: -mx=9
+    options_7z=$($CRUDINI --get "$global_conf" '' options_7z 2>/dev/null)
+    if [ -z "$options_7z" ]; then options_7z='-mx=9'; fi
     if [ "$filetype_7z" == '7z' ]; then
         if [ -z "$passwd_7z" ]
         then
-            cmd_7z="$CMD7Z a -mx=9 -mhe -t7z"
+            cmd_7z="$CMD7Z a $options_7z -mhe -t7z"
         else
-            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mhe -t7z"
+            cmd_7z="$CMD7Z a -p$passwd_7z $options_7z -mhe -t7z"
         fi
     elif [ "$filetype_7z" == 'zip' ]; then
         if [ -z "$passwd_7z" ]
         then
-            cmd_7z="$CMD7Z a -mx=9 -mm=Deflate -mem=AES256 -tzip"
+            cmd_7z="$CMD7Z a $options_7z -mm=Deflate -mem=AES256 -tzip"
         else
-            cmd_7z="$CMD7Z a -p$passwd_7z -mx=9 -mm=Deflate -mem=AES256 -tzip"
+            cmd_7z="$CMD7Z a -p$passwd_7z $options_7z -mm=Deflate -mem=AES256 -tzip"
         fi
     else
         use_7z=0
