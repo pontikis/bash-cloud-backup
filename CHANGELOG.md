@@ -16,12 +16,17 @@ Version 1 has its own branch (version1).
 More at https://github.com/pontikis/bash-cloud-backup/blob/version1/README.md
 
 
+RELEASE 2.2.1 (17 Nov 2026)
+---------------------------
+
+* Add optional options_7z setting in global.conf (default -mx=9)
+
 Release 2.2.0 (3 Feb 2018)
 ---------------------------
 
 * Preserve directories permissions and ownership in tar archive #82
 
-The solution given in Release 2.1.9 works but it leads to very large tar files. 
+The solution given in Release 2.1.9 works but it leads to very large tar files.
 In current solution a simple tar cpvf result.tar file file2 filen is performed (without use -T backup_list)
 
 Release 2.1.9 (31 Jan 2018)
@@ -71,7 +76,7 @@ Release 2.1.3 (01 Oct 2016)
 Release 2.1.2 (29 Sep 2016)
 ---------------------------
 
-* option report_errors #59 
+* option report_errors #59
 * option export_errors #62
 
 
@@ -97,13 +102,13 @@ Release 2.0.9 (18 Sep 2016)
 * Hide root processes (protect passwords to be exposed in command line) #53
 * Custom scripts (became four) #47
 
-    You may create and use 
-    
+    You may create and use
+
     * ``on_backup_started.sh`` - before backup started
     * ``on_backup_finished.sh`` - after backup finished (and before Amazon S3 sync)
     * ``on_s3_sync_finished.sh`` - after Amazon S3 sync
     * ``on_logfile_created.sh`` - after logfile created and main script finished
-    
+
     (these scripts are git ignored)
 
 
@@ -128,12 +133,12 @@ Release 2.0.5 (15 Sep 2016)
 * Postgresql support #12
 * Custom scripts #47
 
-    You may create and use 
-    
+    You may create and use
+
     * ``custom1.sh`` - after backup finished and before Amazon S3 sync
     * ``custom2.sh`` - after Amazon S3 sync
     * ``custom3.sh`` - after logfile created and main script finished
-    
+
     (these scripts are git ignored)
 
 Release 2.0.4 (14 Sep 2016)
@@ -171,7 +176,7 @@ Release 2.0.0 (11 Sep 2016)
 Release 1.1.3 (09 Sep 2016)
 ---------------------------
 
-* improve rotate delete 
+* improve rotate delete
 
 Release 1.1.2 (08 Sep 2016)
 ---------------------------
@@ -215,7 +220,7 @@ Release 1.0.3 (01 Sep 2016)
 Release 1.0.2 (01 Sep 2016)
 ---------------------------
 * MIT LICENSE
-* S3CMD_SYNC_PARAMS user defined (including server side encryption) 
+* S3CMD_SYNC_PARAMS user defined (including server side encryption)
 * use_s3_server_encryption deprecated (included in S3CMD_SYNC_PARAMS)
 * 7z compression added
 

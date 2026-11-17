@@ -3,7 +3,7 @@ bash-cloud-backup
 
 bash-cloud-backup is a bash script, which can be used to automate local and cloud backup in Linux/Unix machines.
 
-RELEASE 2.2.0 (3 Feb 2018)
+RELEASE 2.2.1 (17 Nov 2026)
 
 CHANGELOG https://github.com/pontikis/bash-cloud-backup/blob/master/CHANGELOG.md
 
@@ -22,7 +22,7 @@ Features
 --------
 
 * bash-cloud-backup keeps rotating compressed tarballs of certain directories/files or databases.
-* supported databases 
+* supported databases
     * MySQL (using ``mysqldump``) - http://linuxcommand.org/man_pages/mysqldump1.html
     * Postgresql (using ``pg_dump``) - https://www.postgresql.org/docs/current/static/app-pgdump.html
 * it uses ``tar`` (for archiving) and ``gzip`` (for compression) or ``7z`` (for compression and AES256 encryption - RECOMMENDED).
@@ -67,14 +67,14 @@ bash-cloud-backup is keeping logs (as defined in ``global.conf``).
     logfilepath=/root/backup/log
     logfilename=bash-cloud-backup.log
 
-The main log file is ``logfilepath/logfilename`` 
+The main log file is ``logfilepath/logfilename``
 
 You should take care for logfile rotation.
 
     nano /etc/logrotate.d/bash-cloud-backup
-    
+
 Add something like
-    
+
     /path/to/backup.log {
         weekly
         missingok
@@ -88,7 +88,7 @@ Leave blank **both** ``logfilepath`` and ``logfilename`` if you DO NOT WANT to k
 
 ### temporary log files
 
-Inside ``tmp_path`` bash-cloud-backup is keeping temporary log files, in order to create current session log file. This will be sent by email if you set value to ``mail_to`` parameter.  
+Inside ``tmp_path`` bash-cloud-backup is keeping temporary log files, in order to create current session log file. This will be sent by email if you set value to ``mail_to`` parameter.
 After current session finished, both the temporary path and its contents are deleted.
 
 * logfile_tmp_header="$tmp_path/header.log"
@@ -97,7 +97,7 @@ After current session finished, both the temporary path and its contents are del
 * logfile_tmp_time_elapsed="$tmp_path/time_elapsed.log"
 * logfile_tmp_whole_session="$tmp_path/whole_session.log"
 
-Keep ``tmp_path`` outside backup root. 
+Keep ``tmp_path`` outside backup root.
 
 If you do not set a value, the default value is applied:
 
@@ -107,10 +107,10 @@ If you do not set a value, the default value is applied:
 External software
 -----------------
 
-* crudini: (**REQUIRED**) https://github.com/pixelb/crudini 
-  
+* crudini: (**REQUIRED**) https://github.com/pixelb/crudini
+
   Installation (for Debian):
-   
+
         apt-get install crudini
 
   See also http://www.pixelbeat.org/programs/crudini/
@@ -121,7 +121,7 @@ External software
    Installation (for Debian):
 
         apt-get install p7zip-full
-  
+
   It is a port of 7za.exe for POSIX systems. 7z is an Excellent archiving software offering high compression ratio and Strong AES-256 encryption. See http://www.7-zip.org.
 
   7z man page http://linux.die.net/man/1/7z
@@ -134,26 +134,26 @@ External software
         apt-get install trickle
 
 
-* AWS Command Line Interface: (OPTIONAL) https://aws.amazon.com/cli/ 
+* AWS Command Line Interface: (OPTIONAL) https://aws.amazon.com/cli/
 
    Installation (for Debian):
 
         apt-get install awscli
 
    Configure with
- 
-        aws configure  
+
+        aws configure
 
 
-* s3tools: (OPTIONAL) http://s3tools.org/ 
+* s3tools: (OPTIONAL) http://s3tools.org/
 
    Installation (for Debian):
 
-        apt-get install s3cmd 
+        apt-get install s3cmd
 
    Configure with
- 
-        s3cmd --configure  
+
+        s3cmd --configure
 
    More at http://s3tools.org/s3cmd-howto
 
@@ -217,19 +217,19 @@ Configuration
 * ``global.conf`` which defines global parameters
 * ``backup.conf`` which defines which files or databases will be backed up (a backup set)
 
-By default, bash-cloud-backup expects these files to be 
+By default, bash-cloud-backup expects these files to be
 
 * ``/etc/bash-cloud-backup/global.conf``
 * ``/etc/bash-cloud-backup/backup.conf``
 
 You may define your own ``global.conf`` and as many ``backup.conf`` you like. So:
 
-### Edit ``global.conf`` (global parameters) 
+### Edit ``global.conf`` (global parameters)
 
     cp conf.default/global.conf /etc/bash-cloud-backup/global.conf
     nano /etc/bash-cloud-backup/global.conf
 
-For instructions, see sample ``conf.default/global.conf`` 
+For instructions, see sample ``conf.default/global.conf``
 
 https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/global.conf
 
@@ -241,7 +241,7 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/global.co
     cp conf.default/backup.conf /etc/bash-cloud-backup/backup.conf
     nano /etc/bash-cloud-backup/backup.conf
 
-For instructions, see sample ``conf.default/backup.conf`` 
+For instructions, see sample ``conf.default/backup.conf``
 
 https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.conf
 
@@ -255,7 +255,7 @@ https://github.com/pontikis/bash-cloud-backup/blob/master/conf.default/backup.co
 
 ### You may add custom commands (optional)
 
-You may create and use 
+You may create and use
 
 * ``on_backup_started.sh`` - before backup started
 * ``on_backup_finished.sh`` - after backup finished (and before Amazon S3 sync)
@@ -325,13 +325,13 @@ It would be nice if ``7z`` could use enviromental variables or text fies for pas
 
 When a 7z (or any other) process is running, all command line arguments (including password) can be exposed to other users using programs like ``ps``, ``top``,  ``htop`` etc. You may prevent this remounting ``/proc`` with ``hideid=2`` option.
 
-**Linux kernel version 3.2+ is required.** 
- 
+**Linux kernel version 3.2+ is required.**
+
 See here https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=0499680a42141d86417a8fbaa8c8db806bea1201
 
 You may set this option permanently (using ``/etc/fstab``)
 
-To find with which options ``/proc`` has been mounted in your system, use 
+To find with which options ``/proc`` has been mounted in your system, use
 
     cat /proc/mounts
 
@@ -363,7 +363,7 @@ In older systems (Linux kernel version < 3.2) you may change mod of ``ps``, ``to
 at the beginning of the script
 
     chmod 700 /bin/ps
-      
+
 return to original status at the end of the script.
 
     chmod 755 /bin/ps
@@ -375,7 +375,7 @@ It is recommended all executable (*.sh) to be mod 700 and text files 600:
 
     chown root:root bash-cloud-backup.sh
     chmod 700 bash-cloud-backup.sh
-    
+
     chown root:root /etc/bash-cloud-backup/*.conf
     chmod 600 /etc/bash-cloud-backup/*.conf
 
